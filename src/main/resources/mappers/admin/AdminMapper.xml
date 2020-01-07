@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+        
+<mapper namespace="com.exbyte.insurance.admin.AdminMapper">
+	<insert id ="create">
+		INSERT INTO tbl_admin(
+			admin_id,
+			admin_pw,
+			admin_name,
+			admin_email,
+			admin_position
+		) VALUES (
+			#{adminId},
+			#{adminPw},
+			#{adminName},
+			#{adminEmail},
+			#{adminPosition}
+		)
+	</insert>
+
+	<select id="read" resultMap="AdminResultMap">
+		SELECT
+			*
+		FROM
+			tbl_admin
+		WHERE
+			admin_id = #{adminId}
+	</select>
+	
+	<select id="login" resultMap="AdminResultMap">
+		SELECT
+			*
+		FROM
+			tbl_admin
+		WHERE
+			admin_id = #{adminId}
+	</select>
+	
+	<update id="update">
+		UPDATE 
+			tbl_admin
+		SET
+		    admin_pw = #{adminPw}
+		    , admin_name = #{adminName}
+		    , admin_email = #{adminEmail}
+		    , admin_position = #{adminPosition}
+		    , admin_login_date = NOW()
+		    , admin_branch = #{adminBranch}
+		WHERE 
+			admin_id = #{adminId}
+	</update>
+
+	<delete id="delete">
+		DELETE FROM
+			tbl_admin
+		WHERE
+			admin_id = #{adminId};
+	</delete>
+	
+	<select id="checkPosition" resultType="string">
+		SELECT
+			admin_position
+		FROM
+			tbl_admin
+		WHERE
+			admin_id = #{adminId}
+	</select>
+
+	<update id="keepSession">
+		UPDATE tbl_admin
+		SET
+			session_key = #{sessionId}
+		WHERE
+			admin_id = #{adminId}
+	</update>
+	
+	<select id="checkSession" resultType="string" >
+		SELECT
+			admin_id
+		FROM tbl_admin
+		WHERE session_key = #{value}
+	</select>
+
+	<select id="checkDuplicateSession" resultType="int">
+		SELECT
+			COUNT(admin_id)
+		FROM
+			tbl_admin
+		WHERE session_key = #{value}
+	</select>
+	
+<resultMap type="AdminVO" id="AdminResultMap">
+	<id property="adminId" column="admin_id"/>
+	<result property="adminPw" column="admin_pw" />
+	<result property="adminName" column="admin_name" />
+	<result property="adminEmail" column="admin_email" />
+	<result property="adminPosition" column="admin_position" />
+	<result property="sessionKey" column="session_key" />
+	<result property="adminJoinDate" column="admin_join_date" />
+	<result property="adminLoginDate" column="admin_login_date" />
+	<result property="adminBranch" column="admin_branch" />
+</resultMap>
+
+
+</mapper>

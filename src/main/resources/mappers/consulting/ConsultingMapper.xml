@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.exbyte.insurance.consulting.ConsultingMapper">
+	
+	<insert id="create">
+		INSERT INTO tbl_consulting(
+		    consulting_name,
+		    consulting_email,
+		    consulting_sex,
+		    consulting_birthday,
+		    consulting_kinds,
+		    consulting_type,
+		    consulting_remarks
+		) VALUES (
+			#{consultingName},
+		    #{consultingEmail},
+		    #{consultingSex},
+		   	#{consultingBirthday},
+		    #{consultingKinds},
+		    #{consultingType},
+		    #{consultingRemarks}
+		);
+	</insert>
+	
+	<select id="selectAll" resultMap="ConsultingResultMap">
+		SELECT
+			*
+		FROM
+			tbl_consulting
+	</select>
+	
+	<select id="read" resultMap="ConsultingResultMap">
+		SELECT
+			*
+		FROM
+			tbl_consulting
+		WHERE
+			consulting_no = #{consultingNo}
+	</select>
+	
+	<update id="updateCall">
+		UPDATE 
+			tbl_consulting
+		SET
+		    consulting_is_call = TRUE
+		WHERE consulting_no = #{consultingNo};
+	</update>
+	
+	<update id="updateEnd">
+		UPDATE 
+			tbl_consulting
+		SET
+		    consulting_is_end = TRUE
+		WHERE consulting_no = #{consultingNo};
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM
+			tbl_consulting
+		WHERE
+			consulting_no = #{consultingNo}
+	</delete>
+	
+	<select id="countAll" resultType="int">
+		SELECT
+			COUNT(consulting_no)
+		FROM
+			tbl_consulting
+		WHERE
+			consulting_no > 0	
+	</select>
+	
+
+	
+	<resultMap type="ConsultingVO" id="ConsultingResultMap">
+		<id property="consultingNo" column="consulting_no"/>
+		<result property="adminId" column="admin_id" />
+		<result property="consultingName" column="consulting_name" />
+		<result property="consultingEmail" column="consulting_email" />
+		<result property="consultingSex" column="consulting_sex" />
+		<result property="consultingBirthday" column="consulting_birthday" />
+		<result property="consultingKinds" column="consulting_kinds" />
+		<result property="consultingType" column="consulting_type" />
+		<result property="consultingIsCall" column="consulting_is_call" />
+		<result property="consultingIsEnd" column="consulting_is_end" />
+		<result property="consultingRegDate" column="consulting_reg_date" />
+		<result property="consultingRemarks" column="consulting_remarks" />
+	</resultMap>
+
+</mapper>
