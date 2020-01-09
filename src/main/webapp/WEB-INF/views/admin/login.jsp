@@ -63,6 +63,7 @@
 	                    		</label>
 	                    	</div>
 	                    	<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i>로그인</button>
+	                    	<a href="${path }/admin/find">계정찾기</a>
 	                    </div><!--/.card-footer-->
 	                </form> 
                 </div>
@@ -86,7 +87,10 @@
 		alert("회원가입이 완료되었습니다.");
 	}
 	else if(result == "FAIL"){
-		alert("회원가입이 실패했습니다.");
+		alert("작업이 실패했습니다.");
+	}
+	else if(result == "AUTHFAIL"){
+		alert("${email}" + "이메일을 확인해주세요.");
 	}
 
 </script>

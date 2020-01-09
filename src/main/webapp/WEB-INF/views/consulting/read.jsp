@@ -20,22 +20,24 @@
             <div class="col-lg-12">
                 <div class="card card-primary card-outline">
                     <div class="card-header">
-                        <h3 class="card-title">${article.title}</h3>
+                        <h3 class="card-title">${consulting.consulting_no}</h3>
                     </div><!-- card-header-->
-                    <div class="card-body" style="height: 700px">
-                        <h3>${article.content}</h3>
+                    <div class="card-body">
+                        <h3>${consulting.consultingNo}</h3>
+                        <h3>${consulting.consultingName}</h3>
+                        <h3>${consulting.consultingEmail}</h3>
+                        <h3>${consulting.consultingSex}</h3>
+                        <h3><fmt:formatDate value="${consulting.consultingBirthday }" pattern="yyyy-MM-dd"></fmt:formatDate></h3>
+                        <h3>${consulting.consultingKinds}</h3>
+                        <h3>${consulting.consultingType}</h3>
+					    <h3>${consulting.consultingIsCall}</h3>
+					    <h3>${consulting.consultingIsEnd}</h3>
+                        <h3><fmt:formatDate value="${consulting.consultingRegDate}" pattern="yyyy-MM-dd a HH:mm"/></h3>
+                        <h3>${consulting.consultingRemarks}</h3>
                     </div><!--/.card-body-->
                     <div class="card-footer">
-                        <div class="user-block">
-                            <span class="username">
-                                <a href="#">${article.writer}</a>
-                            </span>
-                            <span class="description"><fmt:formatDate pattern="yyyy-mm-dd a HH:mm" value="${article.regDate}"/></span>
-                        </div>
-                    </div><!--/.card-footer-->
-                    <div class="card-footer">
                         <form role="form" method="post">
-                            <input type="hidden" name="articleNo" value="${article.articleNo}">
+                            <input type="hidden" name="articleNo" value="${consulting.consultingNo}">
                             <input type="hidden" name="page" value="${criteria.page}">
                             <input type="hidden" name="perPageNum" value="${criteria.perPageNum}">
                             <input type="hidden" name="searchType" value="${criteria.searchType}">
@@ -67,19 +69,19 @@
         console.log(formObj);
 
         $(".modBtn").on("click", function () {
-            formObj.attr("action", "/article/modifyPaging");
+            formObj.attr("action", "/consulting/modify");
             formObj.attr("method", "get");
             formObj.submit();
         });
 
         $(".delBtn").on("click", function () {
-            formObj.attr("action", "/article/deletePaging");
+            formObj.attr("action", "/consulting/delete");
             formObj.attr("method", "post");
             formObj.submit();
         });
 
         $(".listBtn").on("click", function () {
-            formObj.attr("action", "/article/list");
+            formObj.attr("action", "/consulting/list");
             formObj.attr("method", "get");
             formObj.submit();
         });

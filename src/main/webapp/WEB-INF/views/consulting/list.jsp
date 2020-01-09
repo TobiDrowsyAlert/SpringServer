@@ -42,7 +42,7 @@
 	                            <c:forEach items="${consultings}" var="consulting" begin = "0" varStatus="status">
 	                                <tr>
 	                                	<td>
-	                                		<input type="checkbox" name = "selectItem" value="${consulting.consultingNo}">
+	                                		<input class="chkbox" type="checkbox" name = "selectItem" value="${consulting.consultingNo}">
 		                                    <a href="${path }/consulting/read&consultingNo=${consulting.consultingNo}">
 			                                   	${consulting.consultingNo}
 		                                    </a>
@@ -54,8 +54,8 @@
 	                                    <td><fmt:formatDate value="${consulting.consultingBirthday }" pattern="yyyy-MM-dd"></fmt:formatDate></td>
 	                                    <td>${consulting.consultingKinds}</td>
 	                                    <td>${consulting.consultingType}</td>
-	                                    <td>${consulting.consultingIsCall}</td>
-	                                    <td>${consulting.consultingIsEnd}</td>
+									     <td>${consulting.consultingIsCall}</td>
+									     <td>${consulting.consultingIsEnd}</td>
 	                                    <td><fmt:formatDate value="${consulting.consultingRegDate}" pattern="yyyy-MM-dd a HH:mm"/></td>
 	                                    <td>${consulting.consultingRemarks}</td>
 	                                </tr>
@@ -85,11 +85,14 @@
                         </div><!--/.text-center-->
                     </div><!--/.card-footer-->
                     <div class="card-footer">
-                       <div class="float-right">
-                           <button type="button" class="btn btn-success btn-flat" id="writeBtn">
-                               <i class="fa fa-pencil"></i> 글쓰기
+                    	<div>
+                    		<input type="checkbox" id="allCheck" name="allCheck"> <label for="allCheck">모두선택</label>
+                    	</div>
+                        <div class="float-right">
+                           <button type="button" class="btn btn-success btn-flat" id="modifyBtn">
+                               <i class="fa fa-pencil"></i> 처리
                            </button>
-                       </div><!-- float-right -->
+                        </div><!-- float-right -->
                     </div><!--/.card-footer-->
                 </div><!-- /.card card-primary card-outline-->
             </div><!-- /.col-lg-12 -->
@@ -104,7 +107,7 @@
 </div>
 <!-- ./wrapper -->
 <%@ include file="../include/plugin_js.jsp"%>
-<script>
+<script type="text/javascript">
 
     var result = "${msg}";
     if (result == "regSuccess") {
@@ -115,7 +118,65 @@
         alert("게시글 삭제가 완료되었습니다.");
     }
 
+    $("#allCheck").click(function(){
+		var chk = $("#allCheck").prop("checked");
+		if(chk){
+			$(".chkbox").prop("checked", true); // 모든 체크박스 true
+		} else {
+			$(".chkbox").prop("checked", false); // 모든 체크박스 false
+		}
+    });
 
+	// chkbox 클릭되면 allCheck는 풀림,
+    $("chkbox").click(function(){
+    	$("#allCheck").prop("checked", false);
+    });
+
+	$('#modifyBtn').click(function(){
+		var confirm_val = confirm('처리 확인');
+
+		if(confirm_val){
+			var checkArr = new Array();
+
+			$("input[class='chkbox']:checked").each(function(){
+				checkArr.push($(this).attr("value"));
+			});
+
+			$.ajax({
+				url : "/consulting/delete",
+				type : "post",
+				data : {chkbox : checkArr},
+				success : function(){
+					location.href = "/consulting/list";
+				}
+			});
+		}
+	});
+
+	 $("#modifyBtn").click(function(){
+	  var confirm_val = confirm("정말 삭제하시겠습니까?");
+	  
+	  if(confirm_val) {
+	   var checkArr = new Array();
+	   
+	   $("input[class='chkbox']:checked").each(function(){
+	    checkArr.push($(this).attr("value"));
+	   });
+	    
+	   $.ajax({
+	    url : "/consulting/delete",
+	    type : "post",
+	    data : { chkbox : checkArr },
+	    success : function(result){
+		    if(result == 1)
+	     		location.href = "/consulting/list";
+	    }
+	   });
+	  } 
+	 });
+
+	alert('javaScript 동작 확인');
+	
 </script>
 </body>
 </html>

@@ -92,6 +92,59 @@
 		WHERE session_key = #{value}
 	</select>
 	
+	<select id = "checkOverId" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			tbl_admin
+		WHERE
+			admin_id = #{adminId}
+	</select>
+	
+	<select id = "checkAuthKey" resultType="string">
+		SELECT
+			admin_auth_key
+		FROM
+			tbl_admin
+		WHERE
+			admin_id = #{adminId}
+	</select>
+	
+	<update id = "updateAuthKey">
+		UPDATE 
+			tbl_admin
+		SET
+			admin_auth_key = #{adminAuthKey}
+		WHERE admin_id = #{adminId}
+	</update>
+	
+	<select id = "checkOverEmail" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			tbl_admin
+		WHERE
+			admin_email = #{adminEmail}
+	</select>
+	
+	<select id = "findAccountById" resultMap="AdminResultMap">
+		SELECT
+			*
+		FROM
+			tbl_admin
+		WHERE
+			admin_email = #{adminEmail}
+	</select>
+	
+	<update id = "updatePw">
+		UPDATE 
+			tbl_admin
+		SET
+		    admin_pw = #{adminPw}
+		WHERE 
+			admin_id = #{adminId}
+	</update>
+	
 <resultMap type="AdminVO" id="AdminResultMap">
 	<id property="adminId" column="admin_id"/>
 	<result property="adminPw" column="admin_pw" />
@@ -102,6 +155,7 @@
 	<result property="adminJoinDate" column="admin_join_date" />
 	<result property="adminLoginDate" column="admin_login_date" />
 	<result property="adminBranch" column="admin_branch" />
+	<result property="adminAuthKey" column="admin_auth_key" />
 </resultMap>
 
 

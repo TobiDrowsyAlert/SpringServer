@@ -27,6 +27,45 @@
                         <input type="hidden" name="keyword" value="${criteria.keyword}">
                         <input type="hidden" name="searchType" value="${criteria.searchType}">
                         <div class="card-body">
+                        <table class="table table-bordered">
+                            <tbody>
+	                            <tr>
+	                                <th style="width: 30px">#</th>
+	                                <th>담당자</th>
+	                                <th>이름</th>
+	                                <th>이메일</th>
+	                                <th>성별</th>
+	                                <th>생년월일</th>
+	                                <th>상담종류</th>
+	                                <th>상담타입</th>
+	                                <th>1차 전화</th>
+	                                <th>상담 완료</th>
+	                                <th>신청 날짜</th>
+	                                <th>비고</th>
+	                            </tr>
+	                            <c:forEach items="${consultings}" var="consulting" begin = "0" varStatus="status">
+	                                <tr>
+	                                	<td>
+	                                		<input class="chkbox" type="checkbox" name = "selectItem" value="${consulting.consultingNo}">
+		                                    <a href="${path }/consulting/read&consultingNo=${consulting.consultingNo}">
+			                                   	${consulting.consultingNo}
+		                                    </a>
+	                                    </td>
+	                                    <td><input type="text" readonly value="${consulting.adminId}"/></td>
+	                                    <td><input type="text"  value="${consulting.consultingName}"/></td>
+	                                    <td><input type="text" value="${consulting.consultingEmail}"/></td>
+	                                    <td><input type="text" readonly value="${consulting.consultingSex}"/></td>
+	                                    <td><input type="text" readonly value="<fmt:formatDate value="${consulting.consultingBirthday }" pattern="yyyy-MM-dd"></fmt:formatDate>"/></td>
+	                                    <td><input type="text" readonly value="${consulting.consultingKinds}"/></td>
+	                                    <td><input type="text" readonly value="${consulting.consultingType}"/></td>
+	                                    <td><input type="text" readonly value="${consulting.consultingIsCall}"/></td>
+	                                    <td><input type="text" readonly value="${consulting.consultingIsEnd}"/></td>
+	                                    <td><input type="text" readonly value="<fmt:formatDate value="${consulting.consultingRegDate}" pattern="yyyy-MM-dd a HH:mm"/>"/></td>
+	                                    <td><input type="text" readonly value="${consulting.consultingRemarks}"/></td>
+	                                </tr>
+	                           </c:forEach>
+                           </tbody>
+                        </table>
                            <div class="form-group">
                                 <label for="title">제목</label>
                                 <input class="form-control" id="title" name="title" placeholder="내용을 입력하세요"
@@ -84,7 +123,6 @@
            //hidden으로 선언된 각종 저장할 애트리뷰트들도 같이 전달된다.
            formObj.submit();
        });
-
 
     });
 </script>

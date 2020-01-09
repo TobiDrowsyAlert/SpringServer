@@ -39,6 +39,10 @@
 			tbl_consulting
 		WHERE
 			consulting_no = #{consultingNo}
+		ORDER BY
+			
+		LIMIT
+			0, 10
 	</select>
 	
 	<update id="updateCall">

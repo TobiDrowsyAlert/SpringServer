@@ -70,6 +70,9 @@
          <a href="${path}/admin/logout" class="dropdown-item">
            <i class="mr-2"></i>로그아웃
          </a>
+         <a class="dropdown-item" id="deleteAdmin" href="#">
+         	<i class="mr-2"></i>회원탈퇴
+         </a>
         </c:if>
         </div> <!-- dropdown menu -->
       </li>

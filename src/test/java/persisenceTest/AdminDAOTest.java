@@ -22,7 +22,6 @@ public class AdminDAOTest {
 	@Inject
 	AdminDAO adminDAO;
 
-	
 	@Test
 	public void loginTest() throws Exception{
 		

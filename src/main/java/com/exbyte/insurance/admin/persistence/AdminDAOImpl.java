@@ -75,4 +75,36 @@ public class AdminDAOImpl implements AdminDAO{
 		
 	}
 
+	@Override
+	public String checkAuthKey(String adminId) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".checkAuthKey", adminId);
+	}
+
+	@Override
+	public void updateAuthKey(AdminVO adminVO) throws Exception {
+		sqlSession.update(NAMESPACE + ".updateAuthKey", adminVO);
+	}
+
+	@Override
+	public int checkOverId(String adminId) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".checkOverId", adminId);
+		
+	}
+
+	@Override
+	public int checkOverEmail(String adminEmail) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".checkOverEmail", adminEmail);
+		
+	}
+
+	@Override
+	public AdminVO findAccountById(String adminEmail) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".findAccountById", adminEmail);
+	}
+
+	@Override
+	public void updatePw(AdminVO adminVO) throws Exception {
+		sqlSession.update(NAMESPACE + ".updatePw", adminVO );
+	}
+
 }

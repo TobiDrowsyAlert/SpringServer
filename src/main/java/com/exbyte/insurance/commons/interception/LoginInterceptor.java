@@ -62,7 +62,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 				
 			} 
 			
-			response.sendRedirect("/");
+			response.sendRedirect("/admin/login");
 			
 		} else {
 			logger.info("LoginFail in Interceptor ");

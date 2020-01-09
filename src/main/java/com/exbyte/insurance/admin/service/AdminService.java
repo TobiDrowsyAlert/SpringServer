@@ -13,4 +13,10 @@ public interface AdminService {
 	void keepSession(String adminId, String sessionId) throws Exception;
 	String checkSession(String value) throws Exception;
 	int checkDuplicateSession(String value) throws Exception;
+	String checkAuthKey(String adminId) throws Exception;
+	void updateAuthKey(AdminVO adminVO) throws Exception;
+	int checkOverId(String adminId) throws Exception;
+	int checkOverEmail(String adminEmail) throws Exception;
+	AdminVO findAccountById(String adminEmail) throws Exception;
+	void updatePw(AdminVO adminVO) throws Exception;
 }

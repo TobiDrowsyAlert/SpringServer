@@ -64,6 +64,39 @@ public class AdminServiceImpl implements AdminService {
 	public int checkDuplicateSession(String value) throws Exception {
 		return adminDAO.checkDuplicateSession(value);
 	}
+
+	@Override
+	public String checkAuthKey(String adminId) throws Exception {
+		return adminDAO.checkAuthKey(adminId);
+		
+	}
+
+	@Override
+	public void updateAuthKey(AdminVO adminVO) throws Exception {
+		adminDAO.updateAuthKey(adminVO);
+	}
+
+	@Override
+	public int checkOverId(String adminId) throws Exception {
+		return adminDAO.checkOverId(adminId);
+		
+	}
+
+	@Override
+	public int checkOverEmail(String adminEmail) throws Exception {
+		return adminDAO.checkOverEmail(adminEmail);
+		
+	}
+
+	@Override
+	public AdminVO findAccountById(String adminEmail) throws Exception {
+		return adminDAO.findAccountById(adminEmail);
+	}
+
+	@Override
+	public void updatePw(AdminVO adminVO) throws Exception {
+		adminDAO.updatePw(adminVO);
+	}
 	
 	
 	

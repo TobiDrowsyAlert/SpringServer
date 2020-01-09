@@ -45,32 +45,40 @@
 								<h3 class="card-title">회원가입</h3>
 							</div>
 							<!--/.card-header-->
-							<div class="card-body">
-								<div class="form-group">
-									<label for="adminId">아이디</label> <input class="form-control"
-										id="adminId" name="adminId" placeholder="아이디">
-								</div>
-								<div class="form-group">
-									<label for="adminPw">비밀번호</label> <input type="password" class="form-control"
-										id="adminPw" name="adminPw" placeholder="비밀번호">
-								</div>
-								<div class="form-group">
-									<label for="adminName">이름</label> <input class="form-control"
-										id="adminName" name="adminName" placeholder="이름">
-								</div>
-								<div class="form-group">
-									<label for="adminEmail">이메일</label> <input type="email" class="form-control"
-										id="adminEmail" name="adminEmail" placeholder="이메일">
-								</div>
-								<div class="form-group">
-									<label for="adminPosition">직책</label>
-									<select class="form-control" id="adminPosition" name="adminPosition">
-										<option>지부장</option>
-										<option>직원</option>
-									</select>
-								</div>
-							</div>
-							<!--/.card-body-->
+					        <div class="card-body">
+				              <div class="form-group">
+				                <label for="adminId">아이디</label> <input class="form-control"
+				                  id="adminId" name="adminId" placeholder="아이디">
+				                  <div class="check_font" id="idCheck">아이디체크</div>
+				              </div>
+				              <div class="form-group">
+				                <label for="adminPw">비밀번호</label> <input type="password" class="form-control"
+				                  id="adminPw" name="adminPw" placeholder="비밀번호">
+				                  <div class="check_font" id="pwCheck">비밀번호체크</div>
+				              </div>
+				              <div class="form-group">
+				                <label for="adminPw">비밀번호 확인</label> <input type="password" class="form-control"
+				                  id="adminDuplicatePw" name="adminDuplicatePw" placeholder="비밀번호 확인">
+				                  <div class="check_font" id="pwDuplicateCheck">중복 체크</div>
+				              </div>
+				              <div class="form-group">
+				                <label for="adminName">이름</label> <input class="form-control"
+				                  id="adminName" name="adminName" placeholder="이름">
+				                  <div class="check_font" id="nameCheck">이름 체크</div>
+				              </div>
+				              <div class="form-group">
+				                <label for="adminEmail">이메일</label> <input type="email" class="form-control"
+				                  id="adminEmail" name="adminEmail" placeholder="이메일">
+				                  <div class="check_font" id="emailCheck">이메일체크</div>
+				              </div>
+				              <div class="form-group">
+				                <label for="adminPosition">직책</label>
+				                <select class="form-control" id="adminPosition" name="adminPosition">
+				                  <option>직원</option>
+				                </select>
+				              </div>
+				            </div>
+				            <!--/.card-body-->
 							<div class="card-footer">
 								<button type="submit" class="btn btn-primary">
 									<i class="fa fa-save"></i>회원가입
@@ -85,18 +93,123 @@
 		</div>
 		<!-- /.content-wrapper -->
 
+
 		<!-- Main Footer -->
 		<%@ include file="../include/main_footer.jsp"%>
 	</div>
 	<!-- ./wrapper -->
 	<%@ include file="../include/plugin_js.jsp"%>
-	<script>
+	
+	<script type="text/javascript">
+	  var adminPw = "";
+	  var re = /^[a-zA-Z0-9]{4,12}$/ // 아이디와 패스워드가 적합한지 검사할 정규식
+	  var re2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일이 적합한지 검사할 정규식
 
-		var result = "${msg}";
-		if (result == "REGISTERED") {
-			alert("회원가입이 완료되었습니다.");
-		}
-		
+
+
+	  $('#adminId').blur(function(){
+	    var adminId = $('#adminId').val();
+	    $.ajax({
+	      url : "http://localhost:8080/admin/checkId"+"?adminId=" + adminId,
+	      type : "get",
+	      success : function(data){
+	          if(data==1){
+	            // 1: 중복
+	            $('#idCheck').text("사용중인 아이디입니다.");
+	            $('#idCheck').css("color", "red");
+	            $('#btnSubmit').attr("disabled", true);
+	          }else{
+	            // 0: 중복아님
+	            //check(re, what, message)
+	            if(!re.test(adminId)){
+	              $('#idCheck').text("아이디는 소문자와 숫자 4~12자리만 가능합니다.");
+	              $('#idCheck').css("color", "red");
+	              $('#btnSubmit').attr("disabled", true);
+	            }else if(adminId == ""){
+	              $('#idCheck').text("아이디를 입력해주세요.");
+	              $('#idCheck').css("color", "blue");
+	              $('#btnSubmit').attr("disabled", true);
+	            }else{
+	              $('#idCheck').text("");
+	            }
+	          }
+	      }
+	    });
+	  });
+
+
+	  $('#adminEmail').blur(function(){
+	    var adminEmail = $('#adminEmail').val();
+	    $.ajax({
+	      url : "http://localhost:8080/admin/checkEmail"+"?adminEmail=" + adminEmail,
+	      type : "get",
+	      success : function(data){
+	        if(data>=1){
+	          $('#emailCheck').text("사용중인 이메일입니다.");
+	          $('#emailCheck').css("color", "red");
+	          // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
+	        }else{
+	          if(!re2.test(adminEmail)){
+	            $('#emailCheck').text("이메일 형식이 잘못되었습니다.");
+	            $('#emailCheck').css("color", "red");
+	          }else if(adminEmail == ""){
+	            $('#emailCheck').text("이메일을 입력해주세요.");
+	            $('#emailCheck').css("color", "blue");
+	            // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
+	          }else{
+	            $('#emailCheck').text("");
+	            // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
+	          }
+	        }
+	      }
+	    });
+	  });
+
+
+	  $('#adminName').blur(function(){
+	    var adminName = $('#adminName').val();
+
+	    if(adminName == ""){
+	      $('#nameCheck').text("이름을 입력하세요.");
+	      $('#nameCheck').css("color", "blue");
+	      // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
+	    }else{
+	      $('#nameCheck').text("");
+	    }
+	  });
+
+	  $('#adminPw').blur(function(){
+	    adminPw = $('#adminPw').val();
+
+	    if(!re.test(adminPw)){
+	      $('#pwCheck').text("비밀번호는 소문자와 숫자 4~12자리만 가능합니다.");
+	      $('#pwCheck').css("color", "red");
+	    }else if(adminPw == ""){
+	      $('#pwCheck').text("비밀번호를 입력하세요.");
+	      $('#pwCheck').css("color", "blue");
+	    }else{
+	      $('#pwCheck').text("");
+	    }
+	  });
+
+	  $('#adminDuplicatePw').blur(function(){
+	    var adminDuplicatePw = $('#adminDuplicatePw').val();
+	    if (adminDuplicatePw == ""){
+	     $('#pwDuplicateCheck').text("비밀번호 중복 체크를 해주세요..");
+	     $('#pwDuplicateCheck').css("color", "red");
+	     // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
+	    }else if(adminPw == adminDuplicatePw){
+	      $('#pwDuplicateCheck').text("비밀번호 중복 확인 완료.");
+	      $('#pwDuplicateCheck').css("color", "blue");
+	    }else {
+	      $('#pwDuplicateCheck').text("비밀번호를 다시 확인해주세요.");
+	      $('#pwDuplicateCheck').css("color", "red");
+	      // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
+	    }
+	  });
+
+
 	</script>
+
 </body>
 </html>

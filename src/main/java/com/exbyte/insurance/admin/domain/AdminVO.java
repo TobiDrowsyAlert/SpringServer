@@ -20,5 +20,6 @@ public class AdminVO {
 	Date adminJoinDate;
 	Date adminLoginDate;
 	String adminBranch;
+	String adminAuthKey;
 	
 }

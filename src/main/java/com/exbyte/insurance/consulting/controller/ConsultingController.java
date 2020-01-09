@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.exbyte.insurance.commons.paging.Criteria;
 import com.exbyte.insurance.commons.paging.PageMaker;
@@ -60,9 +61,54 @@ public class ConsultingController {
 		return "/consulting/read";
 	}
 	
+	// 수정 페이지 이동
+	@RequestMapping(value = "/modify", method = RequestMethod.GET)
+	public String modify(Model model, int consultingNo) throws Exception {
+		
+		model.addAttribute("consulting", consultingService.read(consultingNo));
+		
+		return "/cosulting/modify";
+	}
 	
+	// 상담 리스트 삭제
+	@RequestMapping(value = "/delete", method = RequestMethod.POST)
+	@ResponseBody
+	public int deletePOST(Model model, @RequestParam(value="chkbox[]") List<String> arr,
+			ConsultingVO consulting) throws Exception {
+		
+		logger.info("delete...");
+		
+		int consultingNo = 0;
+		
+		// return 0;
+		
+		for(String i : arr) {
+			consultingNo = Integer.parseInt(i);
+			consultingService.delete(consultingNo);
+		}
+		
+		return 1;
+	}
 	
-	
+	// 상담 리스트 1차 콜 // 최종 확인
+	@RequestMapping(value = "/updateCheck", method = RequestMethod.POST)
+	@ResponseBody
+	public int updateCheck(Model model, @RequestParam(value="chkbox[]") List<String> arr,
+			ConsultingVO consulting) throws Exception {
+		
+		logger.info("delete...");
+		
+		int consultingNo = 0;
+		
+		// return 0;
+		
+		for(String i : arr) {
+			consultingNo = Integer.parseInt(i);
+			consultingService.delete(consultingNo);
+		}
+		
+		return 1;
+	}
 	
 	
 }
