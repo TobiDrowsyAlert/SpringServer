@@ -11,13 +11,15 @@
 			admin_pw,
 			admin_name,
 			admin_email,
-			admin_position
+			admin_position,
+			admin_point
 		) VALUES (
 			#{adminId},
 			#{adminPw},
 			#{adminName},
 			#{adminEmail},
-			#{adminPosition}
+			#{adminPosition},
+			#{adminPoint}
 		)
 	</insert>
 
@@ -48,7 +50,7 @@
 		    , admin_email = #{adminEmail}
 		    , admin_position = #{adminPosition}
 		    , admin_login_date = NOW()
-		    , admin_branch = #{adminBranch}
+		    , admin_point = #{adminPoint}
 		WHERE 
 			admin_id = #{adminId}
 	</update>
@@ -145,6 +147,20 @@
 			admin_id = #{adminId}
 	</update>
 	
+	<select id="listAll" resultMap="AdminResultMap">
+		SELECT
+			*
+		FROM
+			tbl_admin
+	</select>
+	
+	<select id="listPoint" resultMap="PointResultMap">
+		SELECT
+			*
+		FROM
+			tbl_point
+	</select>
+	
 <resultMap type="AdminVO" id="AdminResultMap">
 	<id property="adminId" column="admin_id"/>
 	<result property="adminPw" column="admin_pw" />
@@ -154,9 +170,13 @@
 	<result property="sessionKey" column="session_key" />
 	<result property="adminJoinDate" column="admin_join_date" />
 	<result property="adminLoginDate" column="admin_login_date" />
-	<result property="adminBranch" column="admin_branch" />
+	<result property="adminPoint" column="admin_point" />
 	<result property="adminAuthKey" column="admin_auth_key" />
 </resultMap>
 
+<resultMap type="PointVO" id="PointResultMap">
+	<id property="pointNo" column="point_no"/>
+	<result property="pointName" column="point_name"/>
+</resultMap>
 
 </mapper>

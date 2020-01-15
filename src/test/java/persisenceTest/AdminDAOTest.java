@@ -1,5 +1,7 @@
 package persisenceTest;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.junit.Test;
@@ -12,6 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
 import com.exbyte.insurance.admin.persistence.AdminDAO;
+import com.exbyte.insurance.point.domain.PointVO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
@@ -23,8 +26,13 @@ public class AdminDAOTest {
 	AdminDAO adminDAO;
 
 	@Test
-	public void loginTest() throws Exception{
+	public void selectTest() throws Exception{
 		
+		List<PointVO> pointList = adminDAO.listPoint();
+		
+		for(PointVO point : pointList) {
+			logger.info(point.toString());
+		}
 	}
 	
 	@Test
@@ -36,7 +44,7 @@ public class AdminDAOTest {
 		admin.setAdminName("테스팅");
 		admin.setAdminEmail("tesing@naver.com");
 		admin.setAdminPosition("책임자");
-		admin.setAdminBranch("산업기술대학교");
+		admin.setAdminPoint(3);
 		adminDAO.create(admin);
 		logger.info("Create Success");
 		
@@ -63,7 +71,6 @@ public class AdminDAOTest {
 		admin.setAdminName("테스팅이름");
 		admin.setAdminEmail("tesingModify@naver.com");
 		admin.setAdminPosition("책임자");
-		admin.setAdminBranch("산업기술대학교");
 		adminDAO.update(admin);
 		logger.info("Update Success");
 	}

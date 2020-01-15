@@ -1,6 +1,7 @@
 package com.exbyte.insurance.admin.persistence;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
+import com.exbyte.insurance.point.domain.PointVO;
 
 @Repository
 public class AdminDAOImpl implements AdminDAO{
@@ -105,6 +107,18 @@ public class AdminDAOImpl implements AdminDAO{
 	@Override
 	public void updatePw(AdminVO adminVO) throws Exception {
 		sqlSession.update(NAMESPACE + ".updatePw", adminVO );
+	}
+
+	@Override
+	public List<PointVO> listPoint() throws Exception {
+		return sqlSession.selectList(NAMESPACE + ".listPoint");
+		
+	}
+
+	@Override
+	public List<AdminVO> listAll() throws Exception {
+		return sqlSession.selectList(NAMESPACE + ".listAll");
+		
 	}
 
 }

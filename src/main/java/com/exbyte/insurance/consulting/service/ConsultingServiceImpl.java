@@ -6,6 +6,8 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
+import com.exbyte.insurance.admin.domain.AdminVO;
+import com.exbyte.insurance.commons.paging.Criteria;
 import com.exbyte.insurance.consulting.domain.ConsultingVO;
 import com.exbyte.insurance.consulting.persistence.ConsultingDAO;
 
@@ -25,19 +27,23 @@ public class ConsultingServiceImpl implements ConsultingService {
 	}
 
 	@Override
-	public List<ConsultingVO> selectAll() throws Exception {
-		return consultingDAO.selectAll();
-		
+	public List<ConsultingVO> selectAll(Criteria criteria) throws Exception {
+		return consultingDAO.selectAll(criteria);
 	}
 
 	@Override
-	public void updateCall(int consultingNo) throws Exception {
-		consultingDAO.updateCall(consultingNo);
+	public List<ConsultingVO> selectConsultingById(Criteria criteria, String adminId) throws Exception {
+		return consultingDAO.selectConsultingById(criteria, adminId);
 	}
 
 	@Override
-	public void updateEnd(int consultingNo) throws Exception {
-		consultingDAO.updateEnd(consultingNo);
+	public List<AdminVO> selectAdminByPoint(Criteria criteria, int adminPoint) throws Exception {
+		return consultingDAO.selectAdminByPoint(criteria, adminPoint);
+	}
+
+	@Override
+	public List<ConsultingVO> selectConsultingByPoint(Criteria criteria, int adminPoint) throws Exception {
+		return consultingDAO.selectConsultingByPoint(criteria, adminPoint);
 	}
 
 	@Override
@@ -56,5 +62,11 @@ public class ConsultingServiceImpl implements ConsultingService {
 		return consultingDAO.read(consultingNo);
 		
 	}
+
+	@Override
+	public void update(ConsultingVO consultingVO) throws Exception {
+		consultingDAO.update(consultingVO);
+	}
+
 
 }

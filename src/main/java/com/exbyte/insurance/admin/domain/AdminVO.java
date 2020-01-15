@@ -19,7 +19,8 @@ public class AdminVO {
 	String sessionKey;
 	Date adminJoinDate;
 	Date adminLoginDate;
-	String adminBranch;
+	int adminPoint;
 	String adminAuthKey;
+
 	
 }

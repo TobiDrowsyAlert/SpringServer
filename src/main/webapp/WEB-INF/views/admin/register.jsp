@@ -77,10 +77,18 @@
 				                  <option>직원</option>
 				                </select>
 				              </div>
+				              <div class="form-group">
+				              	<label for="adminPoint">지부</label>
+				              	<select class="form-control" id="adminPoint" name="adminPoint">
+				              		<c:forEach items="${points }" var="point" >
+				              			<option value='${point.pointNo }'>${point.pointName}</option>
+				              		</c:forEach>
+				              	</select>
+				              </div>
 				            </div>
 				            <!--/.card-body-->
 							<div class="card-footer">
-								<button type="submit" class="btn btn-primary">
+								<button type="submit" class="btn btn-primary" id="btnSubmit">
 									<i class="fa fa-save"></i>회원가입
 								</button>
 							</div>
@@ -101,12 +109,26 @@
 	<%@ include file="../include/plugin_js.jsp"%>
 	
 	<script type="text/javascript">
+
+	$(document).ready(function(){
 	  var adminPw = "";
 	  var re = /^[a-zA-Z0-9]{4,12}$/ // 아이디와 패스워드가 적합한지 검사할 정규식
 	  var re2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일이 적합한지 검사할 정규식
 
+	  var validate = function(){
+	    let idCheck = $('#idCheck').text();
+	    let pwCheck = $('#pwCheck').text();
+	    let emailCheck = $('#emailCheck').text();
+	    let nameCheck = $('#nameCheck').text();
+	    let pwDuplicateCheck = $('#pwDuplicateCheck').text();
 
+	    if(idCheck != "" || pwCheck != "" || emailCheck != "" || nameCheck != "" || pwDuplicateCheck != ""){
+	      $('#btnSubmit').attr("disabled", true);
+	      return;
+	    }
 
+	    $('#btnSubmit').attr("disabled", false);
+	  }
 	  $('#adminId').blur(function(){
 	    var adminId = $('#adminId').val();
 	    $.ajax({
@@ -117,22 +139,20 @@
 	            // 1: 중복
 	            $('#idCheck').text("사용중인 아이디입니다.");
 	            $('#idCheck').css("color", "red");
-	            $('#btnSubmit').attr("disabled", true);
 	          }else{
 	            // 0: 중복아님
 	            //check(re, what, message)
 	            if(!re.test(adminId)){
 	              $('#idCheck').text("아이디는 소문자와 숫자 4~12자리만 가능합니다.");
 	              $('#idCheck').css("color", "red");
-	              $('#btnSubmit').attr("disabled", true);
 	            }else if(adminId == ""){
 	              $('#idCheck').text("아이디를 입력해주세요.");
 	              $('#idCheck').css("color", "blue");
-	              $('#btnSubmit').attr("disabled", true);
 	            }else{
 	              $('#idCheck').text("");
 	            }
 	          }
+	       validate();
 	      }
 	    });
 	  });
@@ -147,7 +167,6 @@
 	        if(data>=1){
 	          $('#emailCheck').text("사용중인 이메일입니다.");
 	          $('#emailCheck').css("color", "red");
-	          // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
 	        }else{
 	          if(!re2.test(adminEmail)){
 	            $('#emailCheck').text("이메일 형식이 잘못되었습니다.");
@@ -155,12 +174,11 @@
 	          }else if(adminEmail == ""){
 	            $('#emailCheck').text("이메일을 입력해주세요.");
 	            $('#emailCheck').css("color", "blue");
-	            // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
 	          }else{
 	            $('#emailCheck').text("");
-	            // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
 	          }
 	        }
+	      validate();
 	      }
 	    });
 	  });
@@ -168,14 +186,13 @@
 
 	  $('#adminName').blur(function(){
 	    var adminName = $('#adminName').val();
-
 	    if(adminName == ""){
 	      $('#nameCheck').text("이름을 입력하세요.");
 	      $('#nameCheck').css("color", "blue");
-	      // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
 	    }else{
 	      $('#nameCheck').text("");
 	    }
+	    validate();
 	  });
 
 	  $('#adminPw').blur(function(){
@@ -190,6 +207,7 @@
 	    }else{
 	      $('#pwCheck').text("");
 	    }
+	    validate();
 	  });
 
 	  $('#adminDuplicatePw').blur(function(){
@@ -199,15 +217,16 @@
 	     $('#pwDuplicateCheck').css("color", "red");
 	     // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
 	    }else if(adminPw == adminDuplicatePw){
-	      $('#pwDuplicateCheck').text("비밀번호 중복 확인 완료.");
-	      $('#pwDuplicateCheck').css("color", "blue");
+	      $('#pwDuplicateCheck').text("");
 	    }else {
 	      $('#pwDuplicateCheck').text("비밀번호를 다시 확인해주세요.");
 	      $('#pwDuplicateCheck').css("color", "red");
 	      // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
 	    }
+	  validate();
 	  });
 
+	});
 
 	</script>
 

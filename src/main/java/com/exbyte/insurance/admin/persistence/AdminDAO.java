@@ -1,7 +1,10 @@
 package com.exbyte.insurance.admin.persistence;
 
+import java.util.List;
+
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
+import com.exbyte.insurance.point.domain.PointVO;
 
 public interface AdminDAO {
 
@@ -20,5 +23,7 @@ public interface AdminDAO {
 	int checkOverEmail(String adminEmail) throws Exception;
 	AdminVO findAccountById(String adminEmail) throws Exception;
 	void updatePw(AdminVO adminVO) throws Exception;
-	
+	List<PointVO> listPoint() throws Exception;
+	List<AdminVO> listAll() throws Exception;
+
 }

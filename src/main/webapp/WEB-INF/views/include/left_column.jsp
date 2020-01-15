@@ -15,10 +15,10 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img src="../dist/img/default-user.png" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Alexander Pierce</a>
+          <a href="#" class="d-block">${session.userId }</a>
         </div>
       </div>
 
@@ -30,36 +30,9 @@
           <li class="nav-item has-treeview menu-open"> <!-- 항목 시작 -->
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-edit"></i>
-              <p>
-                메뉴
-                <i class="right fas fa-angle-left"></i>
-              </p>
+              	메뉴<i class="right fas fa-angle-left"></i>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="${path}/article/list" class="nav-link active">
-                  <i class="fa fa-list"></i>
-                  <p>게시판</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="${path}/article/listCriteria" class="nav-link active">
-                  <i class="fa fa-list"></i>
-                  <p>게시판 페이징처리</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="${path}/article/listPaging" class="nav-link active">
-                  <i class="fa fa-list"></i>
-                  <p>게시판 페이징, 페이징 번호 </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="${path}/article/listPagingRead" class="nav-link active">
-                  <i class="fa fa-list"></i>
-                  <p>게시판 페이징, 페이징 번호, 정보 유지 </p>
-                </a>
-              </li>
               <li class="nav-item">
                 <a href="${path}/article/write" class="nav-link active">
                   <i class="fa fa-pencil-alt"></i>
@@ -68,38 +41,6 @@
               </li>
             </ul>
           </li> <!-- nav-item has-treeview menu-open -->
-          <li class="nav-item has-treeview menu-open"> <!-- 항목 시작 -->
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-edit"></i>
-              <p>
-                게시판
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="${path}/article/list" class="nav-link active">
-                  <i class="fa fa-list"></i>
-                  <p>게시판</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="${path}/article/listCriteria" class="nav-link active">
-                  <i class="fa fa-list"></i>
-                  <p>게시판 페이징처리</p>
-                </a>
-              </li>
-            </ul>
-          </li> <!-- nav-item has-treeview menu-open -->
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Simple Link
-                <span class="right badge badge-danger">New</span>
-              </p>
-            </a>
-          </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

@@ -13,12 +13,9 @@
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
-	
     <context:component-scan base-package="com.exbyte.insurance"/> <!-- Component 패키지 지정 -->
 
 
-	<aop:aspectj-autoproxy/>
-	
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
 	<resources mapping="/plugins/**" location="/resources/plugins/"/>
@@ -48,6 +45,11 @@
 		<interceptor>
 			<mapping path="/admin/updatePw" />
 			<beans:bean id ="authEmailInterceptor" class="com.exbyte.insurance.commons.interception.AuthEmailInterceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/admin/login"/>
+			<mapping path="/admin/register"/>
+			<beans:bean id = "loginAfterInterceptor" class="com.exbyte.insurance.commons.interception.LoginAfterInterceptor"/>
 		</interceptor>
 	</interceptors>
 

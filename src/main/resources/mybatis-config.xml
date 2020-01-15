@@ -6,5 +6,6 @@
     <typeAliases>
 		<typeAlias type="com.exbyte.insurance.admin.domain.AdminVO" alias="AdminVO"/>
 		<typeAlias type="com.exbyte.insurance.consulting.domain.ConsultingVO" alias="ConsultingVO"/>
+		<typeAlias type="com.exbyte.insurance.point.domain.PointVO" alias="PointVO"/>
     </typeAliases>
 </configuration>

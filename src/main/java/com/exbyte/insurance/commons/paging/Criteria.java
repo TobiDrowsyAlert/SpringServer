@@ -12,11 +12,14 @@ public class Criteria {
 	private int page;
 	private int perPageNum;
 	private String searchType;
+	private String sortOrder;
 	private String keyword;
+	private String sortType;
 	
 	public Criteria() {
 		page = 1;
 		perPageNum = 10;
+		sortOrder = "";
 	}
 	
 	public void setPage(int page) {
@@ -34,6 +37,10 @@ public class Criteria {
 		}
 		
 		this.perPageNum = perPageNum;
+	}
+	
+	public int getPageStart() {
+		return (this.page - 1) * perPageNum;
 	}
 	
 	

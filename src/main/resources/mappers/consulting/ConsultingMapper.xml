@@ -30,6 +30,55 @@
 			*
 		FROM
 			tbl_consulting
+		WHERE
+			consulting_no > 0
+		<include refid="search"/>
+		<include refid="sort"/>
+		LIMIT
+			#{pageStart}, #{perPageNum}
+	</select>
+
+	<select id="selectConsultingById" resultMap="ConsultingResultMap">
+		SELECT
+			*
+		FROM
+			tbl_consulting
+		WHERE
+			admin_id = #{adminId}
+		<include refid="search"/>
+		<include refid="sort"/>
+		LIMIT
+			#{criteria.pageStart}, #{criteria.perPageNum}
+	</select>
+	
+	<select id="selectAdminByPoint" resultMap="AdminResultMap">
+		SELECT
+			*
+		FROM
+			tbl_admin
+		WHERE
+			admin_point IN #{adminPoint}
+		LIMIT
+			#{criteria.pageStart}, #{criteria.perPageNum}
+	</select>
+	
+	<select id="selectConsultingByPoint" resultMap="ConsultingResultMap">
+		SELECT
+			*
+		FROM
+			tbl_consulting
+		WHERE
+			admin_id IN 
+			(SELECT 
+				admin_id 
+			FROM 
+				tbl_admin 
+			WHERE 
+				admin_point = #{adminPoint})
+		<include refid="search"/>
+		<include refid="sort"/>
+		LIMIT
+			#{criteria.pageStart}, #{criteria.perPageNum}
 	</select>
 	
 	<select id="read" resultMap="ConsultingResultMap">
@@ -39,26 +88,22 @@
 			tbl_consulting
 		WHERE
 			consulting_no = #{consultingNo}
-		ORDER BY
-			
-		LIMIT
-			0, 10
 	</select>
 	
-	<update id="updateCall">
+	<update id="update">
 		UPDATE 
 			tbl_consulting
 		SET
-		    consulting_is_call = TRUE
-		WHERE consulting_no = #{consultingNo};
-	</update>
-	
-	<update id="updateEnd">
-		UPDATE 
-			tbl_consulting
-		SET
-		    consulting_is_end = TRUE
-		WHERE consulting_no = #{consultingNo};
+			admin_id = #{adminId}
+		    , consulting_name = #{consultingName}
+		    , consulting_email = #{consultingEmail}
+		    , consulting_sex = #{consultingSex}
+		    , consulting_birthday = #{consultingBirthday}
+		    , consulting_kinds = #{consultingKinds}
+		    , consulting_is_call = #{consultingIsCall}
+		    , consulting_is_end = #{consultingIsEnd}
+		    , consulting_remarks = #{consultingRemarks}
+		WHERE consulting_no = #{consultingNo};	
 	</update>
 	
 	<delete id="delete">
@@ -77,7 +122,108 @@
 			consulting_no > 0	
 	</select>
 	
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 'i'.toString">
+				AND admin_id LIKE CONCAT('%', #{keyword}, '%')
+			</if>
+			<if test="searchType == 'n'.toString">
+				AND consulting_name LIKE CONCAT('%' , #{keyword}, '%')
+			</if>
+		</if>
+	</sql>
 
+	<sql id="sort">
+		<if test="sortType != null">
+			<if test="sortType == ''.toString">
+				ORDER BY consulting_no DESC
+			</if>
+			<if test="sortType == 'no'.toString">
+				<choose>
+					<when test="sortOrder == 'DESC'">
+						ORDER BY consulting_no DESC
+					</when>
+					<otherwise>
+						ORDER BY consulting_no ASC
+					</otherwise>
+				</choose>
+			</if>
+			<if test="sortType == 'email'.toString">
+				<choose>
+					<when test="sortOrder == 'DESC'">
+						ORDER BY consulting_email DESC, consulting_no DESC
+					</when>
+					<otherwise>
+						ORDER BY consulting_email ASC, consulting_no DESC
+					</otherwise>
+				</choose>
+			</if>
+			<if test="sortType == 'sex'.toString">
+				<choose>
+					<when test="sortOrder == 'DESC'">
+						ORDER BY consulting_sex DESC, consulting_no DESC
+					</when>
+					<otherwise>
+						ORDER BY consulting_sex ASC, consulting_no DESC
+					</otherwise>
+				</choose>
+
+			</if>
+			<if test="sortType == 'kinds'.toString">
+				<choose>
+					<when test="sortOrder == 'DESC'">
+						ORDER BY consulting_kinds DESC, consulting_no DESC
+					</when>
+					<otherwise>
+						ORDER BY consulting_kinds ASC, consulting_no DESC
+					</otherwise>
+				</choose>
+			</if>
+			<if test="sortType == 'type'.toString">
+				<choose>
+					<when test="sortOrder == 'DESC'">
+						ORDER BY consulting_type DESC, consulting_no DESC
+					</when>
+					<otherwise>
+						ORDER BY consulting_type ASC, consulting_no DESC
+					</otherwise>
+				</choose>
+			</if>
+			<if test="sortType == 'call'.toString">
+				<choose>
+					<when test="sortOrder == 'DESC'">
+						ORDER BY consulting_is_call DESC, consulting_no DESC
+					</when>
+					<otherwise>
+						ORDER BY consulting_is_call ASC, consulting_no DESC
+					</otherwise>
+				</choose>
+			</if>
+			<if test="sortType == 'end'.toString">
+				<choose>
+					<when test="sortOrder == 'DESC'">
+						ORDER BY consulting_is_end DESC, consulting_no DESC
+					</when>
+					<otherwise>
+						ORDER BY consulting_is_end ASC, consulting_no DESC
+					</otherwise>
+				</choose>
+			</if>
+			<if test="sortType == 'reg'.toString">
+				<choose>
+					<when test="sortOrder == 'DESC'">
+						ORDER BY consulting_reg_date DESC, consulting_no DESC
+					</when>
+					<otherwise>
+						ORDER BY consulting_reg_date ASC, consulting_no DESC
+					</otherwise>
+				</choose>
+			</if>
+		</if>
+		<if test="sortType == null">
+			ORDER BY consulting_no DESC
+		</if>
+	</sql>
 	
 	<resultMap type="ConsultingVO" id="ConsultingResultMap">
 		<id property="consultingNo" column="consulting_no"/>
@@ -93,5 +239,24 @@
 		<result property="consultingRegDate" column="consulting_reg_date" />
 		<result property="consultingRemarks" column="consulting_remarks" />
 	</resultMap>
+
+	<resultMap type="AdminVO" id="AdminResultMap">
+		<id property="adminId" column="admin_id"/>
+		<result property="adminPw" column="admin_pw" />
+		<result property="adminName" column="admin_name" />
+		<result property="adminEmail" column="admin_email" />
+		<result property="adminPosition" column="admin_position" />
+		<result property="sessionKey" column="session_key" />
+		<result property="adminJoinDate" column="admin_join_date" />
+		<result property="adminLoginDate" column="admin_login_date" />
+		<result property="adminPoint" column="admin_point" />
+		<result property="adminAuthKey" column="admin_auth_key" />
+	</resultMap>
+	
+	<resultMap type="PointVO" id="PointResultMap">
+		<id property="pointNo" column="point_no"/>
+		<result property="pointName" column="point_name"/>
+	</resultMap>
+
 
 </mapper>

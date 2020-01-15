@@ -1,5 +1,9 @@
 package com.exbyte.insurance.admin.controller;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +27,7 @@ import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
 import com.exbyte.insurance.admin.service.AdminMailService;
 import com.exbyte.insurance.admin.service.AdminService;
+import com.exbyte.insurance.point.domain.PointVO;
 
 @Controller
 @RequestMapping("/admin")
@@ -47,7 +52,11 @@ public class AdminController {
 	
 	// 관리자 회원가입 페이지
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
-	public String registerGET() throws Exception {
+	public String registerGET(Model model) throws Exception {
+		
+		List<PointVO> points = adminService.listPoint();
+		model.addAttribute("points", points);
+		
 		return "/admin/register";
 	}
 	
@@ -58,6 +67,9 @@ public class AdminController {
 		// 암호화
 		String hashPw = BCrypt.hashpw(adminVO.getAdminPw(), BCrypt.gensalt());
 		adminVO.setAdminPw(hashPw);
+		
+		logger.info("resgisterPost(Param) : " + adminVO.toString());
+		
 		// DB 아이디 등록
 		adminService.create(adminVO);
 		
@@ -126,31 +138,44 @@ public class AdminController {
 	
 	// 로그인 요청
 	@RequestMapping(value = "/loginPOST", method = RequestMethod.POST)
-	public String loginPOST(LoginDTO loginDTO, Model model, HttpSession httpSession) throws Exception {
+	public String loginPOST(LoginDTO loginDTO, Model model, HttpSession httpSession) {
 
-		AdminVO adminVO = adminService.login(loginDTO);
-
-		// 아이디나 비밀번호가 잘못된 경우
-		if(adminVO == null || !BCrypt.checkpw(loginDTO.getAdminPw(), adminVO.getAdminPw())) {
-			model.addAttribute("msg", "FAIL");
+		try {
+			AdminVO adminVO = adminService.login(loginDTO);
+			
+			// 아이디나 비밀번호가 잘못된 경우
+			if(adminVO == null || !BCrypt.checkpw(loginDTO.getAdminPw(), adminVO.getAdminPw())) {
+				model.addAttribute("msg", "FAIL");
+				return "/admin/login";
+			}
+			// 이메일 인증이 안된 경우
+			else if(!adminVO.getAdminAuthKey().contentEquals("Y")) {
+				model.addAttribute("adminEmail", adminVO.getAdminEmail());
+				return "/admin/emailSend";
+			}
+			
+			// 로그인 성공, loginInterceptor postHandler로 쿠키 생성
+			
+			adminService.keepSession(adminVO.getAdminId() , httpSession.getId());
+			
+			logger.info("adminVO : " + adminVO.getAdminId() + ", loginDTO : ", loginDTO.getAdminId());
+			logger.info("checkpw Boolean : " + BCrypt.checkpw(loginDTO.getAdminPw(), adminVO.getAdminPw()));
+			
+			model.addAttribute("msg", "SUCCESS");
+			model.addAttribute("admin", adminVO);
+		}
+		catch (IllegalArgumentException e) {
+			// salt가 없는 문제 ( DB에 평문 입력으로, 암호화되지 않은 비밀번의 경우 ) 
+			// 비밀번호 변경을 권유
+			e.printStackTrace();
+			model.addAttribute("msg","NOTHASH");
+			return "/admin/login";
+		}catch(Exception e) {
+			e.printStackTrace();
+			model.addAttribute("msg","FAIL");
 			return "/admin/login";
 		}
-		// 이메일 인증이 안된 경우
-		else if(!adminVO.getAdminAuthKey().contentEquals("Y")) {
-			model.addAttribute("adminEmail", adminVO.getAdminEmail());
-			return "/admin/emailSend";
-		}
-		
-		// 로그인 성공, loginInterceptor postHandler로 쿠키 생성
-		
-		adminService.keepSession(adminVO.getAdminId() , httpSession.getId());
-		
-		logger.info("userVO : " + loginDTO.getAdminId() + ", loginDTO : ", loginDTO.getAdminId());
-		logger.info("checkpw Boolean : " + BCrypt.checkpw(loginDTO.getAdminPw(), adminVO.getAdminPw()));
-		
-		model.addAttribute("msg", "SUCCESS");
-		model.addAttribute("admin", adminVO);
-		
+
 		return "/commons/index";
 	}
 	
@@ -186,7 +211,10 @@ public class AdminController {
 	public String findPOST(@RequestParam("adminEmail") String adminEmail, Model model ,HttpServletRequest request) throws Exception {
 		AdminVO adminVO = adminService.findAccountById(adminEmail);
 		model.addAttribute("adminEmail", adminEmail);
-
+		if(adminVO == null) {
+			model.addAttribute("msg", "FAIL");
+			return "/admin/find";
+		}
 		adminMailService.mailSendWithAccount(adminVO, request);
 		
 		return "/admin/findResult";
@@ -240,4 +268,20 @@ public class AdminController {
 		return "/admin/logout";
 	}
 	
+	
+	// 회원정보 전달
+	@RequestMapping(value = "/listAdmin", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, String> listAdmin() throws Exception {
+		List<AdminVO> list = adminService.listAll();
+		Map<String, String> mapAdmin = new HashMap<String,String>();
+		for(AdminVO adminVO : list) {
+			mapAdmin.put(adminVO.getAdminId(), adminVO.getAdminName());
+		}
+		
+		return mapAdmin;
+	}
 }
+
+
+

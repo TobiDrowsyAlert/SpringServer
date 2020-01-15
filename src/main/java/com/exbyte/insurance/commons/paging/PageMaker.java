@@ -56,11 +56,22 @@ public class PageMaker {
 				.queryParam("perPageNum", criteria.getPerPageNum())
 				.queryParam("searchType", criteria.getSearchType())
 				.queryParam("keyword", criteria.getKeyword())
+				.queryParam("sortType", criteria.getSortType())
+				.queryParam("sortOrder", criteria.getSortOrder())
 				.build();
 		
 		return uriComponents.toString();
 	}
 	
+    public String makeQuery(int page){
+        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                .queryParam("page", page)
+                .queryParam("perPageNum", criteria.getPerPageNum())
+                .build();
+
+        return uriComponents.toString();
+    }
+    
     private String encoding(String keyword){
         if(keyword == null || keyword.trim().length() == 0){
             return "";

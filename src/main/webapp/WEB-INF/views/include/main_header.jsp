@@ -59,7 +59,7 @@
          </a>
         </c:if>
         <c:if test="${not empty login }">
-         <h5>회원 아이디 : ${login.adminName } </h5>
+         <h5>회원 아이디 : ${login.adminId } </h5>
          <a href="${path}/consulting/list" class="dropdown-item">
            <i class="fas fa-envelope mr-2"></i> 처리 페이지
          </a>
@@ -69,9 +69,6 @@
          </a>
          <a href="${path}/admin/logout" class="dropdown-item">
            <i class="mr-2"></i>로그아웃
-         </a>
-         <a class="dropdown-item" id="deleteAdmin" href="#">
-         	<i class="mr-2"></i>회원탈퇴
          </a>
         </c:if>
         </div> <!-- dropdown menu -->

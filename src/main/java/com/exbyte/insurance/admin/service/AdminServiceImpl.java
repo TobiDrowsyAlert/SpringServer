@@ -1,5 +1,7 @@
 package com.exbyte.insurance.admin.service;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
 import com.exbyte.insurance.admin.persistence.AdminDAO;
+import com.exbyte.insurance.point.domain.PointVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -98,6 +101,15 @@ public class AdminServiceImpl implements AdminService {
 		adminDAO.updatePw(adminVO);
 	}
 	
-	
+	@Override
+	public List<PointVO> listPoint() throws Exception {
+		return adminDAO.listPoint();
+	}
+
+	@Override
+	public List<AdminVO> listAll() throws Exception {
+		return adminDAO.listAll();
+		
+	}
 	
 }

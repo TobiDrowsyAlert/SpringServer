@@ -67,6 +67,10 @@
 <!-- ./wrapper -->
 <%@ include file="../include/plugin_js.jsp"%>
 <script>
+ result="${msg}";
+ if(result=="FAIL"){
+		alert('이메일을 다시 확인해주세요.');
+	}
 
 </script>
 </body>

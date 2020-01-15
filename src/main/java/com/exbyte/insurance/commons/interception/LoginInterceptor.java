@@ -49,6 +49,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 		if(adminVO != null) {
 			logger.info("LoginSuccess");
 			httpSession.setAttribute(LOGIN, adminVO);
+			// 세션 만료 기간 일주일,
+			httpSession.setMaxInactiveInterval(60 * 60 * 24 * 7);
 			
 			if(request.getParameter("useCookie") != null) {
 				logger.info("remember Cookie");
@@ -58,15 +60,14 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 				loginCookie.setMaxAge(60*60*24*7); // 일주일 동안 보관
 
 				// 쿠키 전송
+				// 쿠키에 담긴 정보, 생성한 Session Id
 				response.addCookie(loginCookie);
-				
 			} 
 			
-			response.sendRedirect("/admin/login");
-			
 		} else {
-			logger.info("LoginFail in Interceptor ");
+			logger.info("LoginFail in Interceptor");
 		}
+		
 	}
 	
 }
