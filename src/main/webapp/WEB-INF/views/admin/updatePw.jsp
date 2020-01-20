@@ -41,8 +41,8 @@
             <div class="col-lg-12">
                 <div class="card card-primary card-outline">
                 <form method="post" action="${path }/admin/updatePwPOST">
-                <input type="text" name="adminId" value="${param.adminId }">
-                <input type="text" name="authKey" value="${param.authKey }">
+                <input type="text" name="adminId" value="${param.adminId }" hidden=true>
+                <input type="text" name="authKey" value="${param.authKey }" hidden=true>
                     <div class="card-header">
                     	<h3 class="card-title">비밀번호 변경 </h3>
                     </div><!--/.card-header-->

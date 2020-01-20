@@ -27,23 +27,8 @@ public class ConsultingServiceImpl implements ConsultingService {
 	}
 
 	@Override
-	public List<ConsultingVO> selectAll(Criteria criteria) throws Exception {
-		return consultingDAO.selectAll(criteria);
-	}
-
-	@Override
-	public List<ConsultingVO> selectConsultingById(Criteria criteria, String adminId) throws Exception {
-		return consultingDAO.selectConsultingById(criteria, adminId);
-	}
-
-	@Override
-	public List<AdminVO> selectAdminByPoint(Criteria criteria, int adminPoint) throws Exception {
-		return consultingDAO.selectAdminByPoint(criteria, adminPoint);
-	}
-
-	@Override
-	public List<ConsultingVO> selectConsultingByPoint(Criteria criteria, int adminPoint) throws Exception {
-		return consultingDAO.selectConsultingByPoint(criteria, adminPoint);
+	public List<ConsultingVO> selectAll(Criteria criteria, AdminVO adminVO) throws Exception {
+		return consultingDAO.selectAll(criteria, adminVO);
 	}
 
 	@Override
@@ -52,8 +37,8 @@ public class ConsultingServiceImpl implements ConsultingService {
 	}
 
 	@Override
-	public int countAll() throws Exception {
-		return consultingDAO.countAll();
+	public int countAll(Criteria criteria, AdminVO adminVO) throws Exception {
+		return consultingDAO.countAll(criteria, adminVO);
 		
 	}
 

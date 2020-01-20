@@ -22,6 +22,8 @@ public class ConsultingVO {
 	Boolean consultingIsCall;
 	Boolean consultingIsEnd;
 	Date consultingRegDate;
+	String consultingFavoriteType;
+	String consultingRegion;
 	String consultingRemarks;
 	
 }

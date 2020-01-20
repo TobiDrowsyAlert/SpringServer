@@ -43,26 +43,14 @@ public class ConsultingController {
 		
 		AdminVO admin = (AdminVO) httpSession.getAttribute("login");
 		List<ConsultingVO> consultings = null;
+		logger.info(admin.toString());
 		
-		if(admin.getAdminPosition().equals("책임자")) {
-			consultings =  consultingService.selectAll(criteria);
-		}
-		else if(admin.getAdminPosition().equals("지사장")) {
-			consultings = consultingService.selectConsultingByPoint(criteria, admin.getAdminPoint());
-		}
-		else if(admin.getAdminPosition().equals("직원")) {
-			consultings = consultingService.selectConsultingById(criteria, admin.getAdminId());
-		}
-		else {
-			logger.info("list error");
-			model.addAttribute("msg", "FAIL");
-			return "/commons/index";
-		}
+		consultings = consultingService.selectAll(criteria, admin);
 		
 		//파라미터인 criteria는 list에서 값 삽입, (form)
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);
-		pageMaker.setTotalPageNum(consultingService.countAll());
+		pageMaker.setTotalPageNum(consultingService.countAll(criteria, admin));
 		
 		model.addAttribute("consultings", consultings);
 		model.addAttribute("pageMaker", pageMaker);
@@ -152,7 +140,9 @@ public class ConsultingController {
 	public int updateCousltingAdmin(Model model, @RequestParam(value="chkbox[]") List<String> arr,
 			@RequestParam(value="adminId") String adminId) {
 		logger.info("updateAdmin work...");
-		
+		if(adminId.equals("")) {
+			return 0;
+		}
 		
 		try {	
 			int consultingNo;
@@ -161,6 +151,39 @@ public class ConsultingController {
 				consultingNo = Integer.parseInt(i);
 				ConsultingVO consultingVO = consultingService.read(consultingNo);
 				consultingVO.setAdminId(adminId);
+				consultingService.update(consultingVO);
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return 0;
+		}
+		return 1;
+	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.GET)
+	@ResponseBody
+	public int updateGET(Model model, @RequestParam(value="chkbox[]") List<String> arr,
+			@RequestParam(value="value") String checkUpdateValue) {
+		
+		logger.info("update work...");
+		
+		if(checkUpdateValue == null) {
+			return 0;
+		}
+		
+		
+		try {	
+			int consultingNo;
+			
+			for(String i : arr) {
+				consultingNo = Integer.parseInt(i);
+				ConsultingVO consultingVO = consultingService.read(consultingNo);
+				if(checkUpdateValue.equals("consultingIsCall")) {
+					consultingVO.setConsultingIsCall(true);
+				}else if(checkUpdateValue.equals("consultingIsEnd")){
+					consultingVO.setConsultingIsEnd(true);
+				}
 				consultingService.update(consultingVO);
 			}
 		}catch (Exception e) {

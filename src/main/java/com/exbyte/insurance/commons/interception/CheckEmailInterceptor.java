@@ -11,33 +11,21 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.service.AdminService;
 
-public class AuthEmailInterceptor extends HandlerInterceptorAdapter {
+public class CheckEmailInterceptor extends HandlerInterceptorAdapter {
 
-	private static Logger logger = LoggerFactory.getLogger(AuthEmailInterceptor.class);
+	private static Logger logger = LoggerFactory.getLogger(CheckEmailInterceptor.class);
 	
 	@Inject
 	private AdminService adminService;
 	
-
-	// 이메일 인증 키 검사
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		logger.info("AuthEmailInterceptor Work...");
-		
-		if(adminService == null) {
-			logger.info("adminService is Null");
-		}
-		
+	
 		String adminId = request.getParameter("adminId");
-		logger.info("adminID : " + adminId);
-		
 		AdminVO adminVO = adminService.read(adminId);
-		
 		String authKey = adminService.checkAuthKey(adminVO.getAdminId());
-		logger.info("adminVO : "+ adminVO.toString());
-		logger.info("request authKey : "+ request.getParameter("authKey"));
-		logger.info("adminVO authKey : "+ adminVO.getAdminAuthKey());
+
 		
 		// 인증 키 값이 다르다면 거절
 		if(!authKey.equals(request.getParameter("authKey"))) {

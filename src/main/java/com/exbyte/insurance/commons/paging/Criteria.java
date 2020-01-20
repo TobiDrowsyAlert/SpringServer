@@ -11,6 +11,7 @@ public class Criteria {
 	
 	private int page;
 	private int perPageNum;
+	private String pageType;
 	private String searchType;
 	private String sortOrder;
 	private String keyword;

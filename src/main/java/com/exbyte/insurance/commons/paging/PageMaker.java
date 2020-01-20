@@ -72,6 +72,15 @@ public class PageMaker {
         return uriComponents.toString();
     }
     
+    public String makeQuery(){
+        UriComponents uriComponents = UriComponentsBuilder.newInstance()
+                .queryParam("page", criteria.getPage())
+                .queryParam("perPageNum", criteria.getPerPageNum())
+                .build();
+
+        return uriComponents.toString();
+    }
+    
     private String encoding(String keyword){
         if(keyword == null || keyword.trim().length() == 0){
             return "";

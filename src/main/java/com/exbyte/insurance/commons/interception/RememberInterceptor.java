@@ -12,7 +12,7 @@ import com.exbyte.insurance.admin.service.AdminService;
 
 public class RememberInterceptor extends HandlerInterceptorAdapter {
 
-	private static final Logger logger = LoggerFactory.getLogger(AuthInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(RememberInterceptor.class);
 	
 	@Inject
 	AdminService adminService;

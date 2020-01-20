@@ -38,5 +38,16 @@
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
+	<style>
+		.table td, .table th{
+			padding : 0.3rem;
+			text-align : center;
+		}
+		
+		.custom-select {
+			background : no-repeat right .75rem center/8px 10px;
+			background-color : #fff;
+		}
+	</style>
 
 </head>

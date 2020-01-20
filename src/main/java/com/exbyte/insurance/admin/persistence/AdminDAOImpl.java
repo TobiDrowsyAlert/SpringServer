@@ -32,6 +32,10 @@ public class AdminDAOImpl implements AdminDAO{
 
 	@Override
 	public AdminVO read(String adminId) throws Exception {
+		
+		AdminVO adminVO = sqlSession.selectOne(NAMESPACE + ".read", adminId);
+		
+		
 		return sqlSession.selectOne(NAMESPACE + ".read", adminId);
 	}
 
@@ -119,6 +123,15 @@ public class AdminDAOImpl implements AdminDAO{
 	public List<AdminVO> listAll() throws Exception {
 		return sqlSession.selectList(NAMESPACE + ".listAll");
 		
+	}
+
+	@Override
+	public int count(AdminVO adminVO, String checkType) throws Exception {
+		Map<String, Object> paramMap = new HashMap<>();
+		paramMap.put("adminVO", adminVO);
+		paramMap.put("checkType", checkType);
+		
+		return sqlSession.selectOne(NAMESPACE + ".count", paramMap );
 	}
 
 }

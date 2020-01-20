@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import com.exbyte.insurance.admin.domain.AdminVO;
@@ -103,13 +104,29 @@ public class AdminServiceImpl implements AdminService {
 	
 	@Override
 	public List<PointVO> listPoint() throws Exception {
-		return adminDAO.listPoint();
+		List<PointVO> points = adminDAO.listPoint();
+		return points;
 	}
 
 	@Override
 	public List<AdminVO> listAll() throws Exception {
 		return adminDAO.listAll();
-		
 	}
+	
+	@Override
+	public int count(AdminVO adminVO, String checkType) throws Exception {
+		return adminDAO.count(adminVO, checkType);
+	}
+	
+	@Override
+	public AdminVO hashAccount(AdminVO adminVO) throws Exception{
+		String hashPw = BCrypt.hashpw(adminVO.getAdminPw(), BCrypt.gensalt());
+		adminVO.setAdminPw(hashPw);
+		adminDAO.create(adminVO);
+		
+		return adminVO;
+	}
+
+	
 	
 }

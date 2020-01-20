@@ -23,24 +23,6 @@
 		)
 	</insert>
 
-	<select id="read" resultMap="AdminResultMap">
-		SELECT
-			*
-		FROM
-			tbl_admin
-		WHERE
-			admin_id = #{adminId}
-	</select>
-	
-	<select id="login" resultMap="AdminResultMap">
-		SELECT
-			*
-		FROM
-			tbl_admin
-		WHERE
-			admin_id = #{adminId}
-	</select>
-	
 	<update id="update">
 		UPDATE 
 			tbl_admin
@@ -88,10 +70,22 @@
 
 	<select id="checkDuplicateSession" resultType="int">
 		SELECT
-			COUNT(admin_id)
+			COUNT(*)
 		FROM
 			tbl_admin
-		WHERE session_key = #{value}
+		WHERE
+			admin_id IS NOT NULL
+			AND session_key = #{value}
+	</select>
+		
+	<select id = "checkOverEmail" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			tbl_admin
+		WHERE
+			admin_id IS NOT NULL
+			AND admin_email = #{adminEmail}
 	</select>
 	
 	<select id = "checkOverId" resultType="int">
@@ -100,8 +94,54 @@
 		FROM
 			tbl_admin
 		WHERE
+			admin_id IS NOT NULL
+			AND admin_id = #{adminId}
+	</select>
+	
+	<select id ="count" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			tbl_admin
+		WHERE
+			admin_id IS NOT NULL
+			<include refid="checkType"/>
+	</select>
+	
+	<select id="read" resultMap="AdminResultMap">
+		SELECT
+			*
+		FROM
+			tbl_admin
+		WHERE
 			admin_id = #{adminId}
 	</select>
+	
+	
+	<select id = "findAccountById" resultMap="AdminResultMap">
+		SELECT
+			*
+		FROM
+			tbl_admin
+		WHERE
+			admin_email = #{adminEmail}
+	</select>
+	
+	
+	
+	<sql id="checkType">
+		<if test="checkType != null">
+			<if test="checkType == 'sessionKey'.toString">
+				AND session_key = #{adminVO.sessionKey}
+			</if>
+			<if test="checkType == 'adminEmail'.toString">
+				AND admin_email = #{adminVO.adminEmail}
+			</if>
+			<if test="checkType == 'adminId'.toString">
+				AND admin_id = #{adminVO.adminId}
+			</if>
+		</if>
+	</sql>
 	
 	<select id = "checkAuthKey" resultType="string">
 		SELECT
@@ -119,25 +159,7 @@
 			admin_auth_key = #{adminAuthKey}
 		WHERE admin_id = #{adminId}
 	</update>
-	
-	<select id = "checkOverEmail" resultType="int">
-		SELECT
-			COUNT(*)
-		FROM
-			tbl_admin
-		WHERE
-			admin_email = #{adminEmail}
-	</select>
-	
-	<select id = "findAccountById" resultMap="AdminResultMap">
-		SELECT
-			*
-		FROM
-			tbl_admin
-		WHERE
-			admin_email = #{adminEmail}
-	</select>
-	
+
 	<update id = "updatePw">
 		UPDATE 
 			tbl_admin
@@ -160,6 +182,8 @@
 		FROM
 			tbl_point
 	</select>
+	
+
 	
 <resultMap type="AdminVO" id="AdminResultMap">
 	<id property="adminId" column="admin_id"/>

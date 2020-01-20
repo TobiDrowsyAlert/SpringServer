@@ -36,6 +36,16 @@ public class AdminDAOTest {
 	}
 	
 	@Test
+	public void countTest() throws Exception{
+		
+		AdminVO adminVO = new AdminVO();
+		adminVO.setAdminId("admin");
+		
+		logger.info("count Value : " + adminDAO.count(adminVO, "adminEmail"));
+		
+	}
+	
+	@Test
 	public void createTest() throws Exception{
 		
 		AdminVO admin = new AdminVO();

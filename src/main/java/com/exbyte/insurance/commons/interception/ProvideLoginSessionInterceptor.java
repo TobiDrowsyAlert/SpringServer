@@ -14,9 +14,9 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.exbyte.insurance.admin.service.AdminService;
 
-public class LoginInterceptor extends HandlerInterceptorAdapter{
+public class ProvideLoginSessionInterceptor extends HandlerInterceptorAdapter{
 	
-	private final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
+	private final Logger logger = LoggerFactory.getLogger(ProvideLoginSessionInterceptor.class);
 	private final String LOGIN = "login";
 	
 	@Inject

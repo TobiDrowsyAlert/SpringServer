@@ -13,6 +13,8 @@
 		    consulting_birthday,
 		    consulting_kinds,
 		    consulting_type,
+		    consulting_favorite_type,
+		    consulting_region,
 		    consulting_remarks
 		) VALUES (
 			#{consultingName},
@@ -21,6 +23,8 @@
 		   	#{consultingBirthday},
 		    #{consultingKinds},
 		    #{consultingType},
+		    #{consultingFavoriteType},
+		    #{consultingRegion},
 		    #{consultingRemarks}
 		);
 	</insert>
@@ -32,55 +36,14 @@
 			tbl_consulting
 		WHERE
 			consulting_no > 0
+		<include refid="position"/>
 		<include refid="search"/>
 		<include refid="sort"/>
 		LIMIT
-			#{pageStart}, #{perPageNum}
+			#{criteria.pageStart}, #{criteria.perPageNum}
 	</select>
 
-	<select id="selectConsultingById" resultMap="ConsultingResultMap">
-		SELECT
-			*
-		FROM
-			tbl_consulting
-		WHERE
-			admin_id = #{adminId}
-		<include refid="search"/>
-		<include refid="sort"/>
-		LIMIT
-			#{criteria.pageStart}, #{criteria.perPageNum}
-	</select>
-	
-	<select id="selectAdminByPoint" resultMap="AdminResultMap">
-		SELECT
-			*
-		FROM
-			tbl_admin
-		WHERE
-			admin_point IN #{adminPoint}
-		LIMIT
-			#{criteria.pageStart}, #{criteria.perPageNum}
-	</select>
-	
-	<select id="selectConsultingByPoint" resultMap="ConsultingResultMap">
-		SELECT
-			*
-		FROM
-			tbl_consulting
-		WHERE
-			admin_id IN 
-			(SELECT 
-				admin_id 
-			FROM 
-				tbl_admin 
-			WHERE 
-				admin_point = #{adminPoint})
-		<include refid="search"/>
-		<include refid="sort"/>
-		LIMIT
-			#{criteria.pageStart}, #{criteria.perPageNum}
-	</select>
-	
+
 	<select id="read" resultMap="ConsultingResultMap">
 		SELECT
 			*
@@ -115,32 +78,47 @@
 	
 	<select id="countAll" resultType="int">
 		SELECT
-			COUNT(consulting_no)
+			COUNT(*)
 		FROM
 			tbl_consulting
 		WHERE
-			consulting_no > 0	
+			consulting_no > 0
+		<include refid="position"/>
+		<include refid="search"/>
 	</select>
+
+	<sql id="position">
+		<if test="adminVO.adminPosition == '지사장'">
+			AND admin_id IN
+				(SELECT
+					admin_id
+				FROM
+					tbl_admin
+				WHERE
+					admin_point = #{adminVO.adminPoint})
+		</if>
+		<if test="adminVO.adminPosition == '직원'">
+			AND admin_id = #{adminVO.adminId}
+		</if>
+	</sql>
 	
+		
 	<sql id="search">
-		<if test="searchType != null">
-			<if test="searchType == 'i'.toString">
-				AND admin_id LIKE CONCAT('%', #{keyword}, '%')
+		<if test="criteria.searchType != null">
+			<if test="criteria.searchType == 'i'.toString">
+				AND admin_id LIKE CONCAT('%', #{criteria.keyword}, '%')
 			</if>
-			<if test="searchType == 'n'.toString">
-				AND consulting_name LIKE CONCAT('%' , #{keyword}, '%')
+			<if test="criteria.searchType == 'n'.toString">
+				AND consulting_name LIKE CONCAT('%' , #{criteria.keyword}, '%')
 			</if>
 		</if>
 	</sql>
 
 	<sql id="sort">
-		<if test="sortType != null">
-			<if test="sortType == ''.toString">
-				ORDER BY consulting_no DESC
-			</if>
-			<if test="sortType == 'no'.toString">
+		<if test="criteria.sortType != null">
+			<if test="criteria.sortType == ''">
 				<choose>
-					<when test="sortOrder == 'DESC'">
+					<when test="criteria.sortOrder == 'DESC'">
 						ORDER BY consulting_no DESC
 					</when>
 					<otherwise>
@@ -148,9 +126,19 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="sortType == 'email'.toString">
+			<if test="criteria.sortType == 'no'">
 				<choose>
-					<when test="sortOrder == 'DESC'">
+					<when test="criteria.sortOrder == 'DESC'">
+						ORDER BY consulting_no DESC
+					</when>
+					<otherwise>
+						ORDER BY consulting_no ASC
+					</otherwise>
+				</choose>
+			</if>
+			<if test="criteria.sortType == 'email'">
+				<choose>
+					<when test="criteria.sortOrder == 'DESC'">
 						ORDER BY consulting_email DESC, consulting_no DESC
 					</when>
 					<otherwise>
@@ -158,9 +146,9 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="sortType == 'sex'.toString">
+			<if test="criteria.sortType == 'sex'">
 				<choose>
-					<when test="sortOrder == 'DESC'">
+					<when test="criteria.sortOrder == 'DESC'">
 						ORDER BY consulting_sex DESC, consulting_no DESC
 					</when>
 					<otherwise>
@@ -169,9 +157,9 @@
 				</choose>
 
 			</if>
-			<if test="sortType == 'kinds'.toString">
+			<if test="criteria.sortType == 'kinds'">
 				<choose>
-					<when test="sortOrder == 'DESC'">
+					<when test="criteria.sortOrder == 'DESC'">
 						ORDER BY consulting_kinds DESC, consulting_no DESC
 					</when>
 					<otherwise>
@@ -179,9 +167,9 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="sortType == 'type'.toString">
+			<if test="criteria.sortType == 'type'">
 				<choose>
-					<when test="sortOrder == 'DESC'">
+					<when test="criteria.sortOrder == 'DESC'">
 						ORDER BY consulting_type DESC, consulting_no DESC
 					</when>
 					<otherwise>
@@ -189,9 +177,9 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="sortType == 'call'.toString">
+			<if test="criteria.sortType == 'call'">
 				<choose>
-					<when test="sortOrder == 'DESC'">
+					<when test="criteria.sortOrder == 'DESC'">
 						ORDER BY consulting_is_call DESC, consulting_no DESC
 					</when>
 					<otherwise>
@@ -199,9 +187,9 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="sortType == 'end'.toString">
+			<if test="criteria.sortType == 'end'">
 				<choose>
-					<when test="sortOrder == 'DESC'">
+					<when test="criteria.sortOrder == 'DESC'">
 						ORDER BY consulting_is_end DESC, consulting_no DESC
 					</when>
 					<otherwise>
@@ -209,9 +197,9 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="sortType == 'reg'.toString">
+			<if test="criteria.sortType == 'reg'">
 				<choose>
-					<when test="sortOrder == 'DESC'">
+					<when test="criteria.sortOrder == 'DESC'">
 						ORDER BY consulting_reg_date DESC, consulting_no DESC
 					</when>
 					<otherwise>
@@ -220,10 +208,12 @@
 				</choose>
 			</if>
 		</if>
-		<if test="sortType == null">
+		<if test="criteria.sortType == null">
 			ORDER BY consulting_no DESC
 		</if>
 	</sql>
+	
+
 	
 	<resultMap type="ConsultingVO" id="ConsultingResultMap">
 		<id property="consultingNo" column="consulting_no"/>
@@ -237,6 +227,8 @@
 		<result property="consultingIsCall" column="consulting_is_call" />
 		<result property="consultingIsEnd" column="consulting_is_end" />
 		<result property="consultingRegDate" column="consulting_reg_date" />
+		<result property="consultingFavoriteType" column="consulting_favorite_type"/>
+		<result property="consultingRegion" column="consulting_region"/>
 		<result property="consultingRemarks" column="consulting_remarks" />
 	</resultMap>
 

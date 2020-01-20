@@ -59,7 +59,7 @@
 	                    <div class="card-footer">
 	                    	<div class="checkbox icheck float-right">
 	                    		<label>
-	                    			<input type="checkbox" name="useCookie">로그인유지
+	                    			<input type="checkbox" name="useCookie" >로그인유지 
 	                    		</label>
 	                    	</div>
 	                    	<button type="submit" class="btn btn-primary"><i class="fa fa-save"></i>로그인</button>
@@ -91,6 +91,8 @@
 	}
 	else if(result == "AUTHFAIL"){
 		alert("${email}" + "이메일을 확인해주세요.");
+	}else if(result == "NOTHASH"){
+		alert("비밀번호 변경이 필요합니다.");
 	}
 
 </script>

@@ -10,7 +10,30 @@
 
     <!-- Left side column. contains the logo and sidebar -->
     <%@ include file="../include/left_column.jsp"%>
-
+		
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<!-- Content Header (Page header) -->
+		<div class="content-header">
+			<div class="container-fluid">
+				<div class="row mb-2">
+					<div class="col-sm-6">
+						<h1 class="m-0 text-dark">sample</h1>
+					</div>
+					<!-- /.col -->
+					<div class="col-sm-6">
+						<ol class="breadcrumb float-sm-right">
+							<li class="breadcrumb-item"><a href="#">Home</a></li>
+							<li class="breadcrumb-item active">...</li>
+						</ol>
+					</div>
+					<!-- /.col -->
+				</div>
+				<!-- /.row -->
+			</div>
+			<!-- /.container-fluid -->
+		</div>
+		<!-- /.content-header -->
 
         <!-- Main content -->
         <section class="content container-fluid">
@@ -40,7 +63,7 @@
 
     <!-- Main Footer -->
     <%@ include file="../include/main_footer.jsp"%>
-</div>
+	</div>
 <!-- ./wrapper -->
 <%@ include file="../include/plugin_js.jsp"%>
 <script>

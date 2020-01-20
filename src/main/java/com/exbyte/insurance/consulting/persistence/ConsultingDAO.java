@@ -10,13 +10,9 @@ public interface ConsultingDAO {
 
 	void create(ConsultingVO consultingVO) throws Exception;
 	ConsultingVO read(int consultingNo) throws Exception;
-	List<ConsultingVO> selectAll(Criteria criteria) throws Exception;
-	List<ConsultingVO> selectConsultingById(Criteria criteria, String adminId) throws Exception;
-	List<AdminVO> selectAdminByPoint(Criteria criteria, int adminPoint) throws Exception;
-	List<ConsultingVO> selectConsultingByPoint(Criteria criteria, int adminPoint) throws Exception;
+	List<ConsultingVO> selectAll(Criteria criteria, AdminVO adminVO) throws Exception;
 	
 	void update(ConsultingVO consultingVO) throws Exception;
 	void delete(int consultingNo) throws Exception;
-	int countAll() throws Exception;
-	
+	int countAll(Criteria criteria, AdminVO adminVO) throws Exception;
 }

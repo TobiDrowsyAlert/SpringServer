@@ -19,28 +19,23 @@
 					<div class="row mb-2">
 						<div class="col-sm-6">
 							<h1 class="m-0 text-dark">sample</h1>
-						</div>
-						<!-- /.col -->
+						</div><!-- /.col -->
 						<div class="col-sm-6">
 							<ol class="breadcrumb float-sm-right">
 								<li class="breadcrumb-item"><a href="#">Home</a></li>
 								<li class="breadcrumb-item active">회원가입</li>
 							</ol>
-						</div>
-						<!-- /.col -->
-					</div>
-					<!-- /.row -->
-				</div>
-				<!-- /.container-fluid -->
-			</div>
-			<!-- /.content-header -->
+						</div><!-- /.col -->
+					</div><!-- /.row -->
+				</div><!-- /.container-fluid -->
+			</div><!-- /.content-header -->
 
 			<!-- Main content -->
 			<section class="content container-fluid">
 				<div class="col-lg-12">
 					<div class="card card-primary card-outline">
-						<form fole="form" id="writeForm" method="post"
-							action="${path}/admin/register">
+						<form role="form" id="writeForm" method="post"
+							action="${path}/admin/registerPOST">
 							<div class="card-header">
 								<h3 class="card-title">회원가입</h3>
 							</div>
@@ -129,11 +124,17 @@
 
 	    $('#btnSubmit').attr("disabled", false);
 	  }
+	  
 	  $('#adminId').blur(function(){
 	    var adminId = $('#adminId').val();
+	    var adminVO ={
+			"adminId" : adminId
+	    };
 	    $.ajax({
-	      url : "http://localhost:8080/admin/checkId"+"?adminId=" + adminId,
-	      type : "get",
+	      //url : "http://localhost:8080/admin/checkId",
+	      url : "http://localhost:8080/checkId",
+	      type : "GET",
+	      data : {"adminVO", adminVO},
 	      success : function(data){
 	          if(data==1){
 	            // 1: 중복

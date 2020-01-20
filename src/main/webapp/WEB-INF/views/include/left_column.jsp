@@ -34,7 +34,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="${path}/article/write" class="nav-link active">
+                <a href="#" class="nav-link active">
                   <i class="fa fa-pencil-alt"></i>
                   <p>게시판 쓰기</p>
                 </a>

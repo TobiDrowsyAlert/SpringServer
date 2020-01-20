@@ -15,11 +15,14 @@ public class LogAdvice {
 
 	private static final Logger logger = LoggerFactory.getLogger(LogAdvice.class);
 	
+	
+	
 	@Around("execution(* com.exbyte.insurance..*Controller.*(..))"
 			+ " or execution(* com.exbyte.insurance..service..*Impl.*(..))"
 			+ " or execution(* com.exbyte.insurance..persistence..*Impl.*(..))"
 			)
 	public Object logPrint(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+		
 		long start = System.currentTimeMillis();
 		
 		Object result = proceedingJoinPoint.proceed();

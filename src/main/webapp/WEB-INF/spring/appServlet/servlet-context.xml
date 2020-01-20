@@ -13,6 +13,7 @@
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
+	<aop:aspectj-autoproxy/>
     <context:component-scan base-package="com.exbyte.insurance"/> <!-- Component 패키지 지정 -->
 
 
@@ -31,12 +32,17 @@
 	<interceptors>
 		<interceptor>
 			<mapping path="/admin/loginPOST"/>
-			<beans:bean id ="loginInterceptor" class="com.exbyte.insurance.commons.interception.LoginInterceptor" />
+			<beans:bean id ="loginInterceptor" class="com.exbyte.insurance.commons.interception.ProvideLoginSessionInterceptor" />
 		</interceptor>
 		<interceptor>
 			<mapping path="/admin/list"/>
 			<mapping path="/consulting/list"/>
-			<beans:bean id ="authInterceptor" class="com.exbyte.insurance.commons.interception.AuthInterceptor" />
+			<beans:bean id ="authInterceptor" class="com.exbyte.insurance.commons.interception.CheckLoginInterceptor" />
+		</interceptor>
+		<interceptor>
+			<mapping path="/admin/login"/>
+			<mapping path="/admin/register"/>
+			<beans:bean id = "loginAfterInterceptor" class="com.exbyte.insurance.commons.interception.CheckLoginAfterInterceptor"/>
 		</interceptor>
 		<interceptor>
 			<mapping path="/admin/login" />
@@ -44,12 +50,7 @@
 		</interceptor>
 		<interceptor>
 			<mapping path="/admin/updatePw" />
-			<beans:bean id ="authEmailInterceptor" class="com.exbyte.insurance.commons.interception.AuthEmailInterceptor" />
-		</interceptor>
-		<interceptor>
-			<mapping path="/admin/login"/>
-			<mapping path="/admin/register"/>
-			<beans:bean id = "loginAfterInterceptor" class="com.exbyte.insurance.commons.interception.LoginAfterInterceptor"/>
+			<beans:bean id ="authEmailInterceptor" class="com.exbyte.insurance.commons.interception.CheckEmailInterceptor" />
 		</interceptor>
 	</interceptors>
 

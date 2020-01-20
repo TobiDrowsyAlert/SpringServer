@@ -40,7 +40,7 @@
         <section class="content container-fluid">
             <div class="col-lg-12">
                 <div class="card card-primary card-outline">
-                <form action="${path }/admin/emailSend" method="post">
+                <form action="${path }/admin/email" method="post">
                 	<input type="text" name="adminEmail" value="${adminEmail }" hidden="true"> 
                     <div class="card-header">
                     	<h3 class="card-title">계정찾기 </h3>

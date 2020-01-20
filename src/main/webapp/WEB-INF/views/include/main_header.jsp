@@ -13,13 +13,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <c:set var="path" value="${pageContext.request.contextPath}"/>
 
-    <!-- Brand Logo -->
-  <a href="index3.html" class="brand-link">
-    <img src="../images/logo1.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
-         style="opacity: .8">
-    <span class="brand-text font-weight-light">Example</span>
-  </a>
- 
   
   <!-- Navbar -->
    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -29,10 +22,7 @@
           <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
-            <a href="index3.html" class="nav-link">Home</a>
-          </li>
-          <li class="nav-item d-none d-sm-inline-block">
-            <a href="#" class="nav-link">Contact</a>
+            <a href="/" class="nav-link">Home</a>
           </li>
      </ul>
 
@@ -60,11 +50,11 @@
         </c:if>
         <c:if test="${not empty login }">
          <h5>회원 아이디 : ${login.adminId } </h5>
-         <a href="${path}/consulting/list" class="dropdown-item">
+         <a href="${path}/consulting/list?sortOrder=DESC" class="dropdown-item">
            <i class="fas fa-envelope mr-2"></i> 처리 페이지
          </a>
          <div class="dropdown-divider"></div>
-         <a href="${path}/admin/login" class="dropdown-item">
+         <a href="${path}/admin/account?adminId=${login.adminId }" class="dropdown-item">
            <i class="fas fa-user mr-2"></i> 개인 정보
          </a>
          <a href="${path}/admin/logout" class="dropdown-item">

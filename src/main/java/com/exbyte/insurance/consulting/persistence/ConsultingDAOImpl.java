@@ -32,40 +32,14 @@ public class ConsultingDAOImpl implements ConsultingDAO {
 	}
 
 	@Override
-	public List<ConsultingVO> selectAll(Criteria criteria) throws Exception {
-		return sqlSession.selectList(NAMESPACE + ".selectAll", criteria);
-	}
-
-
-
-	@Override
-	public List<ConsultingVO> selectConsultingById(Criteria criteria, String adminId) throws Exception {
-		Map<String, Object> paramMap = new HashMap<>();
+	public List<ConsultingVO> selectAll(Criteria criteria, AdminVO adminVO) throws Exception {
+		Map<Object, Object> paramMap = new HashMap<>();
 		paramMap.put("criteria", criteria);
-		paramMap.put("adminId", adminId);
-		return sqlSession.selectList(NAMESPACE + ".selectConsultingById", paramMap);
-		
+		paramMap.put("adminVO", adminVO);
+		return sqlSession.selectList(NAMESPACE + ".selectAll", paramMap);
 	}
 
 
-	@Override
-	public List<AdminVO> selectAdminByPoint(Criteria criteria, int adminPoint) throws Exception {
-		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("criteria", criteria);
-		paramMap.put("adminPoint", adminPoint);
-		return sqlSession.selectList(NAMESPACE + ".selectAdminByPoint", paramMap);
-		
-	}
-
-
-	@Override
-	public List<ConsultingVO> selectConsultingByPoint(Criteria criteria, int adminPoint) throws Exception {
-		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("criteria", criteria);
-		paramMap.put("adminPoint", adminPoint);
-		return sqlSession.selectList(NAMESPACE + ".selectConsultingByPoint", paramMap);
-		
-	}
 
 	@Override
 	public void update(ConsultingVO consultingVO) throws Exception {
@@ -80,8 +54,12 @@ public class ConsultingDAOImpl implements ConsultingDAO {
 
 
 	@Override
-	public int countAll() throws Exception {
-		return sqlSession.selectOne(NAMESPACE + ".countAll");
+	public int countAll(Criteria criteria, AdminVO adminVO) throws Exception {
+		Map<Object, Object> paramMap = new HashMap<>();
+		paramMap.put("criteria", criteria);
+		paramMap.put("adminVO", adminVO);
+		
+		return sqlSession.selectOne(NAMESPACE + ".countAll", paramMap);
 	}
 
 
