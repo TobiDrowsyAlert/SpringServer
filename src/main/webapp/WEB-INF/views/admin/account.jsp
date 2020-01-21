@@ -72,7 +72,7 @@ $(document).ready(function(){
   }
 
   $("#updatePwBtn").click(function(){
-	self.location = "/admin/updatePw?adminId=${login.adminId}&authKey=${authKey}";
+	self.location = "${path }/admin/updatePw?adminId=${login.adminId}&authKey=${authKey}";
   });
   
   $("#memberDeleteBtn").click(function(){

@@ -15,16 +15,16 @@ public interface AdminService {
 	String checkPosition(String adminId) throws Exception;
 	void keepSession(String adminId, String sessionId) throws Exception;
 	String checkSession(String value) throws Exception;
-	int checkDuplicateSession(String value) throws Exception;
 	String checkAuthKey(String adminId) throws Exception;
 	void updateAuthKey(AdminVO adminVO) throws Exception;
-	int checkOverId(String adminId) throws Exception;
-	int checkOverEmail(String adminEmail) throws Exception;
-	AdminVO findAccountById(String adminEmail) throws Exception;
+	int countId(String adminId) throws Exception;
+	int countEmail(String adminEmail) throws Exception;
+	int countSession(String value) throws Exception;
+	AdminVO selectAdminByEmail(String adminEmail) throws Exception;
 	public void updatePw(AdminVO adminVO) throws Exception;
-	public List<PointVO> listPoint() throws Exception;
-	public List<AdminVO> listAll() throws Exception;
+	public List<PointVO> selectAllPoint() throws Exception;
+	public List<AdminVO> selectAllAdmin() throws Exception;
 	public int count(AdminVO adminVO, String checkType) throws Exception;
-	public AdminVO hashAccount(AdminVO adminVO) throws Exception;
+	public AdminVO registerAccount(AdminVO adminVO, String contextPath) throws Exception;
 	
 }

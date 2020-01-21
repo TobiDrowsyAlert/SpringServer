@@ -51,24 +51,22 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public String listGET() throws Exception {
-		return "/admin/list";
+	public void listGET() throws Exception {
+		return;
 	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
-	public String registerGET(Model model) throws Exception {
+	public void registerGET(Model model) throws Exception {
 		
-		List<PointVO> points = adminService.listPoint();
+		List<PointVO> points = adminService.selectAllPoint();
 		model.addAttribute("points", points);
 		
-		return "/admin/register";
+		return;
 	}
 	
 	@RequestMapping(value = "/registerPOST", method = RequestMethod.POST)
 	public String registerPOST(AdminVO adminVO, HttpServletRequest request ,RedirectAttributes redirectAttributes) throws Exception {
-		
-		AdminVO hashAdminVO = adminService.hashAccount(adminVO);
-		adminMailService.mailSend(hashAdminVO, request.getContextPath(), "email");
+		AdminVO hashAdminVO = adminService.registerAccount(adminVO, request.getContextPath());
 		redirectAttributes.addFlashAttribute("msg", "REGISTERED");
 		
 		return "redirect:/admin/login";
@@ -85,24 +83,20 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String loginGET(@ModelAttribute("loginDTO") LoginDTO loginDTO, 
+	public void loginGET(@ModelAttribute("loginDTO") LoginDTO loginDTO, 
 			Model model,
 			HttpServletRequest request) throws Exception {
 		
 		Cookie loginCookie = WebUtils.getCookie(request, "loginCookie"); 
 		
 		if(loginCookie != null) {
-			if(adminService.checkDuplicateSession(loginCookie.getValue()) == 1) {
+			if(adminService.countSession(loginCookie.getValue()) == 1) {
 				String adminId = adminService.checkSession(loginCookie.getValue());
 				model.addAttribute("adminId", adminId);
 			}
-			else {
-				// 중복된 세션 제거 처리 ( Later ) 
-				// 중복 세션이면.. 어떻게 처리할까? 이전의 세션을 제거, 혹은 최근 세션을 제거 둘 중 하나 선택?
-			}
 		}
 		
-		return "/admin/login";
+		return;
 	}
 	
 	// ProvideLoginSessionInterceptor : postHandler 호출 - 쿠키 생성
@@ -145,8 +139,8 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
-	public String emailSend(@RequestParam("adminEmail") String adminEmail) throws Exception {
-		return "/admin/email";
+	public void emailSend(@RequestParam("adminEmail") String adminEmail) throws Exception {
+		return;
 	}
 	
 	
@@ -154,7 +148,7 @@ public class AdminController {
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
 	public String emailResend(@RequestParam("adminEmail") String adminEmail, HttpServletRequest request) throws Exception {
 		
-		AdminVO adminVO = adminService.findAccountById(adminEmail);
+		AdminVO adminVO = adminService.selectAdminByEmail(adminEmail);
 		
 		if(adminVO != null) {
 			adminMailService.mailSend(adminVO, request.getContextPath(), "auth");
@@ -165,14 +159,14 @@ public class AdminController {
 	}
 	
 	@RequestMapping(value = "/find", method = RequestMethod.GET)
-	public String findGET() {
-		return "/admin/find";
+	public void findGET() {
+		return;
 	}
 	
 	@RequestMapping(value = "/findPOST", method = RequestMethod.POST)
 	public String findPOST(@RequestParam("adminEmail") String adminEmail, Model model ,HttpServletRequest request) throws Exception {
 		
-		AdminVO adminVO = adminService.findAccountById(adminEmail);
+		AdminVO adminVO = adminService.selectAdminByEmail(adminEmail);
 		
 		model.addAttribute("adminEmail", adminEmail);
 		if(adminVO == null) {
@@ -186,11 +180,11 @@ public class AdminController {
 	
 	// 이메일을 통한 비밀번호 변경 페이지 이동
 	@RequestMapping(value = "/updatePw", method = RequestMethod.GET)
-	public String updatePwGET(@RequestParam("adminId") String adminId, @RequestParam("authKey") String authKey,  Model model) throws Exception {
+	public void updatePwGET(@RequestParam("adminId") String adminId, @RequestParam("authKey") String authKey,  Model model) throws Exception {
 
 		model.addAttribute("adminId", adminId);
 		
-		return "/admin/updatePw";
+		return;
 	}
 	
 	// 이메일을 통한 비밀번호 변경 처리
@@ -236,7 +230,7 @@ public class AdminController {
 	public ResponseEntity<List<PointVO>> listPoint() throws Exception {
 		ResponseEntity<List<PointVO>> entity = null;
 		
-		List<PointVO> list = adminService.listPoint();
+		List<PointVO> list = adminService.selectAllPoint();
 		Map<Integer, String> mapPoint = new HashMap<Integer,String>();
 		entity = new ResponseEntity<>(list, HttpStatus.OK);
 		try {
@@ -259,7 +253,8 @@ public class AdminController {
 	public List<AdminVO> listAdmin(@RequestParam(value = "pointNo") String pointNo) throws Exception {
 		int pointNoInt = Integer.parseInt(pointNo);
 		
-		List<AdminVO> list = adminService.listAll();
+		// 이건 비즈니스 로직
+		List<AdminVO> list = adminService.selectAllAdmin();
 		List<AdminVO> listAdmin = new ArrayList<>();
 		for(AdminVO adminVO : list) {
 			if(adminVO.getAdminPoint() == pointNoInt) {
@@ -272,11 +267,11 @@ public class AdminController {
 	
 	// 개인정보 페이지
 	@RequestMapping(value = "/account", method = RequestMethod.GET)
-	public String account(Model model, @RequestParam("adminId") String adminId) throws Exception {
+	public void account(Model model, @RequestParam("adminId") String adminId) throws Exception {
 		
 		model.addAttribute("adminVO", adminService.read(adminId)); 
 		
-		return "/admin/account";
+		return;
 	}
 	
 	// 회원탈퇴
@@ -309,7 +304,7 @@ public class AdminController {
 	public int checkIdPOST(@RequestBody(required = true) AdminVO adminVO) throws Exception{
 		
 		// 1: 중복 , 0: 중복아님
-		return adminService.checkOverId(adminVO.getAdminId());
+		return adminService.countId(adminVO.getAdminId());
 		
 	}
 
@@ -320,7 +315,7 @@ public class AdminController {
 	public int countId(@PathVariable("adminId") String adminId) throws Exception{
 		
 		// 1: 중복 , 0: 중복아님
-		return adminService.checkOverId(adminId);
+		return adminService.countId(adminId);
 		
 	}
 	
@@ -330,7 +325,7 @@ public class AdminController {
 	public int checkEmailPOST(@RequestParam("adminEmail") String adminEmail) throws Exception{
 		
 		// 1: 중복, 0: 중복아님
-		return adminService.checkOverEmail(adminEmail);
+		return adminService.countEmail(adminEmail);
 	}
 
 	// 중복체크

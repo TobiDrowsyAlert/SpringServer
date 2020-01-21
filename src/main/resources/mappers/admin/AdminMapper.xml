@@ -12,14 +12,18 @@
 			admin_name,
 			admin_email,
 			admin_position,
-			admin_point
+			admin_point,
+			session_key,
+			admin_auth_key
 		) VALUES (
 			#{adminId},
 			#{adminPw},
 			#{adminName},
 			#{adminEmail},
 			#{adminPosition},
-			#{adminPoint}
+			#{adminPoint},
+			#{sessionKey},
+			#{adminAuthKey}
 		)
 	</insert>
 
@@ -33,6 +37,8 @@
 		    , admin_position = #{adminPosition}
 		    , admin_login_date = NOW()
 		    , admin_point = #{adminPoint}
+		    , session_key = #{sessionKey}
+		    , admin_auth_key = #{adminAuthKey}
 		WHERE 
 			admin_id = #{adminId}
 	</update>
@@ -68,7 +74,7 @@
 		WHERE session_key = #{value}
 	</select>
 
-	<select id="checkDuplicateSession" resultType="int">
+	<select id="countSession" resultType="int">
 		SELECT
 			COUNT(*)
 		FROM
@@ -78,7 +84,7 @@
 			AND session_key = #{value}
 	</select>
 		
-	<select id = "checkOverEmail" resultType="int">
+	<select id = "countEmail" resultType="int">
 		SELECT
 			COUNT(*)
 		FROM
@@ -88,7 +94,7 @@
 			AND admin_email = #{adminEmail}
 	</select>
 	
-	<select id = "checkOverId" resultType="int">
+	<select id = "countId" resultType="int">
 		SELECT
 			COUNT(*)
 		FROM
@@ -117,8 +123,7 @@
 			admin_id = #{adminId}
 	</select>
 	
-	
-	<select id = "findAccountById" resultMap="AdminResultMap">
+	<select id = "selectAdminByEmail" resultMap="AdminResultMap">
 		SELECT
 			*
 		FROM
@@ -126,7 +131,6 @@
 		WHERE
 			admin_email = #{adminEmail}
 	</select>
-	
 	
 	
 	<sql id="checkType">
@@ -169,18 +173,20 @@
 			admin_id = #{adminId}
 	</update>
 	
-	<select id="listAll" resultMap="AdminResultMap">
+	<select id="selectAllAdmin" resultMap="AdminResultMap">
 		SELECT
 			*
 		FROM
 			tbl_admin
+		
 	</select>
 	
-	<select id="listPoint" resultMap="PointResultMap">
+	<select id="selectAllPoint" resultMap="PointResultMap">
 		SELECT
 			*
 		FROM
 			tbl_point
+		ORDER BY point_no ASC
 	</select>
 	
 

@@ -6,6 +6,7 @@ import javax.inject.Inject;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
@@ -15,11 +16,13 @@ import com.exbyte.insurance.point.domain.PointVO;
 @Service
 public class AdminServiceImpl implements AdminService {
 
-	static private AdminDAO adminDAO;
+	private final AdminDAO adminDAO;
+	private final AdminMailService adminMailService;
 	
 	@Inject
-	public AdminServiceImpl(AdminDAO adminDAO) {
+	public AdminServiceImpl(AdminDAO adminDAO, AdminMailService adminMailService) {
 		this.adminDAO = adminDAO;
+		this.adminMailService = adminMailService;
 	}
 
 	@Override
@@ -64,10 +67,7 @@ public class AdminServiceImpl implements AdminService {
 		return adminDAO.checkSession(value);
 	}
 	
-	@Override
-	public int checkDuplicateSession(String value) throws Exception {
-		return adminDAO.checkDuplicateSession(value);
-	}
+
 
 	@Override
 	public String checkAuthKey(String adminId) throws Exception {
@@ -81,20 +81,8 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public int checkOverId(String adminId) throws Exception {
-		return adminDAO.checkOverId(adminId);
-		
-	}
-
-	@Override
-	public int checkOverEmail(String adminEmail) throws Exception {
-		return adminDAO.checkOverEmail(adminEmail);
-		
-	}
-
-	@Override
-	public AdminVO findAccountById(String adminEmail) throws Exception {
-		return adminDAO.findAccountById(adminEmail);
+	public AdminVO selectAdminByEmail(String adminEmail) throws Exception {
+		return adminDAO.selectAdminByEmail(adminEmail);
 	}
 
 	@Override
@@ -103,30 +91,48 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	@Override
-	public List<PointVO> listPoint() throws Exception {
-		List<PointVO> points = adminDAO.listPoint();
+	public List<PointVO> selectAllPoint() throws Exception {
+		List<PointVO> points = adminDAO.selectAllPoint();
 		return points;
 	}
 
 	@Override
-	public List<AdminVO> listAll() throws Exception {
-		return adminDAO.listAll();
+	public List<AdminVO> selectAllAdmin() throws Exception {
+		return adminDAO.selectAllAdmin();
+	}
+
+	@Override
+	public int countId(String adminId) throws Exception {
+		return adminDAO.countId(adminId);
+		
+	}
+
+	@Override
+	public int countEmail(String adminEmail) throws Exception {
+		return adminDAO.countEmail(adminEmail);
+		
+	}
+	
+	@Override
+	public int countSession(String value) throws Exception {
+		return adminDAO.countSession(value);
 	}
 	
 	@Override
 	public int count(AdminVO adminVO, String checkType) throws Exception {
 		return adminDAO.count(adminVO, checkType);
 	}
-	
+
 	@Override
-	public AdminVO hashAccount(AdminVO adminVO) throws Exception{
+	@Transactional
+	public AdminVO registerAccount(AdminVO adminVO, String contextPath) throws Exception {
 		String hashPw = BCrypt.hashpw(adminVO.getAdminPw(), BCrypt.gensalt());
 		adminVO.setAdminPw(hashPw);
 		adminDAO.create(adminVO);
+		adminMailService.mailSend(adminVO, contextPath);
 		
 		return adminVO;
 	}
-
 	
 	
 }

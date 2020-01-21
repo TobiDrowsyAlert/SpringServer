@@ -54,29 +54,28 @@ public class AdminMailService {
 		return sb.toString();
 	}
 	
-	public void mailSend(AdminVO adminVO, String contextPath, String emailType) throws Exception {
+	public void mailSend(AdminVO adminVO, String contextPath) throws Exception {
 
 		String key = makeRandomKey(20, false);
 		String htmlStr;
 		MimeMessage mail = mailSender.createMimeMessage();
 		
-		if(emailType.equals("auth")) {
-			htmlStr = "<h2> 안녕하세요 </>" + "<h4>" + adminVO.getAdminId() + "님</h4>"
-					+ "<p> 인증하기 버튼으로 인증키 확인이 가능합니다."
-					+ "<a href='http://localhost:8080" + contextPath + "/admin/confirm?"
-							+ "adminId="+adminVO.getAdminId() + "&authKey="+key + "'>인증하기</a></p>";
-			mail.setSubject("[본인인증] Com : " + adminVO.getAdminId() + "님의 인증메일입니다.", "utf-8");
-		}else if(emailType.equals("find")) {
+		if(adminDAO.read(adminVO.getAdminId()).getAdminAuthKey().equals("Y")) {
 			htmlStr = "<h1>계정찾기</h1>" + "<h2> 안녕하세요 </>" + "<h4>" + adminVO.getAdminName() + "님</h4>"
 					+ "<p>아이디 : " + adminVO.getAdminId() + " </p>"
 					+ "<p> 비밀번호 변경을 원하시면 아래 링크를 통해 변경하실 수 있습니다.</p>"
 					+ "<a href='http://localhost:8080" + contextPath + "/admin/updatePw?"
 							+ "adminId="+adminVO.getAdminId() + "&authKey="+key + "'>인증하기</a></p>";
 			mail.setSubject("[계정찾기] Com : " + adminVO.getAdminId() + "님의 인증메일입니다.", "utf-8");
-		}else {
-			htmlStr = null;
-			mail.setSubject(null);
 		}
+		else {
+			htmlStr = "<h2> 안녕하세요 </>" + "<h4>" + adminVO.getAdminId() + "님</h4>"
+					+ "<p> 인증하기 버튼으로 인증키 확인이 가능합니다."
+					+ "<a href='http://localhost:8080" + contextPath + "/admin/confirm?"
+							+ "adminId="+adminVO.getAdminId() + "&authKey="+key + "'>인증하기</a></p>";
+			mail.setSubject("[본인인증] Com : " + adminVO.getAdminId() + "님의 인증메일입니다.", "utf-8");
+		}
+		
 		adminVO.setAdminAuthKey(key);
 		adminDAO.updateAuthKey(adminVO);
 		mail.setText(htmlStr, "utf-8", "html");

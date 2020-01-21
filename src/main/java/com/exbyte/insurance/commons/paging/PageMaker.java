@@ -1,6 +1,5 @@
 package com.exbyte.insurance.commons.paging;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 import org.springframework.web.util.UriComponents;
@@ -33,9 +32,6 @@ public class PageMaker {
 	}
 
 	public void calcData() {
-		
-		if(criteria.getPage() < 1)
-			criteria.setPage(1);
 		
 		endPage = (int)Math.ceil(criteria.getPage()/(double)displayPageNum) * displayPageNum;
 		startPage = endPage - displayPageNum + 1;
@@ -81,13 +77,13 @@ public class PageMaker {
         return uriComponents.toString();
     }
     
-    private String encoding(String keyword){
+    public String encoding(String keyword){
         if(keyword == null || keyword.trim().length() == 0){
             return "";
         }
         try{
             return URLEncoder.encode(keyword, "UTF-8");
-        }catch (UnsupportedEncodingException e){
+        }catch (Exception e){
             return "";
         }
     }

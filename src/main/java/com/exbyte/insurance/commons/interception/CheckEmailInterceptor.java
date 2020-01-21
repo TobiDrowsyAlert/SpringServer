@@ -25,9 +25,11 @@ public class CheckEmailInterceptor extends HandlerInterceptorAdapter {
 		String adminId = request.getParameter("adminId");
 		AdminVO adminVO = adminService.read(adminId);
 		String authKey = adminService.checkAuthKey(adminVO.getAdminId());
-
 		
 		// 인증 키 값이 다르다면 거절
+		if(adminVO.getAdminAuthKey().equals("Y")) {
+			return true;
+		}
 		if(!authKey.equals(request.getParameter("authKey"))) {
 			logger.warn("AuthEmailInterceptor : 인증 키 거부");
 			response.sendRedirect("/");

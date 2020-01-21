@@ -32,16 +32,27 @@ public class AdminDAOImpl implements AdminDAO{
 
 	@Override
 	public AdminVO read(String adminId) throws Exception {
-		
-		AdminVO adminVO = sqlSession.selectOne(NAMESPACE + ".read", adminId);
-		
-		
 		return sqlSession.selectOne(NAMESPACE + ".read", adminId);
 	}
 
 	@Override
+	public AdminVO login(LoginDTO loginDTO) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".read", loginDTO);
+		
+	}
+	@Override
 	public void update(AdminVO adminVO) throws Exception {
 		sqlSession.update(NAMESPACE + ".update", adminVO); 
+	}
+
+	@Override
+	public void updatePw(AdminVO adminVO) throws Exception {
+		sqlSession.update(NAMESPACE + ".updatePw", adminVO );
+	}
+
+	@Override
+	public void updateAuthKey(AdminVO adminVO) throws Exception {
+		sqlSession.update(NAMESPACE + ".updateAuthKey", adminVO);
 	}
 
 	@Override
@@ -55,11 +66,6 @@ public class AdminDAOImpl implements AdminDAO{
 		return sqlSession.selectOne(NAMESPACE + ".checkPosition", adminId);
 	}
 
-	@Override
-	public AdminVO login(LoginDTO loginDTO) throws Exception {
-		return sqlSession.selectOne(NAMESPACE + ".read", loginDTO);
-		
-	}
 
 	@Override
 	public void keepSession(String adminId, String sessionId) throws Exception {
@@ -75,11 +81,6 @@ public class AdminDAOImpl implements AdminDAO{
 		return sqlSession.selectOne(NAMESPACE + ".checkSession", value);
 	}
 
-	@Override
-	public int checkDuplicateSession(String value) throws Exception {
-		return sqlSession.selectOne(NAMESPACE + ".checkDuplicateSession", value);
-		
-	}
 
 	@Override
 	public String checkAuthKey(String adminId) throws Exception {
@@ -87,44 +88,36 @@ public class AdminDAOImpl implements AdminDAO{
 	}
 
 	@Override
-	public void updateAuthKey(AdminVO adminVO) throws Exception {
-		sqlSession.update(NAMESPACE + ".updateAuthKey", adminVO);
+	public AdminVO selectAdminByEmail(String adminEmail) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".selectAdminByEmail", adminEmail);
 	}
 
 	@Override
-	public int checkOverId(String adminId) throws Exception {
-		return sqlSession.selectOne(NAMESPACE + ".checkOverId", adminId);
+	public List<PointVO> selectAllPoint() throws Exception {
+		return sqlSession.selectList(NAMESPACE + ".selectAllPoint");
 		
 	}
 
 	@Override
-	public int checkOverEmail(String adminEmail) throws Exception {
-		return sqlSession.selectOne(NAMESPACE + ".checkOverEmail", adminEmail);
+	public List<AdminVO> selectAllAdmin() throws Exception {
+		return sqlSession.selectList(NAMESPACE + ".selectAllAdmin");
 		
 	}
-
 	@Override
-	public AdminVO findAccountById(String adminEmail) throws Exception {
-		return sqlSession.selectOne(NAMESPACE + ".findAccountById", adminEmail);
+	public int countId(String adminId) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".countId", adminId);
 	}
 
 	@Override
-	public void updatePw(AdminVO adminVO) throws Exception {
-		sqlSession.update(NAMESPACE + ".updatePw", adminVO );
+	public int countEmail(String adminEmail) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".countEmail", adminEmail);
 	}
-
+	
 	@Override
-	public List<PointVO> listPoint() throws Exception {
-		return sqlSession.selectList(NAMESPACE + ".listPoint");
-		
+	public int countSession(String value) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".countSession", value);
 	}
-
-	@Override
-	public List<AdminVO> listAll() throws Exception {
-		return sqlSession.selectList(NAMESPACE + ".listAll");
-		
-	}
-
+	
 	@Override
 	public int count(AdminVO adminVO, String checkType) throws Exception {
 		Map<String, Object> paramMap = new HashMap<>();
