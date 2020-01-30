@@ -211,6 +211,7 @@
 	    validate();
 	  });
 
+
 	  $('#adminDuplicatePw').blur(function(){
 	    var adminDuplicatePw = $('#adminDuplicatePw').val();
 	    if (adminDuplicatePw == ""){

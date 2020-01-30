@@ -101,6 +101,11 @@ public class AdminDAOImpl implements AdminDAO{
 	@Override
 	public List<AdminVO> selectAllAdmin() throws Exception {
 		return sqlSession.selectList(NAMESPACE + ".selectAllAdmin");
+	}
+	
+	@Override
+	public List<AdminVO> selectAdminList(String value) throws Exception {
+		return sqlSession.selectList(NAMESPACE + ".selectAdminList", value);
 		
 	}
 	@Override

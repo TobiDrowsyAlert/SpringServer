@@ -46,14 +46,13 @@ public class ProvideLoginSessionInterceptor extends HandlerInterceptorAdapter{
 		ModelMap modelMap = modelAndView.getModelMap();
 		Object adminVO = modelMap.get("admin");
 		
+		
 		if(adminVO != null) {
-			logger.info("LoginSuccess");
 			httpSession.setAttribute(LOGIN, adminVO);
 			// 세션 만료 기간 일주일,
 			httpSession.setMaxInactiveInterval(60 * 60 * 24 * 7);
 			
 			if(request.getParameter("useCookie") != null) {
-				logger.info("remember Cookie");
 				//쿠키 생성
 				Cookie loginCookie = new Cookie("loginCookie", httpSession.getId());
 				loginCookie.setPath("/");
@@ -62,10 +61,13 @@ public class ProvideLoginSessionInterceptor extends HandlerInterceptorAdapter{
 				// 쿠키 전송
 				// 쿠키에 담긴 정보, 생성한 Session Id
 				response.addCookie(loginCookie);
+				
 			} 
+			response.sendRedirect("/");
 			
 		} else {
 			logger.info("LoginFail in Interceptor");
+			response.sendRedirect("/admin/login");
 		}
 		
 	}

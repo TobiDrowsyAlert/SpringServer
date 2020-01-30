@@ -1,0 +1,7 @@
+@charset "UTF-8";
+
+header h1 { float:none; position: absolute; left: 50px; top:35px; transform:  translateX(-50%);
+psdding:0;}
+header .all { display:block; border-top:1px solid #fff; border-bottom: 1px solid #fff;}
+header .left > div {display: none; float:none;}
+header > ul

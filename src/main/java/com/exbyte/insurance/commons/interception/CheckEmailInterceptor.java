@@ -15,8 +15,12 @@ public class CheckEmailInterceptor extends HandlerInterceptorAdapter {
 
 	private static Logger logger = LoggerFactory.getLogger(CheckEmailInterceptor.class);
 	
-	@Inject
 	private AdminService adminService;
+	
+	@Inject
+	public CheckEmailInterceptor(AdminService adminService) {
+		this.adminService = adminService;
+	}
 	
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)

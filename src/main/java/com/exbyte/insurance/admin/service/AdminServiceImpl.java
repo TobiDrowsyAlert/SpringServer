@@ -17,12 +17,10 @@ import com.exbyte.insurance.point.domain.PointVO;
 public class AdminServiceImpl implements AdminService {
 
 	private final AdminDAO adminDAO;
-	private final AdminMailService adminMailService;
 	
 	@Inject
-	public AdminServiceImpl(AdminDAO adminDAO, AdminMailService adminMailService) {
+	public AdminServiceImpl(AdminDAO adminDAO) {
 		this.adminDAO = adminDAO;
-		this.adminMailService = adminMailService;
 	}
 
 	@Override
@@ -53,8 +51,22 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public AdminVO login(LoginDTO loginDTO) throws Exception {
-		return adminDAO.login(loginDTO);
+		AdminVO adminVO;
 		
+		try {
+			adminVO = adminDAO.login(loginDTO);
+			String loginPw = loginDTO.getAdminPw();
+			String databasePw = adminVO.getAdminPw();
+			if(!BCrypt.checkpw(loginPw, databasePw) || !adminVO.getAdminAuthKey().contentEquals("Y")) {
+				throw new IllegalArgumentException();
+			}
+		}catch (NullPointerException arg1) {
+			throw arg1;
+		}catch (IllegalArgumentException arg2) {
+			throw arg2;
+		}
+		
+		return adminVO;
 	}
 
 	@Override
@@ -124,12 +136,16 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
+	public String hashAdminPw(String adminPw) throws Exception {
+		return BCrypt.hashpw(adminPw, BCrypt.gensalt());
+	}
+	
+	@Override
 	@Transactional
-	public AdminVO registerAccount(AdminVO adminVO, String contextPath) throws Exception {
-		String hashPw = BCrypt.hashpw(adminVO.getAdminPw(), BCrypt.gensalt());
+	public AdminVO registerAccount(AdminVO adminVO) throws Exception {
+		String hashPw = hashAdminPw(adminVO.getAdminPw());
 		adminVO.setAdminPw(hashPw);
 		adminDAO.create(adminVO);
-		adminMailService.mailSend(adminVO, contextPath);
 		
 		return adminVO;
 	}

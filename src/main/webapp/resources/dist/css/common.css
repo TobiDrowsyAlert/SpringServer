@@ -1,0 +1,11 @@
+@charset "UTF-8";
+
+.clearfix{
+  overflow:visible;
+}
+
+.clearfix::after{
+  clear: both;  /*float을 사용할때 형태가 어그러지는 것을 해지시켜버리는 부분*/
+  display: block;
+  content: "";
+}

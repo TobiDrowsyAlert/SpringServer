@@ -21,6 +21,8 @@
 	<resources mapping="/resources/**" location="/resources/" />
 	<resources mapping="/plugins/**" location="/resources/plugins/"/>
 	<resources mapping="/dist/**" location="/resources/dist/"/>
+	<resources mapping="/vendor/**" location="/resources/vendor/"/>
+	<resources mapping="/img/**" location="/resources/img/"/>
 
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
@@ -43,10 +45,6 @@
 			<mapping path="/admin/login"/>
 			<mapping path="/admin/register"/>
 			<beans:bean id = "loginAfterInterceptor" class="com.exbyte.insurance.commons.interception.CheckLoginAfterInterceptor"/>
-		</interceptor>
-		<interceptor>
-			<mapping path="/admin/login" />
-			<beans:bean id ="rememberInterceptor" class="com.exbyte.insurance.commons.interception.RememberInterceptor" />
 		</interceptor>
 		<interceptor>
 			<mapping path="/admin/updatePw" />

@@ -1,5 +1,6 @@
 package com.exbyte.insurance.consulting.controller;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -11,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.commons.paging.Criteria;
 import com.exbyte.insurance.commons.paging.PageMaker;
+import com.exbyte.insurance.consulting.domain.ConsultingModifyDTO;
 import com.exbyte.insurance.consulting.domain.ConsultingVO;
 import com.exbyte.insurance.consulting.service.ConsultingService;
 
@@ -29,10 +32,29 @@ public class ConsultingController {
 	
 	private static Logger logger = LoggerFactory.getLogger(ConsultingController.class);
 	
+	private String STRING_SUCCESS = "SUCCESS";
+	private String STRING_FAIL = "FAIL";
+	
 	@Inject
 	private ConsultingService consultingService;
 	
-	
+
+	@RequestMapping(value="/create", method = RequestMethod.POST)
+	public String createPOST(ConsultingVO consulting, RedirectAttributes redirectAttributes) throws Exception {
+		
+		logger.info("create Request : " + consulting.toString());
+		try {
+			consulting.setConsultingRegion("경기도");
+			consulting.setConsultingRemarks("");
+			consultingService.create(consulting);
+			redirectAttributes.addFlashAttribute("msg", STRING_SUCCESS);
+		}catch(SQLIntegrityConstraintViolationException e) {
+			e.printStackTrace();
+			redirectAttributes.addFlashAttribute("msg", STRING_FAIL);
+			return "redirect:/";
+		}
+		return "redirect:/";
+	}
 	
 	// 상담 리스트 페이지 이동
 	// Admin에 대한 처리도 필요해졌다.. 객체지향 관점에서 틀린 부분 리팩토링 필요 // 여기서 read하는게 아니면 된다.
@@ -62,7 +84,7 @@ public class ConsultingController {
 		}
 		logger.info("pageMaker Status : " + pageMaker.toString());
 		
-		return "/consulting/list";
+		return "/consulting/list2";
 	}
 	
 	// 상담 리스트 읽기 ( 값 수정을 위해서 들어감 )
@@ -90,7 +112,6 @@ public class ConsultingController {
 		
 		int consultingNo;
 		
-		logger.info("delete...");
 		redirectAttributes.addAttribute("page", criteria.getPage());
 		redirectAttributes.addAttribute("perPageNum", criteria.getPerPageNum());
 		redirectAttributes.addFlashAttribute("msg", "delSuccess");
@@ -111,8 +132,6 @@ public class ConsultingController {
 	@ResponseBody
 	public int updateCheck(Model model, @RequestParam(value="chkbox[]") List<String> arr,
 			ConsultingVO consulting) throws Exception {
-		
-		logger.info("delete...");
 		
 		int consultingNo = 0;
 		
@@ -139,7 +158,6 @@ public class ConsultingController {
 	@ResponseBody
 	public int updateCousltingAdmin(Model model, @RequestParam(value="chkbox[]") List<String> arr,
 			@RequestParam(value="adminId") String adminId) {
-		logger.info("updateAdmin work...");
 		if(adminId.equals("")) {
 			return 0;
 		}
@@ -163,27 +181,45 @@ public class ConsultingController {
 	
 	@RequestMapping(value = "/update", method = RequestMethod.GET)
 	@ResponseBody
-	public int updateGET(Model model, @RequestParam(value="chkbox[]") List<String> arr,
-			@RequestParam(value="value") String checkUpdateValue) {
-		
-		logger.info("update work...");
-		
-		if(checkUpdateValue == null) {
-			return 0;
-		}
-		
+	public int updateGET(Model model, @RequestParam(value="arr") ConsultingModifyDTO arr) {
+		logger.info("updateGET 확인");
 		
 		try {	
 			int consultingNo;
 			
-			for(String i : arr) {
-				consultingNo = Integer.parseInt(i);
+			logger.info(arr.toString());
+			
+//			for(ConsultingModifyDTO modifyDTO : arr) {
+//				consultingNo = modifyDTO.getConsultingNo();
+//				ConsultingVO consultingVO = consultingService.read(consultingNo);
+//				
+//				consultingVO.setConsultingIsCall(modifyDTO.getConsultingIsCall());
+//				consultingVO.setConsultingIsEnd(modifyDTO.getConsultingIsEnd());
+//				// remark...
+//				consultingService.update(consultingVO);
+//			}
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return 0;
+		}
+		return 1;
+	}
+
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@ResponseBody
+	public int updatePOST(Model model, @RequestBody List<ConsultingModifyDTO> modifyArray) {
+		
+		try {	
+			int consultingNo;
+			
+			for(ConsultingModifyDTO modifyDTO : modifyArray) {
+				consultingNo = modifyDTO.getConsultingNo();
 				ConsultingVO consultingVO = consultingService.read(consultingNo);
-				if(checkUpdateValue.equals("consultingIsCall")) {
-					consultingVO.setConsultingIsCall(true);
-				}else if(checkUpdateValue.equals("consultingIsEnd")){
-					consultingVO.setConsultingIsEnd(true);
-				}
+				
+				consultingVO.setConsultingIsCall(modifyDTO.getConsultingIsCall());
+				consultingVO.setConsultingIsEnd(modifyDTO.getConsultingIsEnd());
+				consultingVO.setConsultingRemarks(modifyDTO.getConsultingRemarks());
 				consultingService.update(consultingVO);
 			}
 		}catch (Exception e) {
@@ -193,5 +229,4 @@ public class ConsultingController {
 		}
 		return 1;
 	}
-	
 }

@@ -25,6 +25,7 @@ public interface AdminDAO {
 	void updatePw(AdminVO adminVO) throws Exception;
 	List<PointVO> selectAllPoint() throws Exception;
 	List<AdminVO> selectAllAdmin() throws Exception;
+	List<AdminVO> selectAdminList(String value) throws Exception;
 	
 	int count(AdminVO adminVO, String checkType) throws Exception;
 

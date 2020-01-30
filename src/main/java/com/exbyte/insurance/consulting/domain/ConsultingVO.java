@@ -10,20 +10,17 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ConsultingVO {
-
 	int consultingNo;
 	String adminId;
 	String consultingName;
-	String consultingEmail;
-	String consultingSex;
-	Date consultingBirthday;
-	String consultingKinds;
-	String consultingType;
+	String consultingPhone;
+	String consultingJob;
+	String consultingBirthday;
+	String consultingCallTime;
 	Boolean consultingIsCall;
 	Boolean consultingIsEnd;
 	Date consultingRegDate;
 	String consultingFavoriteType;
 	String consultingRegion;
 	String consultingRemarks;
-	
 }

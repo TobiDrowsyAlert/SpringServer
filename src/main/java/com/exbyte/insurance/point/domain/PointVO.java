@@ -8,6 +8,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class PointVO {
-	int pointNo;
-	String pointName;
+	private int pointNo;
+	private String pointName;
 }

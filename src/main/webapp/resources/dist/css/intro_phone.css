@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+header h1{padding:0 0 0 0; margin: 5px;}
+header .left > div {float:none;}
+header > ul { display: none; float:none; }
+header .left{padding: 0 0 0 5px; width: 85%; }
+header .all {float:right; display: block; width: 32px; position: relative; height: 6px; border-top: 2px solid #555555; border-bottom: 2px solid #555555;
+color:transparent;}
+header .all::before { content=""; position: absolute; right:0; top:80%; width:100%; height:2px;
+background: #555555; margin-top:-0.5px;}
+
+/*모바일 메뉴*/
+header .close,
+header .all,
+header .left >div > div,
+header h2{display:block;}
+header .nav {display: block; position: absolute; right: 0; top: -40%; transition: top 0.5s; width:100%; height: 30%; background:#fff; box-sizing: border-box;}
+header .nav.on {top: 65px;}
+header .nav.on nav li{float: none;}
+header .nav.on nav ul{height: 150px;}
+header .nav.on nav a{height: 40px; line-height: 10px; font-size: 90%;}
+header > ul li { float: left; font-size: 8px; line-height: 15px;}
+header .left >div > div{font-size: 12px; line-height: 15px; padding: 0 0 0 41px;}
+header .left >div > div a{padding-right: 10px;}
+
+header nav a:before{display: none;}
+
+.login_img{ margin: 5px 5px 0 0;}

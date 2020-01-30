@@ -178,7 +178,18 @@
 			*
 		FROM
 			tbl_admin
-		
+		WHERE
+			admin_id IS NOT NULL
+	</select>
+	
+	<select id="selectAdminList" resultMap="AdminResultMap">
+		SELECT
+			*
+		FROM
+			tbl_admin
+		WHERE
+			admin_id IS NOT NULL
+		<include refid="wherePoint"/>
 	</select>
 	
 	<select id="selectAllPoint" resultMap="PointResultMap">
@@ -189,6 +200,11 @@
 		ORDER BY point_no ASC
 	</select>
 	
+	<sql id="wherePoint">
+		<if test="#{value} != null">
+			AND admin_point = #{value}
+		</if>
+	</sql>
 
 	
 <resultMap type="AdminVO" id="AdminResultMap">

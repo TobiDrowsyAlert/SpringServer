@@ -7,22 +7,22 @@
 	
 	<insert id="create">
 		INSERT INTO tbl_consulting(
+			consulting_no,
 		    consulting_name,
-		    consulting_email,
-		    consulting_sex,
+		    consulting_phone,
 		    consulting_birthday,
-		    consulting_kinds,
-		    consulting_type,
+		    consulting_job,
+		    consulting_call_time,
 		    consulting_favorite_type,
 		    consulting_region,
 		    consulting_remarks
 		) VALUES (
-			#{consultingName},
-		    #{consultingEmail},
-		    #{consultingSex},
-		   	#{consultingBirthday},
-		    #{consultingKinds},
-		    #{consultingType},
+			#{consultingNo},
+		    #{consultingName},
+		    #{consultingPhone},
+		    #{consultingBirthday},
+		    #{consultingJob},
+		    #{consultingCallTime},
 		    #{consultingFavoriteType},
 		    #{consultingRegion},
 		    #{consultingRemarks}
@@ -58,15 +58,16 @@
 			tbl_consulting
 		SET
 			admin_id = #{adminId}
-		    , consulting_name = #{consultingName}
-		    , consulting_email = #{consultingEmail}
-		    , consulting_sex = #{consultingSex}
-		    , consulting_birthday = #{consultingBirthday}
-		    , consulting_kinds = #{consultingKinds}
-		    , consulting_is_call = #{consultingIsCall}
-		    , consulting_is_end = #{consultingIsEnd}
-		    , consulting_remarks = #{consultingRemarks}
-		WHERE consulting_no = #{consultingNo};	
+			, consulting_name = #{consultingName}
+			, consulting_phone = #{consultingPhone}
+			, consulting_birthday = #{consultingBirthday}
+		    , consulting_job = #{consultingJob}
+			, consulting_is_call = #{consultingIsCall}
+			, consulting_is_end = #{consultingIsEnd}
+		    , consulting_favorite_type = #{consultingFavoriteType}
+		    , consulting_region = #{consultingRegion}
+			, consulting_remarks = #{consultingRemarks}
+		WHERE consulting_no = #{consultingNo}
 	</update>
 	
 	<delete id="delete">
@@ -136,47 +137,6 @@
 					</otherwise>
 				</choose>
 			</if>
-			<if test="criteria.sortType == 'email'">
-				<choose>
-					<when test="criteria.sortOrder == 'DESC'">
-						ORDER BY consulting_email DESC, consulting_no DESC
-					</when>
-					<otherwise>
-						ORDER BY consulting_email ASC, consulting_no DESC
-					</otherwise>
-				</choose>
-			</if>
-			<if test="criteria.sortType == 'sex'">
-				<choose>
-					<when test="criteria.sortOrder == 'DESC'">
-						ORDER BY consulting_sex DESC, consulting_no DESC
-					</when>
-					<otherwise>
-						ORDER BY consulting_sex ASC, consulting_no DESC
-					</otherwise>
-				</choose>
-
-			</if>
-			<if test="criteria.sortType == 'kinds'">
-				<choose>
-					<when test="criteria.sortOrder == 'DESC'">
-						ORDER BY consulting_kinds DESC, consulting_no DESC
-					</when>
-					<otherwise>
-						ORDER BY consulting_kinds ASC, consulting_no DESC
-					</otherwise>
-				</choose>
-			</if>
-			<if test="criteria.sortType == 'type'">
-				<choose>
-					<when test="criteria.sortOrder == 'DESC'">
-						ORDER BY consulting_type DESC, consulting_no DESC
-					</when>
-					<otherwise>
-						ORDER BY consulting_type ASC, consulting_no DESC
-					</otherwise>
-				</choose>
-			</if>
 			<if test="criteria.sortType == 'call'">
 				<choose>
 					<when test="criteria.sortOrder == 'DESC'">
@@ -213,17 +173,14 @@
 		</if>
 	</sql>
 	
-
-	
 	<resultMap type="ConsultingVO" id="ConsultingResultMap">
 		<id property="consultingNo" column="consulting_no"/>
 		<result property="adminId" column="admin_id" />
 		<result property="consultingName" column="consulting_name" />
-		<result property="consultingEmail" column="consulting_email" />
-		<result property="consultingSex" column="consulting_sex" />
+		<result property="consultingPhone" column="consulting_phone" />
 		<result property="consultingBirthday" column="consulting_birthday" />
-		<result property="consultingKinds" column="consulting_kinds" />
-		<result property="consultingType" column="consulting_type" />
+		<result property="consultingJob" column="consulting_job"/>
+		<result property="consultingCallTime" column="consulting_Call_time"/>
 		<result property="consultingIsCall" column="consulting_is_call" />
 		<result property="consultingIsEnd" column="consulting_is_end" />
 		<result property="consultingRegDate" column="consulting_reg_date" />

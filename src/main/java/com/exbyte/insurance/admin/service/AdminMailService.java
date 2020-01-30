@@ -25,10 +25,20 @@ public class AdminMailService {
 	private JavaMailSender mailSender;
 	
 	static private AdminDAO adminDAO;
+	final String TEST_VALID_EMAIL = "Y";
+	
+	
+	private MimeMessage mail;
+	String htmlStr;
 	
 	@Inject
 	public AdminMailService(AdminDAO adminDAO) {
 		this.adminDAO = adminDAO;
+	}
+
+	public AdminMailService(AdminDAO adminDAO, JavaMailSender mailSender) {
+		this.adminDAO = adminDAO;
+		this.mailSender = mailSender;
 	}
 	
 	// 임의의 인증 키 생성
@@ -54,27 +64,31 @@ public class AdminMailService {
 		return sb.toString();
 	}
 	
-	public void mailSend(AdminVO adminVO, String contextPath) throws Exception {
-
-		String key = makeRandomKey(20, false);
-		String htmlStr;
-		MimeMessage mail = mailSender.createMimeMessage();
-		
-		if(adminDAO.read(adminVO.getAdminId()).getAdminAuthKey().equals("Y")) {
+	public String makeHtmlMessage(AdminVO adminVO, String contextPath, String key) throws Exception {
+		if(adminDAO.read(adminVO.getAdminId()).getAdminAuthKey().equals(TEST_VALID_EMAIL)) {
 			htmlStr = "<h1>계정찾기</h1>" + "<h2> 안녕하세요 </>" + "<h4>" + adminVO.getAdminName() + "님</h4>"
 					+ "<p>아이디 : " + adminVO.getAdminId() + " </p>"
 					+ "<p> 비밀번호 변경을 원하시면 아래 링크를 통해 변경하실 수 있습니다.</p>"
 					+ "<a href='http://localhost:8080" + contextPath + "/admin/updatePw?"
 							+ "adminId="+adminVO.getAdminId() + "&authKey="+key + "'>인증하기</a></p>";
-			mail.setSubject("[계정찾기] Com : " + adminVO.getAdminId() + "님의 인증메일입니다.", "utf-8");
 		}
 		else {
 			htmlStr = "<h2> 안녕하세요 </>" + "<h4>" + adminVO.getAdminId() + "님</h4>"
 					+ "<p> 인증하기 버튼으로 인증키 확인이 가능합니다."
 					+ "<a href='http://localhost:8080" + contextPath + "/admin/confirm?"
 							+ "adminId="+adminVO.getAdminId() + "&authKey="+key + "'>인증하기</a></p>";
-			mail.setSubject("[본인인증] Com : " + adminVO.getAdminId() + "님의 인증메일입니다.", "utf-8");
 		}
+		return htmlStr;
+	}
+
+	
+	public void mailSend(AdminVO adminVO, String contextPath) throws Exception {
+		String key = makeRandomKey(20, false);
+		String htmlStr;
+		MimeMessage mail = mailSender.createMimeMessage();
+		
+		htmlStr = makeHtmlMessage(adminVO, contextPath, key);
+		mail.setSubject("Com : " + adminVO.getAdminId() + "님의 인증메일입니다.", "utf-8");
 		
 		adminVO.setAdminAuthKey(key);
 		adminDAO.updateAuthKey(adminVO);

@@ -131,6 +131,7 @@
 	                    	</div>
 	                   	</div><!-- /.row -->
                     </div><!--/.card-footer-->
+                
                 </div><!-- /.card card-primary card-outline-->
             </div><!-- /.col-lg-12 -->
             
@@ -147,7 +148,7 @@
 			
 			      <!-- Modal body -->
 			      <div class="modal-body">
-			      	<select id="checkUpdate" class="custom-select">
+			      	<select id="checkType" class="custom-select">
 			      		<option value="consultingIsCall">1차 전화</option>
 			      		<option value="consultingIsEnd">최종 확인</option>
 			      	</select>
@@ -316,7 +317,8 @@ $(document).ready(function(){
 
 	// 1차콜/최종확인 갱신
 	  var checkUpdate = function(){
-		    var checkUpdateValue = $('#checkUpdate option:selected').val();
+		    var checkType = $('#checkType option:selected').val();
+		    var remarks = $('#checkType option:selected').val();
 		    var checkArr = new Array();
 
 			$("input[class='chkbox']:checked").each(function(){
@@ -327,7 +329,7 @@ $(document).ready(function(){
 		      url : "/consulting/update",
 		      method : "GET",
 		      dataType : "json",
-		      data : {chkbox:checkArr, "value" : checkUpdateValue},
+		      data : {chkbox:checkArr, "ConsultingModifyDTO" : {"checkType" : checkType, "remarks" : remarks}},
 		      success : function(data){
 		        if(data == 1){
 		          alert("success");

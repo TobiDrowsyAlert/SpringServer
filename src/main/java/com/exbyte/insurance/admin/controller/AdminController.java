@@ -1,9 +1,7 @@
 package com.exbyte.insurance.admin.controller;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.Cookie;
@@ -11,12 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,17 +42,17 @@ public class AdminController {
 	final String STRING_FAIL = "fail";
 	final String STRING_AUTH_FAIL = "auth_fail";
 	final String STRING_NOT_HASH_PW = "not_hash_pw";
+	final String TEST_VALID_EMAIL = "Y";
+	final String STRING_NULL = "null";
 
+	Logger logger = LoggerFactory.getLogger(AdminController.class);
+	
 	@Inject
 	public AdminController(AdminService adminService, AdminMailService adminMailService) {
 		this.adminMailService = adminMailService;
 		this.adminService = adminService;
 	}
 	
-	@RequestMapping(value = "/list", method = RequestMethod.GET)
-	public void listGET() throws Exception {
-		return;
-	}
 	
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public void registerGET(Model model) throws Exception {
@@ -66,8 +65,17 @@ public class AdminController {
 	
 	@RequestMapping(value = "/registerPOST", method = RequestMethod.POST)
 	public String registerPOST(AdminVO adminVO, HttpServletRequest request ,RedirectAttributes redirectAttributes) throws Exception {
-		AdminVO hashAdminVO = adminService.registerAccount(adminVO, request.getContextPath());
-		redirectAttributes.addFlashAttribute("msg", "REGISTERED");
+		try {
+			AdminVO hashAdminVO = adminService.registerAccount(adminVO);
+			adminMailService.mailSend(adminVO, request.getContextPath());
+			redirectAttributes.addFlashAttribute("msg", STRING_SUCCESS);
+		}catch (NullPointerException e) {
+			e.printStackTrace();
+			redirectAttributes.addFlashAttribute("msg", STRING_NULL);
+		}catch (Exception e) {
+			redirectAttributes.addFlashAttribute("msg", STRING_FAIL);
+		}
+		
 		
 		return "redirect:/admin/login";
 	}
@@ -75,67 +83,11 @@ public class AdminController {
 
 	// CheckEmailInterceptor : preHandler 호출 - 이메일 키 인증
 	@RequestMapping(value = "/confirm", method = RequestMethod.GET )
-	public String authEmailGET(AdminVO adminVO, String authKey, Model model) throws Exception {
+	public String confirmEmail(AdminVO adminVO, String authKey, Model model) throws Exception {
 
-		model.addAttribute("msg", "AUTHSUCCESS");
+		model.addAttribute("msg", STRING_SUCCESS);
 		
 		return "/admin/login";
-	}
-	
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public void loginGET(@ModelAttribute("loginDTO") LoginDTO loginDTO, 
-			Model model,
-			HttpServletRequest request) throws Exception {
-		
-		Cookie loginCookie = WebUtils.getCookie(request, "loginCookie"); 
-		
-		if(loginCookie != null) {
-			if(adminService.countSession(loginCookie.getValue()) == 1) {
-				String adminId = adminService.checkSession(loginCookie.getValue());
-				model.addAttribute("adminId", adminId);
-			}
-		}
-		
-		return;
-	}
-	
-	// ProvideLoginSessionInterceptor : postHandler 호출 - 쿠키 생성
-	@RequestMapping(value = "/loginPOST", method = RequestMethod.POST)
-	public String loginPOST(LoginDTO loginDTO, Model model, HttpSession httpSession) {
-
-		AdminVO adminVO = null;
-	
-		try {
-			adminVO = adminService.login(loginDTO);
-			
-			if(adminVO == null || !BCrypt.checkpw(loginDTO.getAdminPw(), adminVO.getAdminPw())) {
-				model.addAttribute("msg", STRING_FAIL);
-				return "/admin/login";
-			}
-			else if(!adminVO.getAdminAuthKey().contentEquals("Y")) {
-				model.addAttribute("adminEmail", adminVO.getAdminEmail());
-				model.addAttribute("msg", STRING_AUTH_FAIL);
-				return "/admin/email";
-			}
-
-			adminService.keepSession(adminVO.getAdminId() , httpSession.getId());
-		}
-		catch (IllegalArgumentException e) {
-			e.printStackTrace();
-			model.addAttribute("msg", STRING_NOT_HASH_PW);
-			return "/admin/login";
-			
-		}catch(Exception e) {
-			e.printStackTrace();
-			model.addAttribute("msg",STRING_FAIL);
-			return "/admin/login";
-		}
-		finally {
-			model.addAttribute("msg", STRING_SUCCESS);
-			model.addAttribute("admin", adminVO);
-		}
-		
-		return "/commons/index";
 	}
 	
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
@@ -146,16 +98,23 @@ public class AdminController {
 	
 	// 이메일 재송신
 	@RequestMapping(value = "/email", method = RequestMethod.POST)
-	public String emailResend(@RequestParam("adminEmail") String adminEmail, HttpServletRequest request) throws Exception {
+	public String emailResend(@RequestParam("adminEmail") String adminEmail, RedirectAttributes redirectAttribute,
+			HttpServletRequest request) throws Exception {
 		
-		AdminVO adminVO = adminService.selectAdminByEmail(adminEmail);
+		AdminVO adminVO;
 		
-		if(adminVO != null) {
-			adminMailService.mailSend(adminVO, request.getContextPath(), "auth");
+		try {
+			adminVO = adminService.selectAdminByEmail(adminEmail);
+			adminMailService.mailSend(adminVO, request.getContextPath());
+			redirectAttribute.addFlashAttribute("msg", STRING_SUCCESS);
+			return "redirect:/";
+		}catch (NullPointerException e) {
+			// TODO: handle exception
+			redirectAttribute.addFlashAttribute("msg", STRING_FAIL);
 			return "redirect:/";
 		}
-		
-		return "redirect:/";
+
+
 	}
 	
 	@RequestMapping(value = "/find", method = RequestMethod.GET)
@@ -173,7 +132,7 @@ public class AdminController {
 			model.addAttribute("msg", "FAIL");
 			return "/admin/find";
 		}
-		adminMailService.mailSend(adminVO, request.getContextPath(), "find");
+		adminMailService.mailSend(adminVO, request.getContextPath());
 		
 		return "/admin/findResult";
 	}
@@ -203,27 +162,6 @@ public class AdminController {
 		return "/admin/login";
 	}
 	
-	// 로그아웃 처리 구현
-	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logoutGET(HttpServletRequest request, HttpServletResponse response, HttpSession httpSession)
-		throws Exception{
-		
-		Object object = httpSession.getAttribute("login");
-		if(object != null) {
-			httpSession.removeAttribute("login");
-			httpSession.invalidate();
-			Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
-			if(loginCookie != null) {
-				loginCookie.setMaxAge(0);
-				response.addCookie(loginCookie);
-			}
-			// 세션 키 초기화, 
-			
-		}
-		return "/admin/logout";
-	}
-	
-	
 	// 지사 목록 전달
 	@RequestMapping(value = "/listPoint", method = RequestMethod.GET)
 	@ResponseBody
@@ -231,28 +169,27 @@ public class AdminController {
 		ResponseEntity<List<PointVO>> entity = null;
 		
 		List<PointVO> list = adminService.selectAllPoint();
-		Map<Integer, String> mapPoint = new HashMap<Integer,String>();
-		entity = new ResponseEntity<>(list, HttpStatus.OK);
 		try {
 			for(PointVO pointVO : list) {
-				mapPoint.put(pointVO.getPointNo(), pointVO.getPointName());
+				entity = new ResponseEntity<>(list, HttpStatus.OK);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
 			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		}
 		
+		logger.info(entity.toString());
+		
 		return entity;
 	}
-	
 
 	
 	// 회원정보 전달
 	@RequestMapping(value = "/listAdmin", method = RequestMethod.GET)
 	@ResponseBody
-	public List<AdminVO> listAdmin(@RequestParam(value = "pointNo") String pointNo) throws Exception {
+	public ResponseEntity<List<AdminVO>> listAdmin(@RequestParam(value = "pointNo") String pointNo) throws Exception {
 		int pointNoInt = Integer.parseInt(pointNo);
-		
+		ResponseEntity<List<AdminVO>> entity = null;
 		// 이건 비즈니스 로직
 		List<AdminVO> list = adminService.selectAllAdmin();
 		List<AdminVO> listAdmin = new ArrayList<>();
@@ -261,8 +198,15 @@ public class AdminController {
 				listAdmin.add(adminVO);
 			}
 		}
+
+		try {
+			entity = new ResponseEntity<>(listAdmin, HttpStatus.OK);
+		}catch (Exception e) {
+			e.printStackTrace();
+			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		
-		return listAdmin;
+		return entity;
 	}
 	
 	// 개인정보 페이지

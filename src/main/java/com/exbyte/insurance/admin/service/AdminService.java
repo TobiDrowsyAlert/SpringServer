@@ -25,6 +25,9 @@ public interface AdminService {
 	public List<PointVO> selectAllPoint() throws Exception;
 	public List<AdminVO> selectAllAdmin() throws Exception;
 	public int count(AdminVO adminVO, String checkType) throws Exception;
-	public AdminVO registerAccount(AdminVO adminVO, String contextPath) throws Exception;
+	
+	public String hashAdminPw(String adminPw) throws Exception;
+	
+	public AdminVO registerAccount(AdminVO adminVO) throws Exception;
 	
 }
