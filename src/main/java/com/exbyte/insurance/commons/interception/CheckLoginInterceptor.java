@@ -20,7 +20,7 @@ public class CheckLoginInterceptor extends HandlerInterceptorAdapter{
 		
 		if(httpSession.getAttribute("login") == null) {
 			logger.info("not logged");
-			response.sendRedirect("/admin/login");
+			response.sendRedirect(request.getContextPath() + "/admin/login");
 			return false;
 		}
 		

@@ -63,11 +63,10 @@ public class ProvideLoginSessionInterceptor extends HandlerInterceptorAdapter{
 				response.addCookie(loginCookie);
 				
 			} 
-			response.sendRedirect("/");
+			response.sendRedirect(request.getContextPath() + "/");
 			
 		} else {
 			logger.info("LoginFail in Interceptor");
-			response.sendRedirect("/admin/login");
 		}
 		
 	}

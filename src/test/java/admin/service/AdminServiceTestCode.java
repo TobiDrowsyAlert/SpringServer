@@ -36,6 +36,10 @@ public class AdminServiceTestCode extends MockTest{
 		when(adminDAO.read("admin")).thenReturn(new AdminVO());
 		assertTrue(adminService.read("admin") == adminVO);
 		
+	}
+	@Test
+	public void testCreateAccount() throws Exception {
+		AdminVO adminVO;
 		
 	}
 	

@@ -1,24 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 
-<%@ include file="../include/head.jsp"%>
+<%@ include file="../include/head2.jsp"%>
 
-<body class="hold-transition skin-blue sidebar-mini layout-boxed">
+<body class=" skin-blue">
 
 <div class="wrapper">
 
     <!-- Main Header -->
-    <%@ include file="../include/main_header.jsp"%>
-
-    <!-- Left side column. contains the logo and sidebar -->
-    <%@ include file="../include/left_column.jsp"%>
+    <%@ include file="../include/main_header2.jsp"%>
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="container">
         <!-- Main content -->
-        <section class="content container-fluid">
+        <div class="content container-fluid">
             <div class="col-xl-12">
-                <div class="card card-primary card-outline">
+                <div class="card card-primary">
                     <form role="form" id="writeForm" method="post" action="${path}/admin/update">
                     	<input type="text" value="${login.adminId }" name="adminId" hidden="true">
 	                    <div class="card-header">
@@ -42,14 +39,13 @@
 	                </form> 
                 </div><!-- /.card card-primary card-outline-->
             </div><!-- /.col-lg-12 -->
-            
-        </section>
+        </div>
         <!-- /.content -->
     </div>
     <!-- /.content-wrapper -->
 
     <!-- Main Footer -->
-    <%@ include file="../include/main_footer.jsp"%>
+    <%@ include file="../include/main_footer2.jsp"%>
 
 </div>
 <!-- ./wrapper -->
@@ -72,7 +68,7 @@ $(document).ready(function(){
   }
 
   $("#updatePwBtn").click(function(){
-	self.location = "${path }/admin/updatePw?adminId=${login.adminId}&authKey=${authKey}";
+	self.location = "${path }/admin/updatePw?adminId=${login.adminId}&authKey=${login.adminAuthKey}";
   });
   
   $("#memberDeleteBtn").click(function(){

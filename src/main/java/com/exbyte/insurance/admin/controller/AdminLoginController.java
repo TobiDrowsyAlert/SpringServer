@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.WebUtils;
 
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
+import com.exbyte.insurance.admin.service.AdminMailService;
 import com.exbyte.insurance.admin.service.AdminService;
+import com.exbyte.insurance.commons.exception.EmailAuthException;
 
 @Controller
 @RequestMapping("/admin")
@@ -26,18 +29,24 @@ public class AdminLoginController {
 	
 	
 	private final AdminService adminService;
-	final String STRING_SUCCESS = "success";
-	final String STRING_FAIL = "fail";
-	final String STRING_AUTH_FAIL = "auth_fail";
-	final String STRING_NOT_HASH_PW = "not_hash_pw";
+	private final AdminMailService adminMailService;
+	
+	final String STRING_LOGIN_SUCCESS = "로그인 성공";
+	final String STRING_EMAIL_SEND = "이메일로 인증메일을 전송했습니다. 확인해주세요.";
+	final String STRING_FAIL = "작업이 실패했습니다.";
+	final String STRING_AUTH_FAIL = "이메일 인증이 필요합니다.";
+	final String STRING_AUTH_SUCCESS = "이메일 인증이 롼료되었습니다.";
+	final String STRING_NOT_HASH_PW = "암호화되지 않은 계정, 비밀번호 변경이 필요합니다.";
+	final String STRING_INVAILD_PW = "잘못된 비밀번호 입니다.";
 	final String TEST_VALID_EMAIL = "Y";
-	final String STRING_NULL = "null";
+	final String STRING_NULL = "NULL";
 
 	Logger logger = LoggerFactory.getLogger(AdminController.class);
 	
 	@Inject
-	public AdminLoginController(AdminService adminService) {
+	public AdminLoginController(AdminService adminService, AdminMailService adminMailService) {
 		this.adminService = adminService;
+		this.adminMailService = adminMailService;
 	}
 	
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
@@ -50,12 +59,14 @@ public class AdminLoginController {
 			model.addAttribute("adminId", savedAdminId);
 		}
 
-		return "/admin/login2";
+		return "/admin/login";
 	}
 	
 	// ProvideLoginSessionInterceptor : postHandler 호출 - 쿠키 생성
+	@SuppressWarnings("unused")
 	@RequestMapping(value = "/loginPOST", method = RequestMethod.POST)
-	public void loginPOST(LoginDTO loginDTO, Model model, HttpSession httpSession) {
+	public String loginPOST(LoginDTO loginDTO, Model model, HttpServletRequest request, RedirectAttributes redirectAttributes, HttpSession httpSession)
+	throws Exception {
 
 		AdminVO adminVO = null;
 		Logger logger = LoggerFactory.getLogger(AdminController.class);
@@ -63,26 +74,43 @@ public class AdminLoginController {
 	
 		try {
 			adminVO = adminService.login(loginDTO);
+			logger.info("loginPost logger : " + adminVO.toString());
 			
 			if(adminService.countSession(adminVO.getAdminId()) > 0) {
+				throw new Exception();
+			}
+			else if(adminVO == null) {
+				throw new NullPointerException();
+			}
+			else if(adminVO.getAdminPoint() != loginDTO.getAdminPoint()) {
 				throw new Exception();
 			}
 			
 			adminService.keepSession(adminVO.getAdminId() , httpSession.getId());
 		}
-		catch (IllegalArgumentException e) {
+		// Auth Key 실패
+		catch (EmailAuthException e) {
+			adminVO = adminService.read(loginDTO.getAdminId());
+			redirectAttributes.addAttribute("adminEmail", adminVO.getAdminEmail());
+			logger.info("adminEmail : " + adminVO.getAdminEmail());
 			e.printStackTrace();
-			model.addAttribute("msg", STRING_NOT_HASH_PW);
-			return;
+			return "redirect:/admin/email";
 			
-		}catch(Exception e) {
+		} catch(IllegalArgumentException e) {
 			e.printStackTrace();
-			model.addAttribute("msg", STRING_FAIL);
-			return;
+			redirectAttributes.addFlashAttribute("msg", STRING_INVAILD_PW);
+			return "redirect:/admin/login";
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			redirectAttributes.addFlashAttribute("msg", STRING_FAIL);
+			return "redirect:/admin/login";
 		}
 
-		model.addAttribute("msg", STRING_SUCCESS);
+		model.addAttribute("msg", STRING_LOGIN_SUCCESS);
 		model.addAttribute("admin", adminVO);
+		
+		return "/commons/index";
 	}
 	
 	// 로그아웃 처리 구현
@@ -102,7 +130,7 @@ public class AdminLoginController {
 			// 세션 키 초기화, 
 			
 		}
-		return "/admin/logout";
+		return "redirect:/";
 	}
 	
 	

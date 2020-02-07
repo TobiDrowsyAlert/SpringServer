@@ -23,15 +23,15 @@ $(function() {
       $this = $("#sendinfobutton");
       $this.prop("disabled", true); // Disable submit button until AJAX call is complete to prevent duplicate messages
       $.ajax({
-        url: "././mail/info.php",
+        url: "${path }/consulting/create/out",
         type: "POST",
         data: {
-          info_name: info_name,
-          info_birth: info_birth,
-          info_job: info_job,
-          info_phone: info_phone,
-          info_time: info_time,
-          info_select: info_select,
+          "consultingName": info_name,
+          "consultingBirthday": info_birth,
+          "consultingJob": info_job,
+          "consultingPhone": info_phone,
+          "consultingCallTime": info_time,
+          "consultingFavoriteType": info_select,
         },
         cache: false,
         success: function() {

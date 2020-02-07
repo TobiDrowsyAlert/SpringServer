@@ -37,7 +37,7 @@ public class AdminDAOImpl implements AdminDAO{
 
 	@Override
 	public AdminVO login(LoginDTO loginDTO) throws Exception {
-		return sqlSession.selectOne(NAMESPACE + ".read", loginDTO);
+		return sqlSession.selectOne(NAMESPACE + ".login", loginDTO);
 		
 	}
 	@Override
@@ -56,8 +56,8 @@ public class AdminDAOImpl implements AdminDAO{
 	}
 
 	@Override
-	public void delete(String adminId) throws Exception {
-		sqlSession.delete(NAMESPACE + ".delete", adminId);
+	public void delete(AdminVO adminVO) throws Exception {
+		sqlSession.delete(NAMESPACE + ".delete", adminVO);
 	}
 
 	@Override
@@ -88,10 +88,20 @@ public class AdminDAOImpl implements AdminDAO{
 	}
 
 	@Override
+	public AdminVO selectPointAdmin(PointVO pointVO) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".selectPointAdmin", pointVO);
+	}
+	
+	@Override
 	public AdminVO selectAdminByEmail(String adminEmail) throws Exception {
 		return sqlSession.selectOne(NAMESPACE + ".selectAdminByEmail", adminEmail);
 	}
 
+	@Override
+	public List<AdminVO> selectAdmin(AdminVO adminVO) throws Exception {
+		return sqlSession.selectList(NAMESPACE + ".selectAdmin", adminVO);
+	}
+	
 	@Override
 	public List<PointVO> selectAllPoint() throws Exception {
 		return sqlSession.selectList(NAMESPACE + ".selectAllPoint");
@@ -130,6 +140,12 @@ public class AdminDAOImpl implements AdminDAO{
 		paramMap.put("checkType", checkType);
 		
 		return sqlSession.selectOne(NAMESPACE + ".count", paramMap );
+	}
+
+	@Override
+	public int countPosition(AdminVO adminVO) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".countPosition", adminVO);
+		
 	}
 
 }

@@ -8,39 +8,51 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="">
   <meta name="author" content="">
-  <link rel="icon" href="${imgPath }img/favicon.ico">
+  <link rel="icon" href="${path }img/favicon.ico">
 
   <title>로열파트너스</title>
 
-  <!-- add css -->
-  <link  rel="stylesheet" href="vendor/bootstrap/css/add.css">
-
+  <!-- Custom fonts for this template -->
+  <link href="${path }/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  
+    <!-- add css -->
+  <link  rel="stylesheet" href="${path }/vendor/bootstrap/css/add.css">
+  
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="${path }/vendor/bootstrap/css/bootstrap.min.css">
 
   <!-- Custom fonts for this template -->
-  <link href="dist/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="${path }/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   
   <!-- Custom styles for this template -->
-  <link href="dist/css/agency.min.css" rel="stylesheet">
+  <link href="${path }/dist/css/agency.min.css" rel="stylesheet">
 
-  
+  	  
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
   <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
 
+  
+
+  <link rel="stylesheet" href="${path }/dist/css/common.css"/>
+  
+  <!-- login phone -->
+  <link rel="stylesheet" media="(min-width:0px) and (max-width:700px)" href="${path }/dist/css/login_phone.css">
+  
+  
 </head>
 <body id="page-top">
 
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
     <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src='${imgPath }img/logos/main_logo.png' width="200px" height="50px"></a>
+      <a class="navbar-brand js-scroll-trigger" href="#page-top"><img src='${path }/img/logos/main_logo.png' width="200px" height="50px"></a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <i class="fas fa-bars"></i>
       </button>
@@ -61,13 +73,16 @@
           <li class="nav-item">
             <a class="nav-link js-scroll-trigger" href="#contact"><b>고객문의</b></a>
           </li>
+          <li class="nav-item">
+          	<a class="nav-link" href="${path }/management"><b>관리페이지</b></a>
+          </li>
         </ul>
       </div>
     </div>
   </nav>
 
   <!-- Header -->
-  <header class="masthead">
+  <header class="masthead" style="height : 100%">
     <div class="container">
       <div class="intro-text">
         <div class="intro-lead-in"><b>'조금 더'</b>의 차이를 만드는 <br><b>"성공적인 자산관리</b> <b style="color:#ff872a;">파트너"</b></div>
@@ -93,7 +108,7 @@
                 <i class="fas fa-plus fa-3x"></i>
               </div>
             </div>
-            <img class="img-fluid" src="${imgPath }img/portfolio/01-thumbnail.jpg" alt="">
+            <img class="img-fluid" src="${path }/img/portfolio/01-thumbnail.jpg" alt="">
           </a>
           <div class="portfolio-caption">
             <h4>재무설계</h4>
@@ -106,7 +121,7 @@
                 <i class="fas fa-plus fa-3x"></i>
               </div>
             </div>
-            <img class="img-fluid" src="${imgPath }img/portfolio/02-thumbnail.jpg" alt="">
+            <img class="img-fluid" src="${path }/img/portfolio/02-thumbnail.jpg" alt="">
           </a>
           <div class="portfolio-caption">
             <h4>보장분석</h4>
@@ -119,7 +134,7 @@
                 <i class="fas fa-plus fa-3x"></i>
               </div>
             </div>
-            <img class="img-fluid" src="${imgPath }img/portfolio/03-thumbnail.jpg" alt="">
+            <img class="img-fluid" src="${path }/img/portfolio/03-thumbnail.jpg" alt="">
           </a>
           <div class="portfolio-caption">
             <h4>유전자 동의</h4>
@@ -132,7 +147,7 @@
                 <i class="fas fa-plus fa-3x"></i>
               </div>
             </div>
-            <img class="img-fluid" src="${imgPath }img/portfolio/04-thumbnail.jpg" alt="">
+            <img class="img-fluid" src="${path }/img/portfolio/04-thumbnail.jpg" alt="">
           </a>
           <div class="portfolio-caption">
             <h4>보험금 찾기</h4>
@@ -144,14 +159,14 @@
   </section>
 
   <!-- Services -->
-  <section class="page-section" id="services" style="background-image: url('${imgPath }img/need_back.png')">
+  <section class="page-section" id="services" style="background-image: url('${path }/img/need_back.png')">
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
           <h2 class="section-heading text-uppercase">자산관리 필요성</h2>
           <h5 class="text_shadow">자산관리</h5>
         </div>
-        <img class="need_img" src="${imgPath }img/need.png">
+        <img class="need_img" src="${path }/img/need.png">
       </div>
     </div>
   </section>
@@ -368,8 +383,8 @@
           data-cycle-fx="scrollHorz"
           data-cycle-pause-on-hover="true"
           data-cycle-speed="150">
-          <img class="im" src="${imgPath }img/img_1.png">
-          <img class="im" src="${imgPath }img/img_2.png">
+          <img class="im" src="${path }/img/img_1.png">
+          <img class="im" src="${path }/img/img_2.png">
         </div>
         <div class="rows">
           <div class="col-lg-12 text-center">
@@ -377,7 +392,7 @@
             <h2 class="text_shadow">process</h2>
           </div>
         </div>
-        <img class="process" src ="${imgPath }img/process.png">
+        <img class="process" src ="${path }/img/process.png">
       </div>
     </div>
       </div>
@@ -385,11 +400,11 @@
   </section>
 
   <!-- Contact -->
-  <section class="page-section" id="contact">
+  <section class="page-section" id="contact" style="background-color : #5d6165; background-repeat : no-repeat">
     <div class="container">
       <div class="row">
         <div class="col-lg-12 text-center">
-          <h2 class="section-heading text-uppercase">고객문의</h2>
+          <h2 class="section-heading text-uppercase" style="color : #fff">고객문의</h2>
           <h2 class="text_shadow">customer</h2>
         </div>
       </div>

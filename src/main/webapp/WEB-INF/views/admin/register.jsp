@@ -1,236 +1,294 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 
-<html>
-<%@ include file="../include/head.jsp"%>
-<body class="hold-transition skin-blue sidebar-mini layout-boxed">
+<!DOCTYPE html>
+<html lang="ko">
 
-	<div class="wrapper">
-		<!-- Main Header -->
-		<%@ include file="../include/main_header.jsp"%>
+<head>
+<title>회원가입 | 로얄파트너스</title>
+<%@ include file="../include/head2.jsp"%>
+<!-- login css -->
+<link href="${path }/dist/css/join_sub.css" rel="stylesheet">
+</head>
 
-		<!-- Left side column. contains the logo and sidebar -->
-		<%@ include file="../include/left_column.jsp"%>
+<body id="page-top">
 
-		<!-- Content Wrapper. Contains page content -->
-		<div class="content-wrapper">
-			<!-- Content Header (Page header) -->
-			<div class="content-header">
-				<div class="container-fluid">
-					<div class="row mb-2">
-						<div class="col-sm-6">
-							<h1 class="m-0 text-dark">sample</h1>
-						</div><!-- /.col -->
-						<div class="col-sm-6">
-							<ol class="breadcrumb float-sm-right">
-								<li class="breadcrumb-item"><a href="#">Home</a></li>
-								<li class="breadcrumb-item active">회원가입</li>
-							</ol>
-						</div><!-- /.col -->
-					</div><!-- /.row -->
-				</div><!-- /.container-fluid -->
-			</div><!-- /.content-header -->
-
-			<!-- Main content -->
-			<section class="content container-fluid">
-				<div class="col-lg-12">
-					<div class="card card-primary card-outline">
-						<form role="form" id="writeForm" method="post"
-							action="${path}/admin/registerPOST">
-							<div class="card-header">
-								<h3 class="card-title">회원가입</h3>
-							</div>
-							<!--/.card-header-->
-					        <div class="card-body">
-				              <div class="form-group">
-				                <label for="adminId">아이디</label> <input class="form-control"
-				                  id="adminId" name="adminId" placeholder="아이디">
-				                  <div class="check_font" id="idCheck">아이디체크</div>
-				              </div>
-				              <div class="form-group">
-				                <label for="adminPw">비밀번호</label> <input type="password" class="form-control"
-				                  id="adminPw" name="adminPw" placeholder="비밀번호">
-				                  <div class="check_font" id="pwCheck">비밀번호체크</div>
-				              </div>
-				              <div class="form-group">
-				                <label for="adminPw">비밀번호 확인</label> <input type="password" class="form-control"
-				                  id="adminDuplicatePw" name="adminDuplicatePw" placeholder="비밀번호 확인">
-				                  <div class="check_font" id="pwDuplicateCheck">중복 체크</div>
-				              </div>
-				              <div class="form-group">
-				                <label for="adminName">이름</label> <input class="form-control"
-				                  id="adminName" name="adminName" placeholder="이름">
-				                  <div class="check_font" id="nameCheck">이름 체크</div>
-				              </div>
-				              <div class="form-group">
-				                <label for="adminEmail">이메일</label> <input type="email" class="form-control"
-				                  id="adminEmail" name="adminEmail" placeholder="이메일">
-				                  <div class="check_font" id="emailCheck">이메일체크</div>
-				              </div>
-				              <div class="form-group">
-				                <label for="adminPosition">직책</label>
-				                <select class="form-control" id="adminPosition" name="adminPosition">
-				                  <option>직원</option>
-				                </select>
-				              </div>
-				              <div class="form-group">
-				              	<label for="adminPoint">지부</label>
-				              	<select class="form-control" id="adminPoint" name="adminPoint">
-				              		<c:forEach items="${points }" var="point" >
-				              			<option value='${point.pointNo }'>${point.pointName}</option>
-				              		</c:forEach>
-				              	</select>
-				              </div>
-				            </div>
-				            <!--/.card-body-->
-							<div class="card-footer">
-								<button type="submit" class="btn btn-primary" id="btnSubmit">
-									<i class="fa fa-save"></i>회원가입
-								</button>
-							</div>
-							<!--/.card-footer-->
-						</form>
-					</div>
-				</div>
-			</section>
-			<!-- /.content -->
+	<!-- nav-->
+	<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
+		<div class="container">
+			<a class="navbar-brand js-scroll-trigger" href="${path }/"><img
+				src='${path }/img/logos/main_logo.png' width="200px" height="50px"></a>
 		</div>
-		<!-- /.content-wrapper -->
+	</nav>
 
+	<!-- header -->
+	<div class="page-section"></div>
 
-		<!-- Main Footer -->
-		<%@ include file="../include/main_footer.jsp"%>
-	</div>
-	<!-- ./wrapper -->
-	<%@ include file="../include/plugin_js.jsp"%>
+	<!-- section -->
+	<section class="section_join">
+		<div class="join_container">
+			<h2 class="section-heading text-uppercase">회원가입</h2>
+			<h5 class="section-heading_sub text-uppercase">정보입력</h5>
+			<form role="form" id="join_subForm" name="sentinfo" action="${path }/admin/registerPOST" method="post">
+				<div class="join_sub-form" id="join_sub_ids">
+					<div class="form-boxs_js clearfix">
+						<span class="js_sub">*</span>아이디
+					</div>
+					<input type="text" id="adminId" name="adminId" class="form-box_js clearfix"
+						placeholder="영문, 숫자만 입력가능합니다." required="required">
+				</div>
+				<div class="join_sub-form" id="join_sub_births">
+					<span class="form-boxs_js"><span class="js_sub">*</span>비밀번호</span>
+					<input type="tel" id="adminPw" name="adminPw" class="form-box_js" minlength="6"
+						maxlength="12" placeholder="영문과 숫자를 혼합해 6~12자리로 입력해주세요."
+						required="required">
+				</div>
+				<div class="join_sub-form" id="join_sub_birthscheck">
+					<span class="form-boxs_js"><span class="js_sub">*</span>비밀번호
+						확인</span> <input type="password" id="adminCheckPw" class="form-box_js"
+						minlength="6" maxlength="12" placeholder="비밀번호를 한번 더 입력해주세요."
+						required="required">
+				</div> 
+				<div class="join_sub-form" id="join_sub_names">
+					<span class="form-boxs_js"><span class="js_sub">*</span>이름</span> <input
+						type="text" id="adminName" name="adminName" class="form-box_js" maxlength="6"
+						placeholder="공백 없이 입력해주세요." required="required">
+				</div>
+				<div class="join_sub-form" id="join_sub_emails">
+					<span class="form-boxs_js"><span class="js_sub">*</span>이메일</span>
+					<input type="email" id="adminEmail" name="adminEmail" class="form-box_js adminEmail"
+						placeholder="아이디와 비밀번호 분실시 입력하신 이메일로 변경 또는 찾으실 수 있습니다."
+						required="required">
+				</div>
+				<div class="join_sub-form" id="join_sub_tels">
+					<span class="form-boxs_js">전화번호</span> <input type="tel"
+						id="adminHomePhone" name="adminHomePhone" class="form-box_js" maxlength="12"
+						placeholder="'-'없이 입력해주세요.">
+				</div> 
+				<div class="join_sub-form" id="join_sub_phones">
+					<span class="form-boxs_js"><span class="js_sub">*</span>휴대폰</span>
+					<input type="tel" id="adminPhone" name="adminPhone" class="form-box_js"
+						maxlength="12" placeholder="'-'없이 입력해주세요." required="required">
+				</div>
+				<div class="join_sub-form" id="join_sub_locates">
+					<span class="form-boxs_js"><span class="js_sub">*</span>지점</span> 
+					<select
+						class="form-box_js" id="pointList" name="adminPoint" required="required">
+					</select>
+				</div>
+	          <div class="join_sub-form" id="join_sub_position">
+	            <span class="form-boxs_js"><span class="js_sub">*</span>직책</span>
+	            <select class="form-box_js adminPosition" id="join_sub_position" name="adminPosition" required="required">
+	              <option>관리자</option>
+	              <option>지점장</option>
+	              <option>사원</option>
+	            </select>
+	          </div>
+				<button class="btns_join" id="btn_join" type="button" onclick="">가입하기</button>
+			</form>
+		</div>
+	</section>
+
+	<!-- Footer -->
+	<footer class="footer_join">
+		<div>&copy; 2020 Royal_partners. All Rights Reserved.</div>
+	</footer>
+
+	<%@ include file="../include/main_footer2.jsp"%>
 	
+	<%@ include file = "../include/plugin_js2.jsp" %>
+
 	<script type="text/javascript">
 
-	$(document).ready(function(){
-	  var adminPw = "";
-	  var re = /^[a-zA-Z0-9]{4,12}$/ // 아이디와 패스워드가 적합한지 검사할 정규식
-	  var re2 = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일이 적합한지 검사할 정규식
+	var adminPw = "";
+	var adminCheckPw = "";
+	var adminEmail = "";
+	var msg = "";
+	var formObj = $("form[role='form']");
+	var op = new Option();
+	
+	var reId = /^[a-zA-Z0-9]/;
+	var rePw = /^[a-zA-Z0-9.,`~!@#$%^&*()_+-]{6,12}$/; // 아이디와 패스워드가 적합한지 검사할 정규식
+	var reEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일이 적합한지 검사할 정규식
+	var rePhone = /^[0-9]+$/;
+		
+	   var ajaxListPoint = function(){
+		     $.ajax({
+			       url : "${path }/admin/listPoint", // HTTP요청을 보낼 URL 주소
+			       method : "GET", // 요청 메소드
+			       dataType : "json", // 서버에서 보내줄 데이터 타입
+			       success : function(data){ // 성공 시 처리
+			         var data_key = Object.keys(data);
+			           for(var i = 0; i < data_key.length; i++){
+				         var op = new Option();
+				         op.value = data[data_key[i]].pointNo;
+				         op.text = data[data_key[i]].pointName;
+				         document.getElementById("pointList").add(op);
+			         }
+			       },
+			       error : function(){
+			         alert('point 불러오기 실패');
+			       }
+			     });
+		   }
 
-	  var validate = function(){
-	    let idCheck = $('#idCheck').text();
-	    let pwCheck = $('#pwCheck').text();
-	    let emailCheck = $('#emailCheck').text();
-	    let nameCheck = $('#nameCheck').text();
-	    let pwDuplicateCheck = $('#pwDuplicateCheck').text();
-
-	    if(idCheck != "" || pwCheck != "" || emailCheck != "" || nameCheck != "" || pwDuplicateCheck != ""){
-	      $('#btnSubmit').attr("disabled", true);
-	      return;
-	    }
-
-	    $('#btnSubmit').attr("disabled", false);
-	  }
 	  
+	  ajaxListPoint();
+		
+
+	function ajaxCheckId(){
+		return new Promise(function(resolve, reject){
+		    var adminId = $('#adminId').val();
+		    $.ajax({
+		      url : "${path }/admin/checkId",
+		      type : "get",
+		      data : {"adminId" : adminId},
+		      success : function(data){
+			      resolve();
+		          if(data==1){
+		            // 1: 중복
+		            msg = "이미 등록된 아이디입니다. ";
+		            alert(msg);
+		          }
+		      }
+		    });
+		});
+	}
+
+	function ajaxCheckEmail(){
+		return new Promise(function(resolve, reject){
+		    var adminEmail = $('#adminEmail').val();
+		    $.ajax({
+		      url : "${path }/admin/checkEmail"+"?adminEmail=" + adminEmail,
+		      type : "get",
+		      success : function(data){
+			      resolve();
+		        if(data>=1){
+		          msg = "이미 등록된 이메일입니다. ";
+		          alert(msg);
+		        }
+		      }
+		    });
+		});
+	}
+
+	function ajaxCheckPosition(){
+		return new Promise(function(resolve, reject){
+		    var adminPosition = $('.adminPosition').val();
+		    var promise = $.ajax({
+		      url : "${path }/admin/checkPosition"+"?adminPosition=" + adminPosition,
+		      type : "get",
+		      success : function(data){
+			      resolve();
+			        if(data>=1){
+			          msg = "직책을 다시 확인해주십시오. ";
+			          alert(msg);
+			        }
+			  }
+		    });
+		});
+
+	}
+
+	function submitForm(){
+		return new Promise(function(resolve, reject){
+			if(msg != ""){
+				alert(msg);
+				return;
+			}
+			formObj.submit();
+		});
+
+	}
+	$('#btn_join').click(function(){
+		msg="";
+		
+		ajaxCheckId()
+		.then(function() {
+			return ajaxCheckEmail();
+		})
+		.then(function(){
+			return ajaxCheckPosition();
+		})
+		.then(function(){
+			return validate();
+		})
+		.then(function(){
+			return submitForm();
+		});
+
+	})
+		
+	var validate = function(){
+
+		adminId = $("#adminId").val();
+		adminPw = $('#adminPw').val();
+		adminEmail = $('#adminEmail').val();
+		adminCheckPw = $('#adminCheckPw').val();
+		adminName = $('#adminName').val();
+		adminPhone = $('#adminPhone').val();
+		adminHomePhone = $('#adminHomePhone').val();	
+		adminPosition = $('.adminPosition').val();
+		var checkNumber = adminPw.search(/[0-9]/g);
+		var checkEnglish = adminPw.search(/[a-z]/ig);
+		
+		/* ajaxCheckPosition();
+		ajaxCheckId();
+		ajaxCheckEmail(); */
+		
+		if(!reId.test(adminId)){
+			msg = "아이디는 영문과 숫자만 가능합니다.";
+		}
+		if(!rePw.test(adminPw) || (checkNumber < 0 || checkNumber < 0)  ){
+			msg = "비밀번호는 영문과 숫자 혼합 6~12자리만 가능합니다.";
+		}
+		if(!reEmail.test(adminEmail)){
+			msg = "이메일을 다시 확인해주세요. ";
+		}
+		if(adminPw != adminCheckPw){
+			msg = "비밀번호 확인을 다시 입력하세요. ";
+		}
+		if((adminPhone == "")){
+			msg = "휴대번호를 확인해주세요.";
+		}
+		if(!rePhone.test(adminPhone)){
+			msg = "휴대번호는 숫자를 입력해야합니다.";
+		}
+		if(!(adminHomePhone == "") && !rePhone.test(adminHomePhone)){
+			msg = "전화번호를 확인해주세요."; 
+		}
+
+	
+	}
+
+    function joinMSG() {
+/*       var chk1 = document.getElementById("join_ag1");
+      var chk2 = document.getElementById("join_ag2");
+      if (chk1.checked==false&&chk2.checked==false){
+        alert("필수사항을 체크해주세요")}
+      else if (chk1.checked==false){
+        alert("이용약관 동의에 체크해주세요")}
+      else if (chk2.checked==false){
+        alert("개인정보수집 및 이용동의에 체크해주세요")} */
+      }
+  
 	  $('#adminId').blur(function(){
-	    var adminId = $('#adminId').val();
-	    var adminVO ={
-			"adminId" : adminId
-	    };
-	    $.ajax({
-	      //url : "http://localhost:8080/admin/checkId",
-	      url : "http://localhost:8080/checkId",
-	      type : "GET",
-	      data : {"adminVO", adminVO},
-	      success : function(data){
-	          if(data==1){
-	            // 1: 중복
-	            $('#idCheck').text("사용중인 아이디입니다.");
-	            $('#idCheck').css("color", "red");
-	          }else{
-	            // 0: 중복아님
-	            //check(re, what, message)
-	            if(!re.test(adminId)){
-	              $('#idCheck').text("아이디는 소문자와 숫자 4~12자리만 가능합니다.");
-	              $('#idCheck').css("color", "red");
-	            }else if(adminId == ""){
-	              $('#idCheck').text("아이디를 입력해주세요.");
-	              $('#idCheck').css("color", "blue");
-	            }else{
-	              $('#idCheck').text("");
-	            }
-	          }
-	       validate();
-	      }
-	    });
+		    ajaxCheckId();
 	  });
 
 
-	  $('#adminEmail').blur(function(){
-	    var adminEmail = $('#adminEmail').val();
-	    $.ajax({
-	      url : "http://localhost:8080/admin/checkEmail"+"?adminEmail=" + adminEmail,
-	      type : "get",
-	      success : function(data){
-	        if(data>=1){
-	          $('#emailCheck').text("사용중인 이메일입니다.");
-	          $('#emailCheck').css("color", "red");
-	        }else{
-	          if(!re2.test(adminEmail)){
-	            $('#emailCheck').text("이메일 형식이 잘못되었습니다.");
-	            $('#emailCheck').css("color", "red");
-	          }else if(adminEmail == ""){
-	            $('#emailCheck').text("이메일을 입력해주세요.");
-	            $('#emailCheck').css("color", "blue");
-	          }else{
-	            $('#emailCheck').text("");
-	          }
-	        }
-	      validate();
-	      }
-	    });
+
+	  $('.adminEmail').blur(function(){
+		  ajaxCheckEmail();
 	  });
 
 
-	  $('#adminName').blur(function(){
-	    var adminName = $('#adminName').val();
-	    if(adminName == ""){
-	      $('#nameCheck').text("이름을 입력하세요.");
-	      $('#nameCheck').css("color", "blue");
-	    }else{
-	      $('#nameCheck').text("");
-	    }
-	    validate();
-	  });
-
-	  $('#adminPw').blur(function(){
-	    adminPw = $('#adminPw').val();
-
-	    if(!re.test(adminPw)){
-	      $('#pwCheck').text("비밀번호는 소문자와 숫자 4~12자리만 가능합니다.");
-	      $('#pwCheck').css("color", "red");
-	    }else if(adminPw == ""){
-	      $('#pwCheck').text("비밀번호를 입력하세요.");
-	      $('#pwCheck').css("color", "blue");
-	    }else{
-	      $('#pwCheck').text("");
-	    }
-	    validate();
+	  $('.adminPosition').blur(function(){
+		  ajaxCheckPosition();
 	  });
 
 
-	  $('#adminDuplicatePw').blur(function(){
-	    var adminDuplicatePw = $('#adminDuplicatePw').val();
-	    if (adminDuplicatePw == ""){
-	     $('#pwDuplicateCheck').text("비밀번호 중복 체크를 해주세요..");
-	     $('#pwDuplicateCheck').css("color", "red");
-	     // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
-	    }else if(adminPw == adminDuplicatePw){
-	      $('#pwDuplicateCheck').text("");
-	    }else {
-	      $('#pwDuplicateCheck').text("비밀번호를 다시 확인해주세요.");
-	      $('#pwDuplicateCheck').css("color", "red");
-	      // 버튼 비활성화 ,$('#버튼아이디').attr("disabled", true);
-	    }
-	  validate();
-	  });
-
-	});
-
-	</script>
+  </script>
 
 </body>
+
 </html>

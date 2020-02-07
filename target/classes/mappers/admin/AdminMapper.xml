@@ -10,6 +10,8 @@
 			admin_id,
 			admin_pw,
 			admin_name,
+			admin_phone,
+			admin_call_number,
 			admin_email,
 			admin_position,
 			admin_point,
@@ -19,6 +21,8 @@
 			#{adminId},
 			#{adminPw},
 			#{adminName},
+			#{adminPhone},
+			#{adminCallNumber},
 			#{adminEmail},
 			#{adminPosition},
 			#{adminPoint},
@@ -26,7 +30,6 @@
 			#{adminAuthKey}
 		)
 	</insert>
-
 	<update id="update">
 		UPDATE 
 			tbl_admin
@@ -34,6 +37,8 @@
 		    admin_pw = #{adminPw}
 		    , admin_name = #{adminName}
 		    , admin_email = #{adminEmail}
+		    , admin_phone = #{adminPhone}
+		    , admin_call_number = #{adminCallNumber}
 		    , admin_position = #{adminPosition}
 		    , admin_login_date = NOW()
 		    , admin_point = #{adminPoint}
@@ -47,7 +52,8 @@
 		DELETE FROM
 			tbl_admin
 		WHERE
-			admin_id = #{adminId};
+			admin_id = #{adminId}
+		<include refid="rejectForAdmin"/>
 	</delete>
 	
 	<select id="checkPosition" resultType="string">
@@ -91,7 +97,7 @@
 			tbl_admin
 		WHERE
 			admin_id IS NOT NULL
-			AND admin_email = #{adminEmail}
+		AND admin_email = #{adminEmail}
 	</select>
 	
 	<select id = "countId" resultType="int">
@@ -123,6 +129,18 @@
 			admin_id = #{adminId}
 	</select>
 	
+	<select id="login" resultMap="AdminResultMap">
+		SELECT
+			*
+		FROM
+			tbl_admin
+		WHERE
+			admin_id = #{adminId}
+			AND admin_point = #{adminPoint}
+	</select>
+	
+	
+	
 	<select id = "selectAdminByEmail" resultMap="AdminResultMap">
 		SELECT
 			*
@@ -132,6 +150,25 @@
 			admin_email = #{adminEmail}
 	</select>
 	
+	
+	<select id = "countPosition" resultType="int">
+		SELECT
+			count(*)
+		FROM
+			tbl_admin
+		WHERE
+			admin_id IS NOT NULL
+			<include refid="position"/>
+	</select>
+	
+	<sql id="position">
+		<if test="adminPosition == '관리자'">
+			AND admin_position = #{adminPosition}
+		</if>
+		<if test="adminPosition == '지점장'">
+			AND admin_position = #{adminPosition} AND admin_point = #{adminPoint}
+		</if>
+	</sql>
 	
 	<sql id="checkType">
 		<if test="checkType != null">
@@ -144,6 +181,7 @@
 			<if test="checkType == 'adminId'.toString">
 				AND admin_id = #{adminVO.adminId}
 			</if>
+			
 		</if>
 	</sql>
 	
@@ -173,6 +211,16 @@
 			admin_id = #{adminId}
 	</update>
 	
+	<select id="selectAdmin" resultMap="AdminResultMap">
+		SELECT
+			*
+		FROM
+			tbl_admin
+		WHERE
+			admin_id IS NOT NULL
+		<include refid="wherePosition" />
+	</select>
+	
 	<select id="selectAllAdmin" resultMap="AdminResultMap">
 		SELECT
 			*
@@ -200,18 +248,45 @@
 		ORDER BY point_no ASC
 	</select>
 	
+	<select id="selectPointAdmin" resultMap="AdminResultMap">
+		SELECT
+			*
+		FROM
+			tbl_admin
+		WHERE
+		admin_position = '지점장'
+		AND admin_point = #{pointNo}
+	</select>
+	
 	<sql id="wherePoint">
 		<if test="#{value} != null">
 			AND admin_point = #{value}
 		</if>
 	</sql>
-
+	
+	<sql id="wherePosition">
+		<if test="adminPosition == '지점장'">
+			AND admin_point = #{adminPoint}
+		</if>
+		<if test="adminPosition == '사원'">
+			AND admin_point = #{adminPoint}
+				AND admin_id = #{adminId}
+		</if>
+	</sql>
+	
+	<sql id="rejectForAdmin">
+		<if test= "adminId == 'admin'">
+			AND admin_id = NULL
+		</if>
+	</sql>
 	
 <resultMap type="AdminVO" id="AdminResultMap">
 	<id property="adminId" column="admin_id"/>
 	<result property="adminPw" column="admin_pw" />
 	<result property="adminName" column="admin_name" />
 	<result property="adminEmail" column="admin_email" />
+	<result property="adminPhone" column="admin_phone"/>
+	<result property="adminCallNumber" column="admin_call_number"/>
 	<result property="adminPosition" column="admin_position" />
 	<result property="sessionKey" column="session_key" />
 	<result property="adminJoinDate" column="admin_join_date" />

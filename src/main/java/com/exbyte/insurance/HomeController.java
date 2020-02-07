@@ -35,10 +35,14 @@ public class HomeController {
 	}
 
 	@RequestMapping(value = "/intro")
-	public String introGET() {
+	public String intro() {
 		return "commons/intro";
 	}
 	
+	@RequestMapping(value="/management")
+	public String management() {
+		return "commons/management";
+	}
 	
 	
 }

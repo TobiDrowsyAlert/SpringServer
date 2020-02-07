@@ -39,6 +39,22 @@ public class ConsultingController {
 	private ConsultingService consultingService;
 	
 
+	@RequestMapping(value="/create/out", method = RequestMethod.GET)
+	@ResponseBody
+	public int createOutGET(ConsultingVO consulting) throws Exception {
+		
+		logger.info("create Request : " + consulting.toString());
+		try {
+			consulting.setConsultingRegion("경기도");
+			consulting.setConsultingRemarks("");
+			consultingService.create(consulting);
+		}catch(SQLIntegrityConstraintViolationException e) {
+			e.printStackTrace();
+			return 0;
+		}
+		return 1;
+	}
+		
 	@RequestMapping(value="/create", method = RequestMethod.POST)
 	public String createPOST(ConsultingVO consulting, RedirectAttributes redirectAttributes) throws Exception {
 		
@@ -189,15 +205,6 @@ public class ConsultingController {
 			
 			logger.info(arr.toString());
 			
-//			for(ConsultingModifyDTO modifyDTO : arr) {
-//				consultingNo = modifyDTO.getConsultingNo();
-//				ConsultingVO consultingVO = consultingService.read(consultingNo);
-//				
-//				consultingVO.setConsultingIsCall(modifyDTO.getConsultingIsCall());
-//				consultingVO.setConsultingIsEnd(modifyDTO.getConsultingIsEnd());
-//				// remark...
-//				consultingService.update(consultingVO);
-//			}
 		}catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

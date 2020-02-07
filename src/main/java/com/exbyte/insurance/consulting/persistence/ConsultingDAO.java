@@ -11,6 +11,7 @@ public interface ConsultingDAO {
 	void create(ConsultingVO consultingVO) throws Exception;
 	ConsultingVO read(int consultingNo) throws Exception;
 	List<ConsultingVO> selectAll(Criteria criteria, AdminVO adminVO) throws Exception;
+	List<ConsultingVO> selectByAdmin(String adminId) throws Exception;
 	
 	void update(ConsultingVO consultingVO) throws Exception;
 	void delete(int consultingNo) throws Exception;

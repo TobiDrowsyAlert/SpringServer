@@ -3,26 +3,23 @@ package admin.controller;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import javax.inject.Inject;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,10 +66,10 @@ public class AdminControllerTest {
 	final String TEST_STRING = "junitTest";
 	final int TEST_POINT = 1;
 	
-	@Mock
+	@Autowired
 	AdminService adminService;
-	
-	@Mock
+
+	@Autowired
 	AdminMailService adminMailService;
 	
 	private AdminController adminController;
@@ -94,6 +91,11 @@ public class AdminControllerTest {
 	public MockHttpSession session;
 	public MockHttpServletRequest request;
 	
+	@Inject
+	public AdminControllerTest(AdminService adminService, AdminMailService adminMailService) {
+		this.adminService = adminService;
+		this.adminMailService = adminMailService;
+	}
 	
 	
 	@Before
@@ -125,16 +127,9 @@ public class AdminControllerTest {
 	}
 
 	@Test
-	public void registerGetTest_CheckForward() throws Exception {
-		pointList = new ArrayList<>();
-		
-		when(adminService.selectAllPoint()).thenReturn(pointList);
-		
-		mockMvc.perform(get("/admin/register"))
-		.andExpect(status().isOk())
-		.andExpect(view().name("admin/register"))
-		.andExpect(model().attribute("points", pointList));
-		
+	public void registerTest_Register() throws Exception {
+		mockMvc.perform(get("/admin/register").param("adminPosition", TEST_STRING))
+		.andExpect(view().name("admin/email"));
 	}
 	
 	@Test
@@ -146,42 +141,11 @@ public class AdminControllerTest {
 		.andExpect(view().name("admin/email"));
 		
 	}
-	
-	@Test
-	public void emailSendPostTest_ValidEmail_ShouldPass() throws Exception {
-		//build
-		String adminEmail = TEST_STRING;
-		
-		//when
-		when(adminService.selectAdminByEmail(adminEmail)).thenReturn(admin);
-		doNothing().when(adminMailService).mailSend(any(), anyString());;
-		
-		//check
-		mockMvc.perform(post("/admin/email")
-				.param("adminEmail", adminEmail))
-		.andExpect(redirectedUrl("/"));
-	}
 
-	@Test(expected = NullPointerException.class)
-	public void emailSendPostTest_InvalidEmail_ThrowException() throws Exception {
-		//build
-		String adminEmail = TEST_STRING;
-		
-		//when
-		doThrow(NullPointerException.class).when(adminService).selectAdminByEmail(anyString());
-		doNothing().when(adminMailService).mailSend(any(), anyString());;
-		
-		//check
-		mockMvc.perform(post("/admin/email")
-				.param("adminEmail", adminEmail))
-		.andExpect(redirectedUrl("/"));
-	}	
-	
 	@Test
-	public void registerPostTest_ValidInfo_ShouldPass() throws Exception{
+	public void registerPOSTTest_ValidInfo_ShouldPass() throws Exception{
 		// bulid
-		AdminVO expectedResult = admin;
-		expectedResult.setAdminPw(BCrypt.hashpw(admin.getAdminPw(), BCrypt.gensalt()));
+		admin.setAdminPw(BCrypt.hashpw(admin.getAdminPw(), BCrypt.gensalt()));
 		
 		// when
 		when(adminService.registerAccount(admin)).thenReturn(expectedResult);
@@ -195,28 +159,7 @@ public class AdminControllerTest {
 		verify(adminMailService).mailSend(any(), anyString());;
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Test(expected = NullPointerException.class)
-	public void registerPostTest_MissingInfo_ThrowException() throws Exception {
 
-		// when
-		when(adminService.registerAccount(any())).thenThrow(NullPointerException.class);
-		
-		// check
-		mockMvc.perform(post("/admin/registerPOST", admin))
-		.andExpect(redirectedUrl("/admin/login"))
-		.andExpect(flash().attribute("msg", STRING_NULL));
-		
-	}
-	
-	@Test
-	public void confirmEmailTest_Forward_ShouldPass() throws Exception {
-		mockMvc.perform(get("/admin/confirm", admin))
-		.andExpect(model().attribute("msg", STRING_SUCCESS))
-		.andExpect(view().name("/admin/login"));
-		
-	}
-	
 	
 	
 	

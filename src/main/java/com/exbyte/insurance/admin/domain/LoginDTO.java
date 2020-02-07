@@ -11,6 +11,7 @@ public class LoginDTO {
 
 	private String adminId;
 	private String adminPw;
+	private int adminPoint;
 	private boolean useCookie;
 	
 	public void setUseCookie(boolean useCookie) {

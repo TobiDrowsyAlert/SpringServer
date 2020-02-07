@@ -22,7 +22,7 @@
           <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
-            <a href="/" class="nav-link">Home</a>
+            <a href="${path }/" class="nav-link">Home</a>
           </li>
      </ul>
 
@@ -63,11 +63,5 @@
         </c:if>
         </div> <!-- dropdown menu -->
       </li>
-      <!-- right sidebar -->
-      <li class="nav-item">
-        <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"><i
-                class="fas fa-th-large"></i></a>
-      </li>
-      <!-- /.right sidebar -->
     </ul>
   </nav>

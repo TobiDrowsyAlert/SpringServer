@@ -39,6 +39,11 @@ public class ConsultingDAOImpl implements ConsultingDAO {
 		return sqlSession.selectList(NAMESPACE + ".selectAll", paramMap);
 	}
 
+	@Override
+	public List<ConsultingVO> selectByAdmin(String adminId) throws Exception {
+		return sqlSession.selectList(NAMESPACE + ".selectByAdmin", adminId);
+		
+	}
 
 
 	@Override

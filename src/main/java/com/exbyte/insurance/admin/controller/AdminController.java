@@ -17,7 +17,6 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,14 +37,19 @@ public class AdminController {
 	
 	private final AdminService adminService;
 	private final AdminMailService adminMailService;
-	final String STRING_SUCCESS = "success";
-	final String STRING_FAIL = "fail";
-	final String STRING_AUTH_FAIL = "auth_fail";
-	final String STRING_NOT_HASH_PW = "not_hash_pw";
+	
+	final String STRING_LOGIN_SUCCESS = "로그인 성공";
+	final String STRING_EMAIL_SEND = "이메일로 인증메일을 전송했습니다. 확인해주세요.";
+	final String STRING_FAIL = "작업이 실패했습니다.";
+	final String STRING_AUTH_FAIL = "이메일 인증이 필요합니다.";
+	final String STRING_AUTH_SUCCESS = "이메일 인증이 롼료되었습니다.";
+	final String STRING_NOT_HASH_PW = "NOT_HASH_PW";
+	final String STRING_INVAILD_PW = "INVAILD_PW";
 	final String TEST_VALID_EMAIL = "Y";
-	final String STRING_NULL = "null";
+	final String STRING_NULL = "NULL";
 
 	Logger logger = LoggerFactory.getLogger(AdminController.class);
+	
 	
 	@Inject
 	public AdminController(AdminService adminService, AdminMailService adminMailService) {
@@ -67,13 +71,14 @@ public class AdminController {
 	public String registerPOST(AdminVO adminVO, HttpServletRequest request ,RedirectAttributes redirectAttributes) throws Exception {
 		try {
 			AdminVO hashAdminVO = adminService.registerAccount(adminVO);
-			adminMailService.mailSend(adminVO, request.getContextPath());
-			redirectAttributes.addFlashAttribute("msg", STRING_SUCCESS);
+			adminMailService.mailSend(adminVO, adminMailService.urlMaker(request));
+			redirectAttributes.addFlashAttribute("msg", STRING_EMAIL_SEND);
 		}catch (NullPointerException e) {
 			e.printStackTrace();
 			redirectAttributes.addFlashAttribute("msg", STRING_NULL);
 		}catch (Exception e) {
 			redirectAttributes.addFlashAttribute("msg", STRING_FAIL);
+			e.printStackTrace();
 		}
 		
 		
@@ -85,14 +90,15 @@ public class AdminController {
 	@RequestMapping(value = "/confirm", method = RequestMethod.GET )
 	public String confirmEmail(AdminVO adminVO, String authKey, Model model) throws Exception {
 
-		model.addAttribute("msg", STRING_SUCCESS);
+		model.addAttribute("msg", STRING_AUTH_SUCCESS);
 		
 		return "/admin/login";
 	}
 	
 	@RequestMapping(value = "/email", method = RequestMethod.GET)
-	public void emailSend(@RequestParam("adminEmail") String adminEmail) throws Exception {
-		return;
+	public String emailSend(@RequestParam("adminEmail") String adminEmail, Model model) throws Exception {
+		model.addAttribute("adminEmail", adminEmail);
+		return "/admin/email";
 	}
 	
 	
@@ -105,8 +111,8 @@ public class AdminController {
 		
 		try {
 			adminVO = adminService.selectAdminByEmail(adminEmail);
-			adminMailService.mailSend(adminVO, request.getContextPath());
-			redirectAttribute.addFlashAttribute("msg", STRING_SUCCESS);
+			adminMailService.mailSend(adminVO, adminMailService.urlMaker(request));
+			redirectAttribute.addFlashAttribute("msg", STRING_EMAIL_SEND);
 			return "redirect:/";
 		}catch (NullPointerException e) {
 			// TODO: handle exception
@@ -132,34 +138,39 @@ public class AdminController {
 			model.addAttribute("msg", "FAIL");
 			return "/admin/find";
 		}
-		adminMailService.mailSend(adminVO, request.getContextPath());
+		adminMailService.mailSendFindPw(adminVO, adminMailService.urlMaker(request));
 		
 		return "/admin/findResult";
 	}
 	
 	// 이메일을 통한 비밀번호 변경 페이지 이동
 	@RequestMapping(value = "/updatePw", method = RequestMethod.GET)
-	public void updatePwGET(@RequestParam("adminId") String adminId, @RequestParam("authKey") String authKey,  Model model) throws Exception {
+	public String updatePwGET(@RequestParam("adminId") String adminId, @RequestParam("authKey") String authKey,  Model model) throws Exception {
+
+		// 잘못된 인증키 
+		if(!authKey.equals(adminService.read(adminId).getAdminAuthKey())) {
+			return "/admin/login";
+		}
 
 		model.addAttribute("adminId", adminId);
+		model.addAttribute("authKey", authKey);
 		
-		return;
+		return "/admin/updatePw";
 	}
 	
 	// 이메일을 통한 비밀번호 변경 처리
-	@RequestMapping(value = "/updatePwPOST", method = RequestMethod.POST)
+	@RequestMapping(value = "/updatePw", method = RequestMethod.POST)
 	public String updatePwPOST(LoginDTO loginDTO, Model model) throws Exception {
-		AdminVO adminVO = new AdminVO();
-		adminVO.setAdminId(loginDTO.getAdminId());
-		adminVO.setAdminPw(loginDTO.getAdminPw());
-
-		// 암호화
-		String hashPw = BCrypt.hashpw(adminVO.getAdminPw(), BCrypt.gensalt());
-		adminVO.setAdminPw(hashPw);
+		AdminVO adminVO = adminService.read(loginDTO.getAdminId());
 		
-		adminService.updatePw(adminVO);
+		// 암호화
+		String hashPw = BCrypt.hashpw(loginDTO.getAdminPw(), BCrypt.gensalt());
+		adminVO.setAdminPw(hashPw);
+		adminVO.setAdminAuthKey("Y");
+		
+		adminService.update(adminVO);
 	
-		return "/admin/login";
+		return "/commons/index";
 	}
 	
 	// 지사 목록 전달
@@ -211,18 +222,18 @@ public class AdminController {
 	
 	// 개인정보 페이지
 	@RequestMapping(value = "/account", method = RequestMethod.GET)
-	public void account(Model model, @RequestParam("adminId") String adminId) throws Exception {
+	public String account(Model model, @RequestParam("adminId") String adminId) throws Exception {
 		
 		model.addAttribute("adminVO", adminService.read(adminId)); 
 		
-		return;
+		return "/admin/account";
 	}
 	
 	// 회원탈퇴
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	public String deleteAdmin(@RequestParam(value="adminId") String adminId, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
-		adminService.delete(adminId);
+		adminService.delete(adminService.read(adminId));
 		HttpSession session = request.getSession();
 		
 		// 쿠키 및 세션 초기화 작업, 추후 Interception으로 일괄처리하도록 변경
@@ -243,16 +254,30 @@ public class AdminController {
 	// AJAX 값 반환용
 	// 아이디 중복 체크
 	// 수정 전 : @RequestParam("adminId") String adminId
-	@RequestMapping(value = "/checkId", method = RequestMethod.POST)
+	@RequestMapping(value = "/checkId", method = RequestMethod.GET)
 	@ResponseBody
-	public int checkIdPOST(@RequestBody(required = true) AdminVO adminVO) throws Exception{
+	public int checkIdPOST(@RequestParam("adminId") String adminId) throws Exception{
 		
 		// 1: 중복 , 0: 중복아님
-		return adminService.countId(adminVO.getAdminId());
+		return adminService.countId(adminId);
 		
 	}
 
 	
+	// AJAX 값 반환용
+	// 아이디 중복 체크
+	// 수정 전 : @RequestParam("adminId") String adminId
+	@RequestMapping(value = "/checkPosition", method = RequestMethod.GET)
+	@ResponseBody
+	public int checkAdminPosition(@RequestParam("adminPosition") String adminPosition) throws Exception{
+		AdminVO adminVO = new AdminVO();
+		adminVO.setAdminPosition(adminPosition);
+		
+		// 1: 거부 , 0: 승인
+		return adminService.countPosition(adminVO);
+		
+	}
+
 
 	@RequestMapping(value = "/{adminId}/adminId", method = RequestMethod.GET)
 	@ResponseBody
@@ -272,6 +297,8 @@ public class AdminController {
 		return adminService.countEmail(adminEmail);
 	}
 
+	
+	
 	// 중복체크
 	// 위의 일일이 체크하는 값들을 하나의 메소드로 해결할 수 있도록 구성한 것이다.
 	@RequestMapping(value = "/duplicateCheck", method = RequestMethod.GET)
@@ -283,15 +310,17 @@ public class AdminController {
 	
 	// 회원 정보 변경
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
-	public String updateAdmin(AdminVO adminVO) throws Exception {
+	public String updateAdmin(Model model, AdminVO adminVO) throws Exception {
 		
 		AdminVO currentAdminVO = adminService.read(adminVO.getAdminId());
 		currentAdminVO.setAdminEmail(adminVO.getAdminEmail());
 		currentAdminVO.setAdminName(adminVO.getAdminName());
 		
+		model.addAttribute("adminId", adminVO.getAdminId());
+		
 		adminService.update(currentAdminVO);
 		
-		return "/commons/index";
+		return "/admin/account";
 	}
 	
 	

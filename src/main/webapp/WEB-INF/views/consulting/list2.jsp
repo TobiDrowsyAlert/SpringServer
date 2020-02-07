@@ -5,62 +5,57 @@
 
 <head>
   <title>고객상담 | 로얄파트너스</title>
+  
+  <!-- table css -->
+  <link href="${path }/dist/css/table.css" rel="stylesheet">
+  
 </head>
 
 <body id="page-top">
-  <!-- nav-->
-  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-    <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="/"><img src='${imgPath }/img/logos/main_logo.png' width="200px" height="50px"></a>
-      <a href="${path }/admin/logout" style="color:#000000;">logout</a>
-    </div>
-  </nav>
 
-  <!-- header -->
-  <div class="page-section">
-  </div>
+ <%@ include file="../include/main_header2.jsp" %>
 
   <!-- section -->
-  <section class="page-section" id="about">
-    <div class="container">
-      <h3 class="section-heading text-uppercase">고객상담 (관리자용)</h3>
-        <table class="tg">
-	        <tr>
-	          <td class="tg-c3ow"><input class="selectAllBox" value="${consulting.consultingNo }" type="checkbox"/></td>
-	          <th class="tg-c3ow">시간</th>
-	          <th class="tg-c3ow">성함</th>
-	          <th class="tg-c3ow">생년월일</th>
-	          <th class="tg-c3ow">직업</th>
-	          <th class="tg-c3ow">연락처</th>
-	          <th class="tg-c3ow">통화가능시간</th>
-	          <th class="tg-c3ow">관심분야</th>
-	          <th class="tg-c3ow">1차콜</th>
-	          <th class="tg-c3ow">담당자</th>
-	          <th class="tg-c3ow">상담지역</th>
-	          <th class="tg-c3ow">상담내용</th>
-	          <th class="tg-c3ow">상담완료</th>
-	        </tr>
-	        
-		   <c:forEach items="${consultings}" var="consulting" begin = "0" varStatus="status">
-	        <tr class="tableRow">
-	          <td class="tg-0pky"><input class="selectBox" value="${consulting.consultingNo }" type="checkbox"/></td>
-	          <td class="tg-0pky"><fmt:formatDate value="${consulting.consultingRegDate }" pattern="MM-dd HH:mm"></fmt:formatDate></td>
-	          <td class="tg-0pky">${consulting.consultingName}</td>
-	          <td class="tg-0pky">${consulting.consultingBirthday }</td>
-	          <td class="tg-0pky">${consulting.consultingJob }</td>
-	          <td class="tg-0pky">${consulting.consultingPhone}</td>
-	          <td class="tg-0pky">${consulting.consultingCallTime}</td>
-	          <td class="tg-0pky">${consulting.consultingFavoriteType}</td>
-		      <td class="tg-0pky"><input type="checkbox" <c:out value="${consulting.consultingIsCall == 'true' ? 'checked' : '' }"/>></td>
-		      <td class="tg-0pky">${consulting.adminId }</td>
-	          <td class="tg-0pky">${consulting.consultingRegion }</td>
-	          <td class="tg-0pky"><textarea class="form-control remarks" rows="1">${consulting.consultingRemarks} </textarea></td>
-			  <td class="tg-0pky"><input class="endCheckBox" value="${consulting.consultingNo }" type="checkbox" name = "consultingIsEnd" <c:out value="${consulting.consultingIsEnd == 'true' ? 'checked' : '' }"/>></td>
-			</tr>
-		  </c:forEach>
-        </table>
-      </div>
-  </section>
+  <div class="page-section" id="about" style="display:block">
+	  <div class="container">
+	      <h3 class="section-heading text-uppercase"><a href="${path }/consulting/list" style="color : 111111">고객상담 (${login.adminPosition } 용)</a></h3>
+	        <table class="tg">
+		        <tr>
+		          <td class="tg-c3ow"><input class="selectAllBox" value="${consulting.consultingNo }" type="checkbox"/></td>
+		          <th class="tg-c3ow">시간</th>
+		          <th class="tg-c3ow">성함</th>
+		          <th class="tg-c3ow">생년월일</th>
+		          <th class="tg-c3ow">직업</th>
+		          <th class="tg-c3ow">연락처</th>
+		          <th class="tg-c3ow">통화가능시간</th>
+		          <th class="tg-c3ow">관심분야</th>
+		          <th class="tg-c3ow">1차콜</th>
+		          <th class="tg-c3ow">담당자</th>
+		          <th class="tg-c3ow">상담지역</th>
+		          <th class="tg-c3ow">상담내용</th>
+		          <th class="tg-c3ow">상담완료</th>
+		        </tr>
+		        
+			   <c:forEach items="${consultings}" var="consulting" begin = "0" varStatus="status">
+		        <tr class="tableRow">
+		          <td class="tg-0pky"><input class="selectBox" value="${consulting.consultingNo }" type="checkbox"/></td>
+		          <td class="tg-0pky"><fmt:formatDate value="${consulting.consultingRegDate }" pattern="MM-dd HH:mm"></fmt:formatDate></td>
+		          <td class="tg-0pky">${consulting.consultingName}</td>
+		          <td class="tg-0pky">${consulting.consultingBirthday }</td>
+		          <td class="tg-0pky">${consulting.consultingJob }</td>
+		          <td class="tg-0pky">${consulting.consultingPhone}</td>
+		          <td class="tg-0pky">${consulting.consultingCallTime}</td>
+		          <td class="tg-0pky">${consulting.consultingFavoriteType}</td>
+			      <td class="tg-0pky"><input type="checkbox" <c:out value="${consulting.consultingIsCall == 'true' ? 'checked' : '' }"/>></td>
+			      <td class="tg-0pky">${consulting.adminId }</td>
+		          <td class="tg-0pky">${consulting.consultingRegion }</td>
+		          <td class="tg-0pky"><textarea class="form-control remarks" rows="1">${consulting.consultingRemarks} </textarea></td>
+				  <td class="tg-0pky"><input class="endCheckBox" value="${consulting.consultingNo }" type="checkbox" name = "consultingIsEnd" <c:out value="${consulting.consultingIsEnd == 'true' ? 'checked' : '' }"/>></td>
+				</tr>
+			  </c:forEach>
+	        </table>
+	  </div>
+  </div>
   
   <!-- pagenation -->
 	<div>
@@ -220,7 +215,7 @@
 	  // 검색 후 동작 url
 	  var searchLocation = function(){
 	    self.location =
-	        "/consulting/list${pageMaker.makeQuery(1)}"
+	        "${path }/consulting/list${pageMaker.makeQuery(1)}"
 	     + "&sortType=" + $("#sortType option:selected").val()
 	     + "&sortOrder=" + $("#sortOrder option:selected").val()
 	     + "&searchType=" +$("#searchType option:selected").val()
@@ -230,7 +225,7 @@
 	  // 작업 처리 후 페이지 유지를 위한 동작 url
 	  var searchPageLocation = function(page){
 		    self.location =
-		        "/consulting/list${pageMaker.makeQuery()}"
+		        "${path }/consulting/list${pageMaker.makeQuery()}"
 		     + "&sortType=" + $("#sortType option:selected").val()
 		     + "&sortOrder=" + $("#sortOrder option:selected").val()
 		     + "&searchType=" +$("#searchType option:selected").val()
@@ -256,7 +251,7 @@
 				});
 	
 				$.ajax({
-					url : "/consulting/delete",
+					url : "${path }/consulting/delete",
 					type : "post",
 					data : {chkbox : checkArr},
 				    success : function(){
@@ -265,17 +260,7 @@
 				});
 			}
 		});
-	
-	  // 테이블 자체 정렬 ( 진행중 )
-		$('.sorting').click(function(){
-			var consultings = "${consultings}";
-			alert(consultings);
-			consultings.each(function(index, item){
-				alert("index : " + index + ", item : " + item);
-			});
-	
-		});
-	
+
 		// 담당자 변경
 		$('#assignBtn').click(function(){
 			var adminId = $("#memberList option:selected").val();
@@ -285,7 +270,7 @@
 				checkArr.push($(this).attr("value"));
 			});
 		  $.ajax({
-			    url : "/consulting/updateAdmin",
+			    url : "${path }/consulting/updateAdmin",
 			    method : "GET",
 			    dataType : "json",
 			    data : {chkbox:checkArr, "adminId":adminId},
@@ -348,7 +333,7 @@
 			    var modifyArray = JSON.stringify(modifyNotJSONArray);
 			    
 			    $.ajax({
-			      url : "/consulting/update",
+			      url : "${path }/consulting/update",
 			      method : "post",
 			      dataType : "json",
 			      data : modifyArray,
@@ -359,7 +344,7 @@
 			          searchPageLocation();
 			        }
 			      },
-			      error : function(){
+			      error : function(){"src/main/webapp/WEB-INF"
 			        alert('갱신 실패');
 			      }
 			    });
@@ -373,10 +358,9 @@
 		  // 현재 지사들의 목록을 불러와서 옵션을 추가하는 이벤트
 			var loadPoint =  function(){
 			     $.ajax({
-			       url : "/admin/listPoint", // HTTP요청을 보낼 URL 주소
+			       url : "${path }/admin/listPoint", // HTTP요청을 보낼 URL 주소
 			       method : "GET", // 요청 메소드
 			       dataType : "json", // 서버에서 보내줄 데이터 타입
-			       contentType : "application/json; charset=UTF8",
 			       success : function(data){ // 성공 시 처리
 			         var data_key = Object.keys(data);
 			           for(var i = 0; i < data_key.length; i++){
@@ -398,7 +382,7 @@
 				  $("#memberList option").remove();
 				  var pointSelect = $("#pointList option:selected").val();
 				    $.ajax({
-				      url : "/admin/listAdmin", // HTTP요청을 보낼 URL 주소
+				      url : "${path }/admin/listAdmin", // HTTP요청을 보낼 URL 주소
 				      method : "GET", // 요청 메소드
 				      data : {"pointNo": pointSelect},
 				      dataType : "json", // 서버에서 보내줄 데이터 타입

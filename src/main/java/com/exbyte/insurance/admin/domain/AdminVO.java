@@ -15,6 +15,8 @@ public class AdminVO {
 	String adminPw;
 	String adminName;
 	String adminEmail;
+	String adminPhone;
+	String adminCallNumber;
 	String adminPosition;
 	String sessionKey;
 	Date adminJoinDate;

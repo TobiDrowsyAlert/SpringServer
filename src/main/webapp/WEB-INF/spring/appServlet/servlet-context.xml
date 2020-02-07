@@ -18,11 +18,11 @@
 
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
-	<resources mapping="/resources/**" location="/resources/" />
 	<resources mapping="/plugins/**" location="/resources/plugins/"/>
 	<resources mapping="/dist/**" location="/resources/dist/"/>
 	<resources mapping="/vendor/**" location="/resources/vendor/"/>
 	<resources mapping="/img/**" location="/resources/img/"/>
+	<resources mapping="/resources/**" location="/resources/" />
 
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
@@ -47,8 +47,8 @@
 			<beans:bean id = "loginAfterInterceptor" class="com.exbyte.insurance.commons.interception.CheckLoginAfterInterceptor"/>
 		</interceptor>
 		<interceptor>
-			<mapping path="/admin/updatePw" />
-			<beans:bean id ="authEmailInterceptor" class="com.exbyte.insurance.commons.interception.CheckEmailInterceptor" />
+			<mapping path="/admin/confirm"/>
+			<beans:bean id="checkEmailInterceptor" class="com.exbyte.insurance.commons.interception.CheckEmailInterceptor"/>
 		</interceptor>
 	</interceptors>
 

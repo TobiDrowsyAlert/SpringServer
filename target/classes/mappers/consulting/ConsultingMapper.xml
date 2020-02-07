@@ -43,6 +43,15 @@
 			#{criteria.pageStart}, #{criteria.perPageNum}
 	</select>
 
+	<select id="selectByAdmin" resultMap="ConsultingResultMap">
+		SELECT
+			*
+		FROM
+			tbl_consulting
+		WHERE
+			consulting_no > 0
+		AND admin_id = #{adminId}
+	</select>
 
 	<select id="read" resultMap="ConsultingResultMap">
 		SELECT
@@ -89,7 +98,7 @@
 	</select>
 
 	<sql id="position">
-		<if test="adminVO.adminPosition == '지사장'">
+		<if test="adminVO.adminPosition == '지점장'">
 			AND admin_id IN
 				(SELECT
 					admin_id
@@ -97,8 +106,9 @@
 					tbl_admin
 				WHERE
 					admin_point = #{adminVO.adminPoint})
+			 AND NOT admin_id = 'admin'
 		</if>
-		<if test="adminVO.adminPosition == '직원'">
+		<if test="adminVO.adminPosition == '사원'">
 			AND admin_id = #{adminVO.adminId}
 		</if>
 	</sql>
@@ -177,6 +187,7 @@
 		<id property="consultingNo" column="consulting_no"/>
 		<result property="adminId" column="admin_id" />
 		<result property="consultingName" column="consulting_name" />
+		<result property="consultingHomeNumber" column="consulting_home_number"/>
 		<result property="consultingPhone" column="consulting_phone" />
 		<result property="consultingBirthday" column="consulting_birthday" />
 		<result property="consultingJob" column="consulting_job"/>

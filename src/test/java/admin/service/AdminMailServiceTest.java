@@ -53,7 +53,7 @@ public class AdminMailServiceTest {
 		admin.setAdminId(TEST_STRING);
 		admin.setAdminPw(TEST_STRING);
 		admin.setAdminName(TEST_STRING);
-		admin.setAdminEmail(TEST_STRING + "@naver.com");
+		admin.setAdminEmail("noreply@jigool.cafe24.com");
 		admin.setAdminPosition(TEST_STRING);
 		admin.setAdminPoint(TEST_POINT);
 		admin.setSessionKey(TEST_STRING);
@@ -98,7 +98,7 @@ public class AdminMailServiceTest {
 	@Test(expected = NullPointerException.class)
 	public void mailSendTest_Invalid_ThrowException() throws Exception {
 		//build
-		AdminVO admin = setAdminVO(TEST_STRING, TEST_POINT);
+		AdminVO admin = setAdminVO(TEST_STRING, TEST_POINT); 
 		admin.setAdminAuthKey(TEST_VAILD_EMAIL);
 		
 		//operate
