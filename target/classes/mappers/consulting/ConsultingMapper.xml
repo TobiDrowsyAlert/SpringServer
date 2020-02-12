@@ -128,14 +128,12 @@
 	<sql id="sort">
 		<if test="criteria.sortType != null">
 			<if test="criteria.sortType == ''">
-				<choose>
-					<when test="criteria.sortOrder == 'DESC'">
-						ORDER BY consulting_no DESC
-					</when>
-					<otherwise>
-						ORDER BY consulting_no ASC
-					</otherwise>
-				</choose>
+				<if test="criteria.sortOrder == 'DESC'">
+					ORDER BY consulting_no DESC
+				</if>
+				<if test="criteria.sortOrder == 'ASC'">
+					ORDER BY consulting_no ASC
+				</if>
 			</if>
 			<if test="criteria.sortType == 'no'">
 				<choose>

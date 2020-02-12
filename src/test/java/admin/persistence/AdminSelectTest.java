@@ -7,10 +7,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -25,11 +28,17 @@ public class AdminSelectTest {
 	final String TEST_UPDATE_STRING = "junitUpdateTest";
 	int TEST_VALUE = 1;
 	
+	AdminVO admin;
 	Logger logger = LoggerFactory.getLogger(AdminSelectTest.class);
+	
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+	
 	
 	@Inject
 	AdminDAO adminDAO;
 
+	
 	public AdminVO setAdminVO(String TEST_STRING) {
 		AdminVO admin = new AdminVO();
 		admin.setAdminId(TEST_STRING);
@@ -47,9 +56,10 @@ public class AdminSelectTest {
 	@Before
 	public void init() throws Exception {
 		AdminVO existAdmin = adminDAO.read(TEST_STRING);
+		admin = setAdminVO(TEST_STRING);
 		
 		if(existAdmin != null){
-			adminDAO.delete(existAdmin.getAdminId());
+			adminDAO.delete(existAdmin);
 		}
 	}
 	
@@ -63,7 +73,15 @@ public class AdminSelectTest {
 		logger.info(list.toString());
 		assertNotNull(list);
 		
-		adminDAO.delete(admin.getAdminId());
+		adminDAO.delete(admin);
+	}
+	
+	@Test
+	public void testSelectAdmin_NullData_ExpectException() throws Exception {
+		thrown.expect(InsufficientAuthenticationException.class);
+		thrown.expectMessage("None List");
+		
+		List<AdminVO> list = adminDAO.selectAdmin(admin);
 	}
 	
 }

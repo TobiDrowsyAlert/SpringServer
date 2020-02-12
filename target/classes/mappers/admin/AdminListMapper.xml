@@ -7,5 +7,59 @@
 <mapper namespace="com.exbyte.insurance.admin.AdminMapper">
 
 	
+	<select id="countSession" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			tbl_admin
+		WHERE
+			admin_id IS NOT NULL
+			AND session_key = #{value}
+	</select>
+		
+	<select id = "countEmail" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			tbl_admin
+		WHERE
+			admin_id IS NOT NULL
+		AND admin_email = #{adminEmail}
+	</select>
+	
+	<select id = "countId" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			tbl_admin
+		WHERE
+			admin_id IS NOT NULL
+			AND admin_id = #{adminId}
+	</select>
+	
+	<select id ="count" resultType="int">
+		SELECT
+			COUNT(*)
+		FROM
+			tbl_admin
+		WHERE
+			admin_id IS NOT NULL
+			<include refid="checkType"/>
+	</select>
+	
+	<sql id="checkType">
+		<if test="checkType != null">
+			<if test="checkType == 'sessionKey'.toString">
+				AND session_key = #{adminVO.sessionKey}
+			</if>
+			<if test="checkType == 'adminEmail'.toString">
+				AND admin_email = #{adminVO.adminEmail}
+			</if>
+			<if test="checkType == 'adminId'.toString">
+				AND admin_id = #{adminVO.adminId}
+			</if>
+			
+		</if>
+	</sql>
 	
 </mapper>

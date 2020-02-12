@@ -19,9 +19,9 @@ import org.springframework.web.util.WebUtils;
 
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
+import com.exbyte.insurance.admin.exception.InvalidAuthKeyAccessException;
 import com.exbyte.insurance.admin.service.AdminMailService;
 import com.exbyte.insurance.admin.service.AdminService;
-import com.exbyte.insurance.commons.exception.EmailAuthException;
 
 @Controller
 @RequestMapping("/admin")
@@ -57,6 +57,7 @@ public class AdminLoginController {
 		if(loginCookie != null) {
 			String savedAdminId = adminService.checkSession(loginCookie.getValue());
 			model.addAttribute("adminId", savedAdminId);
+			
 		}
 
 		return "/admin/login";
@@ -89,7 +90,7 @@ public class AdminLoginController {
 			adminService.keepSession(adminVO.getAdminId() , httpSession.getId());
 		}
 		// Auth Key 실패
-		catch (EmailAuthException e) {
+		catch (InvalidAuthKeyAccessException e) {
 			adminVO = adminService.read(loginDTO.getAdminId());
 			redirectAttributes.addAttribute("adminEmail", adminVO.getAdminEmail());
 			logger.info("adminEmail : " + adminVO.getAdminEmail());

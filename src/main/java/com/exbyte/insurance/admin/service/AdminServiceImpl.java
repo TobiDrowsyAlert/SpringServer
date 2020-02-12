@@ -13,8 +13,8 @@ import org.springframework.stereotype.Service;
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
 import com.exbyte.insurance.admin.domain.PointDTO;
+import com.exbyte.insurance.admin.exception.InvalidAuthKeyAccessException;
 import com.exbyte.insurance.admin.persistence.AdminDAO;
-import com.exbyte.insurance.commons.exception.EmailAuthException;
 import com.exbyte.insurance.consulting.service.ConsultingServiceOutside;
 import com.exbyte.insurance.point.domain.PointVO;
 
@@ -76,10 +76,10 @@ public class AdminServiceImpl implements AdminService {
 			}
 			
 			if(!adminVO.getAdminAuthKey().contentEquals("Y")) {
-				throw new EmailAuthException("이메일 인증이 필요합니다.");
+				throw new InvalidAuthKeyAccessException();
 			}
 			
-		}catch (EmailAuthException arg1) {
+		}catch (InvalidAuthKeyAccessException arg1) {
 			throw arg1;
 		}catch (IllegalArgumentException arg2) {
 			throw arg2;

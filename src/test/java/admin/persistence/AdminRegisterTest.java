@@ -11,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.exbyte.insurance.admin.domain.AdminVO;
+import com.exbyte.insurance.admin.domain.LoginDTO;
 import com.exbyte.insurance.admin.persistence.AdminDAO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -20,6 +21,9 @@ public class AdminRegisterTest {
 	final String TEST_STRING = "registerCheck";
 	final String TEST_UPDATE_STRING = "junitUpdateTest";
 	int TEST_VALUE = 3;
+	
+	AdminVO admin;
+	LoginDTO login;
 	
 	Logger logger = LoggerFactory.getLogger(AdminRegisterTest.class);
 	
@@ -47,22 +51,37 @@ public class AdminRegisterTest {
 	@Before
 	public void init() throws Exception {
 		AdminVO existAdmin = adminDAO.read(TEST_STRING);
+
+		admin = AdminVO.builder()
+				.adminId(TEST_STRING)
+				.adminPw(TEST_STRING)
+				.adminName(TEST_STRING)
+				.adminEmail(TEST_STRING)
+				.adminPhone(TEST_STRING)
+				.sessionKey(TEST_STRING)
+				.adminCallNumber(TEST_STRING)
+				.adminPosition("사원")
+				.adminPoint(1)
+				.adminAuthKey(TEST_STRING)
+				.build();
+		
+		login = LoginDTO.builder()
+				.adminId(TEST_STRING)
+				.adminPw(TEST_STRING)
+				.adminPoint(1)
+				.useCookie(false)
+				.build();
+		
 		
 		if(existAdmin != null){
 			adminDAO.delete(existAdmin);
 		}
 	}
 	
-	public AdminVO initAdminVO() throws Exception {
-		AdminVO admin = setAdminVO(TEST_STRING);
-		adminDAO.create(admin);
-		return admin;
-	}
 	
 	@Test
 	public void registerTest() throws Exception {
-		AdminVO adminVO = setAdminVO(TEST_STRING);
-		adminDAO.create(adminVO);
+		adminDAO.create(admin);
 	}
 	
 	@Test

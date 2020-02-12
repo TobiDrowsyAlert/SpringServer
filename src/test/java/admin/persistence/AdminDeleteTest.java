@@ -15,8 +15,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.exbyte.insurance.admin.domain.AdminVO;
+import com.exbyte.insurance.admin.domain.PointDTO;
 import com.exbyte.insurance.admin.persistence.AdminDAO;
-import com.exbyte.insurance.point.domain.PointDTO;
 import com.exbyte.insurance.point.domain.PointVO;
 
 @RunWith(SpringJUnit4ClassRunner.class)

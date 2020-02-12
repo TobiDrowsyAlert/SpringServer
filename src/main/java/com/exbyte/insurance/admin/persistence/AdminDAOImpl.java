@@ -62,7 +62,6 @@ public class AdminDAOImpl implements AdminDAO{
 
 	@Override
 	public String checkPosition(String adminId) throws Exception {
-		
 		return sqlSession.selectOne(NAMESPACE + ".checkPosition", adminId);
 	}
 

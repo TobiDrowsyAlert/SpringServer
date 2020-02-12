@@ -4,7 +4,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash;
@@ -148,7 +147,6 @@ public class AdminControllerTest {
 		admin.setAdminPw(BCrypt.hashpw(admin.getAdminPw(), BCrypt.gensalt()));
 		
 		// when
-		when(adminService.registerAccount(admin)).thenReturn(expectedResult);
 		doNothing().when(adminMailService).mailSend(any(), anyString());
 		
 		// check
