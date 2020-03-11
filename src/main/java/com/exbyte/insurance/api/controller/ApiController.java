@@ -27,6 +27,7 @@ public class ApiController {
 		this.apiService = apiService;
 	}
 	
+	// 디버깅
 	@RequestMapping(value = "/value", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Point> ResponseAPI(@RequestBody List<Point> points) {
@@ -52,6 +53,5 @@ public class ApiController {
 		
 		return points;
 	}
-	
 	
 }
