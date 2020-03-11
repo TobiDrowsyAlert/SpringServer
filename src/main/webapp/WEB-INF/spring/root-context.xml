@@ -23,13 +23,16 @@
         <property name="url" value="jdbc:mysql://rayor.cgeo4qdzfqv8.ap-northeast-2.rds.amazonaws.com:3306/webserver?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=UTC"/>
         <property name="username" value="RAYOR"/>   
         <property name="password" value="1"/>
+                <property name="username" value="jigool1"/>
+        <property name="password" value="wjdwlgns12*"/>
+        <property name="maxIdle" value="20"/>
     </bean>
 	-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://umj7-011.cafe24.com:3306/jigool1?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=Asia/Seoul"/>
-        <property name="username" value="jigool1"/>
-        <property name="password" value="wjdwlgns12*"/>
+        <property name="url" value="jdbc:mysql://rayor.cgeo4qdzfqv8.ap-northeast-2.rds.amazonaws.com:3306/jigool1?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=Asia/Seoul"/>
+        <property name="username" value="RAYOR"/>   
+        <property name="password" value="1"/>
         <property name="maxIdle" value="20"/>
     </bean>
 
