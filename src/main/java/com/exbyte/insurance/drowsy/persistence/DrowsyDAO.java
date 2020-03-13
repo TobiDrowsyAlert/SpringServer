@@ -6,13 +6,13 @@ import org.apache.ibatis.session.SqlSession;
 
 import com.exbyte.insurance.drowsy.domain.PersonalVO;
 
-public class drowsyDAO {
+public class DrowsyDAO {
 	
 	private static SqlSession sqlSession;
 	private final String NAMESPACE = "com.exbyte.insuruance.drowsy.DrowsyMapper";
 	
 	@Inject
-	drowsyDAO(SqlSession sqlSession){
+	DrowsyDAO(SqlSession sqlSession){
 		this.sqlSession = sqlSession;
 	}
 	
