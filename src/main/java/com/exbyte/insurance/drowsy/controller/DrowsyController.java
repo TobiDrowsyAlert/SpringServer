@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.exbyte.insurance.drowsy.domain.PersonalVO;
+import com.exbyte.insurance.drowsy.domain.StatusCode;
+import com.exbyte.insurance.drowsy.dto.DrowsyDTO;
 import com.exbyte.insurance.drowsy.service.DrowsyService;
 
 @Controller
@@ -20,20 +22,47 @@ public class DrowsyController {
 	
 	@RequestMapping(value = "/create", method = RequestMethod.POST)
 	@ResponseBody
-	public String create(PersonalVO personalVO){
+	public DrowsyDTO create(PersonalVO personalVO){
 		
-		drowsyService.create(personalVO);
+		DrowsyDTO drowsyDTO = new DrowsyDTO();
 		
-		return "";
+		try {
+			drowsyDTO.setPersonalVO(null);
+		}catch(Exception e) {
+			drowsyDTO.setStatusCode(StatusCode.CODE_000);
+			return drowsyDTO;
+		}
+		
+		drowsyDTO.setStatusCode(StatusCode.CODE_400);
+		return drowsyDTO;
 	}
 	
 	@RequestMapping(value = "/read", method = RequestMethod.POST)
 	@ResponseBody
-	public String read(String userId) {
+	public DrowsyDTO read(String userId) {
+		DrowsyDTO drowsyDTO = new DrowsyDTO();
+		drowsyDTO.setPersonalVO(drowsyService.read(userId));
 		
-		drowsyService.read(userId);
-		
-		return "";
+		return drowsyDTO;
 	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST)
+	@ResponseBody
+	public DrowsyDTO update(String userId) {
+		
+		DrowsyDTO drowsyDTO = new DrowsyDTO();
+		
+		try {
+			drowsyDTO.setPersonalVO(null);
+			drowsyService.update(userId);
+		}catch(Exception e) {
+			drowsyDTO.setStatusCode(StatusCode.CODE_000);
+			return drowsyDTO;
+		}
+		
+		drowsyDTO.setStatusCode(StatusCode.CODE_400);
+		return drowsyDTO;
+	}
+	
 	
 }
