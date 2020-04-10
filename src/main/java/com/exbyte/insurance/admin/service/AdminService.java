@@ -5,7 +5,6 @@ import java.util.List;
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
 import com.exbyte.insurance.admin.domain.PointDTO;
-import com.exbyte.insurance.point.domain.PointVO;
 
 public interface AdminService {
 	void create(AdminVO adminVO) throws Exception;
@@ -26,7 +25,6 @@ public interface AdminService {
 	public void updatePw(AdminVO adminVO) throws Exception;
 	public List<PointDTO> selectPointAdmin() throws Exception;
 	public List<AdminVO> selectAdmin(AdminVO adminVO) throws Exception;
-	public List<PointVO> selectAllPoint() throws Exception;
 	public List<AdminVO> selectAllAdmin() throws Exception;
 	public int count(AdminVO adminVO, String checkType) throws Exception;
 	

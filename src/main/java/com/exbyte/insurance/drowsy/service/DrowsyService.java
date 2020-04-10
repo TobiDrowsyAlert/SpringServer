@@ -2,9 +2,12 @@ package com.exbyte.insurance.drowsy.service;
 
 import javax.inject.Inject;
 
+import org.springframework.stereotype.Service;
+
 import com.exbyte.insurance.drowsy.domain.PersonalVO;
 import com.exbyte.insurance.drowsy.persistence.DrowsyDAO;
 
+@Service
 public class DrowsyService {
 
 	private DrowsyDAO drowsyDAO;

@@ -1,6 +1,5 @@
 package com.exbyte.insurance.admin.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -15,22 +14,17 @@ import com.exbyte.insurance.admin.domain.LoginDTO;
 import com.exbyte.insurance.admin.domain.PointDTO;
 import com.exbyte.insurance.admin.exception.InvalidAuthKeyAccessException;
 import com.exbyte.insurance.admin.persistence.AdminDAO;
-import com.exbyte.insurance.consulting.service.ConsultingServiceOutside;
-import com.exbyte.insurance.point.domain.PointVO;
 
 @Service
 public class AdminServiceImpl implements AdminService {
 
 	private final AdminDAO adminDAO;
 	
-	private final ConsultingServiceOutside consultingServiceOutside;
-	
 	Logger logger = LoggerFactory.getLogger(AdminServiceImpl.class);
 	
 	@Inject
-	public AdminServiceImpl(AdminDAO adminDAO, ConsultingServiceOutside consultingServiceOutside) {
+	public AdminServiceImpl(AdminDAO adminDAO) {
 		this.adminDAO = adminDAO;
-		this.consultingServiceOutside = consultingServiceOutside;
 	}
 
 	@Override
@@ -51,7 +45,6 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public void delete(AdminVO adminVO) throws Exception {  
-		consultingServiceOutside.updateAdminConsultingPosition(adminVO.getAdminId());
 		adminDAO.delete(adminVO);
 	}
 
@@ -123,39 +116,10 @@ public class AdminServiceImpl implements AdminService {
 	}
 	
 	@Override
-	public List<PointDTO> selectPointAdmin() throws Exception {
-		List<PointVO> list = adminDAO.selectAllPoint();
-		List<PointDTO> listPoint = new ArrayList();
-		logger.info(list.toString());
-		for(PointVO pointVO : list) {
-			PointDTO pointDTO = new PointDTO();
-			try {
-				AdminVO adminVO = adminDAO.selectPointAdmin(pointVO);
-				pointDTO.setPointNo(pointVO.getPointNo());
-				pointDTO.setPointName(pointVO.getPointName());
-				pointDTO.setPointAdmin(adminVO.getAdminId());
-				
-			}catch (NullPointerException e) {
-				e.printStackTrace();
-				pointDTO.setPointAdmin("NULL");
-			}
-			listPoint.add(pointDTO);
-		}
-		
-		return listPoint;
-	}
-	
-	@Override
 	public List<AdminVO> selectAdmin(AdminVO adminVO) throws Exception{
 		return adminDAO.selectAdmin(adminVO);
 	}
 	
-	@Override
-	public List<PointVO> selectAllPoint() throws Exception {
-		List<PointVO> points = adminDAO.selectAllPoint();
-		return points;
-	}
-
 	@Override
 	public List<AdminVO> selectAllAdmin() throws Exception {
 		return adminDAO.selectAllAdmin();
@@ -208,6 +172,12 @@ public class AdminServiceImpl implements AdminService {
 		adminDAO.create(adminVO);
 		
 		return adminVO;
+	}
+
+	@Override
+	public List<PointDTO> selectPointAdmin() throws Exception {
+		return null;
+		
 	}
 	
 	

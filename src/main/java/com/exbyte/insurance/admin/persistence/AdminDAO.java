@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
-import com.exbyte.insurance.point.domain.PointVO;
 
 public interface AdminDAO {
 
@@ -23,9 +22,7 @@ public interface AdminDAO {
 	int countEmail(String adminEmail) throws Exception;
 	AdminVO selectAdminByEmail(String adminEmail) throws Exception;
 	void updatePw(AdminVO adminVO) throws Exception;
-	AdminVO selectPointAdmin(PointVO pointVO) throws Exception;
 	List<AdminVO> selectAdmin(AdminVO adminVO) throws Exception;
-	List<PointVO> selectAllPoint() throws Exception;
 	List<AdminVO> selectAllAdmin() throws Exception;
 	List<AdminVO> selectAdminList(String value) throws Exception;
 	

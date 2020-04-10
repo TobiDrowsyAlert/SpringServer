@@ -3,10 +3,12 @@ package com.exbyte.insurance.log.persistence;
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 
 import com.exbyte.insurance.drowsy.domain.PersonalVO;
 import com.exbyte.insurance.log.domain.LogVO;
 
+@Repository
 public class LogDAO {
 
 	private static SqlSession sqlSession;

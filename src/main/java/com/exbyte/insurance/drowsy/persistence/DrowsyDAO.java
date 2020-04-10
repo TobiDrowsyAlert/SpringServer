@@ -3,9 +3,11 @@ package com.exbyte.insurance.drowsy.persistence;
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 
 import com.exbyte.insurance.drowsy.domain.PersonalVO;
 
+@Repository
 public class DrowsyDAO {
 	
 	private static SqlSession sqlSession;

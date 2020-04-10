@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
-import com.exbyte.insurance.point.domain.PointVO;
 
 @Repository
 public class AdminDAOImpl implements AdminDAO{
@@ -86,10 +85,6 @@ public class AdminDAOImpl implements AdminDAO{
 		return sqlSession.selectOne(NAMESPACE + ".checkAuthKey", adminId);
 	}
 
-	@Override
-	public AdminVO selectPointAdmin(PointVO pointVO) throws Exception {
-		return sqlSession.selectOne(NAMESPACE + ".selectPointAdmin", pointVO);
-	}
 	
 	@Override
 	public AdminVO selectAdminByEmail(String adminEmail) throws Exception {
@@ -101,11 +96,6 @@ public class AdminDAOImpl implements AdminDAO{
 		return sqlSession.selectList(NAMESPACE + ".selectAdmin", adminVO);
 	}
 	
-	@Override
-	public List<PointVO> selectAllPoint() throws Exception {
-		return sqlSession.selectList(NAMESPACE + ".selectAllPoint");
-		
-	}
 
 	@Override
 	public List<AdminVO> selectAllAdmin() throws Exception {

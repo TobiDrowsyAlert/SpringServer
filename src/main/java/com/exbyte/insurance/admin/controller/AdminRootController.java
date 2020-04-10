@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.PointDTO;
 import com.exbyte.insurance.admin.service.AdminService;
-import com.exbyte.insurance.point.domain.PointVO;
 
 @Controller
 @RequestMapping("/admin")
@@ -36,20 +35,12 @@ public class AdminRootController {
 	public String list(Model model, AdminVO adminVO) throws Exception {
 		
 		List<AdminVO> adminList = adminService.selectAdmin(adminVO);
-		List<PointVO> pointList = adminService.selectAllPoint();
 		List<String> nameList = new ArrayList();
 		
-		List<String> pointNameList = new ArrayList();
-		for(AdminVO admin : adminList) {
-			String name = pointList.get(admin.getAdminPoint()).getPointName();
-			nameList.add(name);
-		}
 		
 		logger.warn("nameList.toString() : " + nameList.toString());
-		logger.warn("pointList.toString() : " + pointList.toString());
 		
 		model.addAttribute("adminList", adminService.selectAdmin(adminVO));
-		model.addAttribute("pointList", pointList);
 		model.addAttribute("nameList", nameList);
 		
 		return "/admin/list";

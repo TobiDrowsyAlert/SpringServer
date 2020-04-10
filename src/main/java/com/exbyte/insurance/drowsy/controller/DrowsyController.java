@@ -1,5 +1,7 @@
 package com.exbyte.insurance.drowsy.controller;
 
+import javax.inject.Inject;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +18,7 @@ public class DrowsyController {
 
 	DrowsyService drowsyService;
 	
+	@Inject
 	DrowsyController(DrowsyService drowsyService){
 		this.drowsyService = drowsyService;
 	}
@@ -62,6 +65,15 @@ public class DrowsyController {
 		
 		drowsyDTO.setStatusCode(StatusCode.CODE_400);
 		return drowsyDTO;
+	}
+	
+	@RequestMapping(value = "/execute", method= RequestMethod.POST)
+	@ResponseBody
+	public DrowsyDTO execute() {
+		
+		
+		
+		return null;
 	}
 	
 	

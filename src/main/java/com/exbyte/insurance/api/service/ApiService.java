@@ -21,13 +21,27 @@ public class ApiService {
 	
 	//private final RestTemplate restTemplate;
 	
+	class Point {
+		int x;
+		int y;
+		
+		Point(int x, int y){
+			this.x = x;
+			this.y = y;
+		}
+		
+		Point getPoint() {
+			return this;
+		}
+	}
 	
 	public Object getItemsForOpenApi(String regid, String time) throws UnsupportedEncodingException{
-		String url = "http://127.0.0.1:5000/api";
+		String url = "http://15.165.116.82:1234";
 		String serviceKey = "서비스키";
 		String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");
 		
 		String json = "data";
+		Point point = new Point(10,10);
 		
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();

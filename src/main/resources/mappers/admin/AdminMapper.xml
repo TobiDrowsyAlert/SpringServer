@@ -242,9 +242,4 @@
 	<result property="adminAuthKey" column="admin_auth_key" />
 </resultMap>
 
-<resultMap type="PointVO" id="PointResultMap">
-	<id property="pointNo" column="point_no"/>
-	<result property="pointName" column="point_name"/>
-</resultMap>
-
 </mapper>

@@ -28,7 +28,6 @@ import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
 import com.exbyte.insurance.admin.service.AdminMailService;
 import com.exbyte.insurance.admin.service.AdminService;
-import com.exbyte.insurance.point.domain.PointVO;
 
 @Controller
 @RequestMapping("/admin")
@@ -61,8 +60,6 @@ public class AdminController {
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public void registerGET(Model model) throws Exception {
 		
-		List<PointVO> points = adminService.selectAllPoint();
-		model.addAttribute("points", points);
 		
 		return;
 	}
@@ -172,28 +169,6 @@ public class AdminController {
 	
 		return "/commons/index";
 	}
-	
-	// 지사 목록 전달
-	@RequestMapping(value = "/listPoint", method = RequestMethod.GET)
-	@ResponseBody
-	public ResponseEntity<List<PointVO>> listPoint() throws Exception {
-		ResponseEntity<List<PointVO>> entity = null;
-		
-		List<PointVO> list = adminService.selectAllPoint();
-		try {
-			for(PointVO pointVO : list) {
-				entity = new ResponseEntity<>(list, HttpStatus.OK);
-			}
-		}catch (Exception e) {
-			e.printStackTrace();
-			entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-		}
-		
-		logger.info(entity.toString());
-		
-		return entity;
-	}
-
 	
 	// 회원정보 전달
 	@RequestMapping(value = "/listAdmin", method = RequestMethod.GET)
@@ -325,6 +300,3 @@ public class AdminController {
 	
 	
 }
-
-
-
