@@ -4,13 +4,13 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashMap;
 
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -40,26 +40,26 @@ public class ApiService {
 		}
 	}
 	
-	public Object getItemsForOpenApi(String regid, String time, String jsonData) throws UnsupportedEncodingException{
+	public Object getItemsForOpenApi(String regid, String jsonData) throws UnsupportedEncodingException{
 		String url = "http://15.165.116.82:1234/set_face";
 		String serviceKey = "서비스키";
 		String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");
 		HashMap<String,Landmark> param = new HashMap<String, Landmark>();
 		
-		//String json = "data";
-		Point point = new Point(10,10);
-		
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
-		//headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
+		// 전송을 위한 http 엔티티
 		HttpEntity<String> entity = new HttpEntity<String>(jsonData,headers);
 		
 		
+		// 1. String > Json
 		com.google.gson.JsonParser parser = new com.google.gson.JsonParser();
 		Object obj = parser.parse(jsonData);
 		
+		// 2. String > JSON
 		JSONParser simpleParser = new JSONParser();
 		Object obj2 = new Object();
 		try {
@@ -68,22 +68,20 @@ public class ApiService {
 			e.printStackTrace();
 		}
 		
-		JSONObject obj3 = new JSONObject();
-		obj3.put("name", "key");
-		
 		
 		System.out.println("JsonData Value : " + obj2.toString());
-		System.out.println("JsonData Value : " + obj3.toString());
-		
 		
 		
 		UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
 				.build(false);
 		
-		Object response = restTemplate.postForObject(url, entity, String.class);
+		//postForObject 결과를 객체로, exchange 결과를 HTTPResponseEntitiy로 받는다 + Http Header 수정 가능 
 		
+		// 전송 방법 1.
+		//Object response = restTemplate.postForObject(url, entity, String.class);
 		
-		response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity ,String.class);
+		// 전송 방법 2.
+		ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity ,String.class);
 		System.out.print("result " + response.toString());
 		
 		return response;

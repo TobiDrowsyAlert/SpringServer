@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.exbyte.insurance.api.domain.Landmark;
 import com.exbyte.insurance.api.domain.Point;
 import com.exbyte.insurance.api.service.ApiService;
 
@@ -38,21 +37,22 @@ public class ApiController {
 		return points;
 	}
 	
+	// 데이터 전송
 	@RequestMapping(value = "/value", method = RequestMethod.POST)
 	@ResponseBody
-	public Landmark ResponseAPIPost(@RequestBody String landmarks) {
-		
+	public Object ResponseAPIPost(@RequestBody String landmarks) {
+		Object result = null;
 		log.info("전달받은 결과 값 " + landmarks.toString());
 	
 		try {
-		Object result = apiService.getItemsForOpenApi("50","check", landmarks);
+		result = apiService.getItemsForOpenApi("regid", landmarks);
 		log.info("data Test " + result.toString());
 		
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return result;
 	}
 	
 }
