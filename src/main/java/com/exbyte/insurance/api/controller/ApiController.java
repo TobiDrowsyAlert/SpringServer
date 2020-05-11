@@ -120,4 +120,20 @@ public class ApiController {
 		return result;
 	}
 	
+
+	// 데이터 전송
+	@RequestMapping(value = "/timer", method = RequestMethod.POST)
+	@ResponseBody
+	public Object timer() {
+		ResponseEntity<String> result = null;
+	
+		try {
+		result = apiService.timer("regid", null);
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
 }

@@ -129,6 +129,28 @@ public class ApiService {
 		
 		return response;
 	}
+	
+	public ResponseEntity<String> timer(String regid, String jsonData) throws UnsupportedEncodingException{
+		String url = "http://15.165.116.82:1234/timer";
+		String serviceKey = "서비스키";
+		String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");
+		HashMap<String,Landmark> param = new HashMap<String, Landmark>();
+		
+		RestTemplate restTemplate = new RestTemplate();
+		HttpHeaders headers = new HttpHeaders();
+
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		
+		HttpEntity<String> entity = new HttpEntity<String>(jsonData,headers);
+
+		UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
+				.build(false);
+		
+		ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity ,String.class);
+		System.out.print("result " + response.toString());
+		
+		return response;
+	}
 }
 
 
