@@ -5,7 +5,7 @@
         
         
 <mapper namespace="com.exbyte.insurance.admin.AdminMapper">
-	<insert id ="create">
+<!-- 	<insert id ="create">
 		INSERT INTO tbl_admin(
 			admin_id,
 			admin_pw,
@@ -187,14 +187,6 @@
 		<include refid="wherePoint"/>
 	</select>
 	
-	<select id="selectAllPoint" resultMap="PointResultMap">
-		SELECT
-			*
-		FROM
-			tbl_point
-		ORDER BY point_no ASC
-	</select>
-	
 	<select id="selectPointAdmin" resultMap="AdminResultMap">
 		SELECT
 			*
@@ -240,6 +232,6 @@
 	<result property="adminLoginDate" column="admin_login_date" />
 	<result property="adminPoint" column="admin_point" />
 	<result property="adminAuthKey" column="admin_auth_key" />
-</resultMap>
+</resultMap> -->
 
 </mapper>

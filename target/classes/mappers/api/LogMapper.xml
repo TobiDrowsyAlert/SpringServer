@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        
+<mapper namespace="com.exbyte.insurance.api.LogMapper">
+	
+	<insert id="create">
+		INSERT INTO tbl_log(
+			blink,
+		    user_id,
+		    stage,
+		    driving_time,
+		    is_correct,
+		    pitch,
+		    roll,
+		    yaw,
+            mar,
+            ear,
+            reason
+		) VALUES (
+			#{blink},
+		    #{userId},
+		    #{stage},
+		    #{drivingTime},
+		    #{isCorrect},
+		    #{pitch},
+		    #{roll},
+		    #{yaw},
+            #{mar},
+            #{ear},
+            #{reason}
+		);
+	</insert>
+	
+	<delete id="delete">
+	    DELETE FROM 
+	    	tbl_log 
+	    WHERE log_no = #{logNo}
+	</delete>
+	
+	<select id="select" resultMap="LogResultMap">
+		SELECT
+			*
+		FROM
+			tbl_log
+		WHERE
+			log_no > 0
+	</select>
+
+	<select id="read" resultMap="LogResultMap">
+		SELECT
+			*
+		FROM
+			tbl_log
+		WHERE
+			log_no = #{logNo} 
+	</select>
+		
+		
+	<resultMap type="LogVO" id="LogResultMap">
+		<id property="logNo" column="log_no"/>
+		<result property="blink" column="blink" />
+		<result property="userId" column="user_id" />
+		<result property="stage" column="stage" />
+		<result property="curTime" column="cur_time" />
+		<result property="drivingTime" column="driving_time" />
+		<result property="isCorrect" column="is_correct" />
+		<result property="pitch" column="pitch" />
+		<result property="roll" column="roll" />
+		<result property="yaw" column="yaw" />
+		<result property="mar" column="mar" />
+		<result property="ear" column="ear" />
+		<result property="reason" column="reason" />
+	</resultMap>
+	
+</mapper>

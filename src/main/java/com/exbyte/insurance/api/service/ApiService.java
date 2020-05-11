@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ApiService {
 	
 	//private final RestTemplate restTemplate;
+	
 	private final int INT_BLINK = 100;
 	private final int INT_BLIND = 101;
 	private final int INT_YAWN = 200;
@@ -30,21 +31,8 @@ public class ApiService {
 	private final int INT_DRIVER_AWARE_FAIL = 301;
 	private final int C_NORMAL = 400;
 	
-	class Point {
-		int x;
-		int y;
-		
-		Point(int x, int y){
-			this.x = x;
-			this.y = y;
-		}
-		
-		Point getPoint() {
-			return this;
-		}
-	}
 	
-	public Object getItemsForOpenApi(String regid, String jsonData) throws UnsupportedEncodingException{
+	public ResponseEntity<String> getItemsForOpenApi(String regid, String jsonData) throws UnsupportedEncodingException{
 		String url = "http://15.165.116.82:1234/set_face";
 		String serviceKey = "서비스키";
 		String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");
@@ -74,7 +62,7 @@ public class ApiService {
 		return response;
 	}
 
-	public Object dropSleepStep(String regid, String jsonData) throws UnsupportedEncodingException{
+	public ResponseEntity<String> dropSleepStep(String regid, String jsonData) throws UnsupportedEncodingException{
 		String url = "http://15.165.116.82:1234/drop";
 		String serviceKey = "서비스키";
 		String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");
@@ -90,15 +78,13 @@ public class ApiService {
 		UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
 				.build(false);
 		
-		//postForObject 결과를 객체로, exchange 결과를 HTTPResponseEntitiy로 받는다 + Http Header 수정 가능 
-
 		ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity ,String.class);
 		System.out.print("result " + response.toString());
 		
 		return response;
 	}
 	
-	public Object resetSleepStep(String regid, String jsonData) throws UnsupportedEncodingException{
+	public ResponseEntity<String> resetSleepStep(String regid, String jsonData) throws UnsupportedEncodingException{
 		String url = "http://15.165.116.82:1234/reset";
 		String serviceKey = "서비스키";
 		String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");
@@ -122,7 +108,7 @@ public class ApiService {
 		return response;
 	}
 	
-	public Object feedbackSleepStep(String regid, String jsonData) throws UnsupportedEncodingException{
+	public ResponseEntity<String> feedbackSleepStep(String regid, String jsonData) throws UnsupportedEncodingException{
 		String url = "http://15.165.116.82:1234/feedback";
 		String serviceKey = "서비스키";
 		String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");

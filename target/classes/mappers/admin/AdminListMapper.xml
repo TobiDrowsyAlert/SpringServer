@@ -6,7 +6,7 @@
         
 <mapper namespace="com.exbyte.insurance.admin.AdminMapper">
 
-	
+<!-- 	
 	<select id="countSession" resultType="int">
 		SELECT
 			COUNT(*)
@@ -60,6 +60,6 @@
 			</if>
 			
 		</if>
-	</sql>
+	</sql> -->
 	
 </mapper>

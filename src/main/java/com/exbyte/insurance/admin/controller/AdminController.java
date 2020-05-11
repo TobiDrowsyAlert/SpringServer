@@ -45,7 +45,7 @@ public class AdminController {
 	final String STRING_NOT_HASH_PW = "NOT_HASH_PW";
 	final String STRING_INVAILD_PW = "INVAILD_PW";
 	final String TEST_VALID_EMAIL = "Y";
-	final String STRING_NULL = "NULL";
+	final String STRING_NULL = "NULL"; 
 
 	Logger logger = LoggerFactory.getLogger(AdminController.class);
 	

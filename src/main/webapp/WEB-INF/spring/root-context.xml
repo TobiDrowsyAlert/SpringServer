@@ -30,9 +30,9 @@
 	-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://rayor.cgeo4qdzfqv8.ap-northeast-2.rds.amazonaws.com:3306/jigool1?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=Asia/Seoul"/>
-        <property name="username" value="RAYOR"/>   
-        <property name="password" value="1"/>
+        <property name="url" value="jdbc:mysql://rayor.cgeo4qdzfqv8.ap-northeast-2.rds.amazonaws.com:3306/AWS_test?allowPublicKeyRetrieval=true&amp;useSSL=false&amp;serverTimezone=Asia/Seoul"/>
+        <property name="username" value="admin"/>   
+        <property name="password" value="Hoho2hanh1!"/>
         <property name="maxIdle" value="20"/>
     </bean>
 
