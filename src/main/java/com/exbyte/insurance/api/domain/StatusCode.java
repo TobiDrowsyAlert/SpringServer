@@ -33,6 +33,8 @@ public enum StatusCode {
 			reason = INT_DRIVER_AWARE_FAIL.reason;
 		}else if(code == INT_NORMAL.code) {
 			reason = INT_NORMAL.reason;
+		}else {
+			reason = "정상";
 		}
 		
 		return reason;

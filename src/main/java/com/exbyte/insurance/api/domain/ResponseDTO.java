@@ -1,5 +1,7 @@
 package com.exbyte.insurance.api.domain;
 
+import java.util.Date;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,4 +15,8 @@ public class ResponseDTO {
 	private int pitch;
 	private int yaw;
 	private int roll;
+	private int left_ear;
+	private int right_ear;
+	private int m_ear;
+	private Date curTime;
 }

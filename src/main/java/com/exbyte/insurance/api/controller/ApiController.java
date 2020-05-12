@@ -1,6 +1,7 @@
 package com.exbyte.insurance.api.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Date;
 
 import javax.inject.Inject;
 
@@ -15,6 +16,7 @@ import com.exbyte.insurance.api.domain.LogVO;
 import com.exbyte.insurance.api.domain.ResponseDTO;
 import com.exbyte.insurance.api.service.ApiService;
 import com.exbyte.insurance.api.service.LogService;
+import com.exbyte.insurance.api.service.MinuteLogService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -27,6 +29,7 @@ public class ApiController {
 	
 	ApiService apiService;
 	LogService logService;
+	MinuteLogService minuteLogService;
 	
     // 상태 코드 상수
     private final int INT_BLINK = 100;
@@ -37,9 +40,10 @@ public class ApiController {
     private final int INT_NORMAL = 400;
 	
 	@Inject
-	public ApiController(ApiService apiService, LogService logService) {
+	public ApiController(ApiService apiService, LogService logService, MinuteLogService minuteLogService) {
 		this.apiService = apiService;
 		this.logService = logService;
+		this.minuteLogService = minuteLogService;
 	}
 	
 	// 데이터 전송
@@ -47,31 +51,30 @@ public class ApiController {
 	@ResponseBody
 	public Object ResponseAPIPost(@RequestBody String landmarks) {
 		ResponseEntity<String> result = null;
-		log.info("전달받은 결과 값 " + landmarks.toString());
-	
-
+		ResponseEntity<String> responseAndroid = null;
+		
 		try {
 			result = apiService.getItemsForOpenApi("regid", landmarks);
 			String data = result.getBody();
 			Gson gson = new GsonBuilder().create();
-			
 			ResponseDTO responseDTO = gson.fromJson(data, ResponseDTO.class);
+			responseDTO.setCurTime(new Date());
+			String jsonDataWithTime = gson.toJson(responseDTO);
+			
 			int currentStatus = responseDTO.getStatus_code();
-			
 			LogVO logVO = new LogVO(responseDTO, "admin");
-			
-			if(currentStatus != INT_NORMAL ) {
-				// 데이터베이스 기록
-				logService.create(logVO);
-			}
-			
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
+			responseAndroid = new ResponseEntity<String>(jsonDataWithTime ,result.getHeaders(),result.getStatusCode());
+		
+		if(currentStatus != INT_NORMAL ) {
+			// 데이터베이스 기록
+			logService.create(logVO);
+		}
+		
+		}catch(Exception e) {
 			e.printStackTrace();
 		}
 		
-		return result;
+		return responseAndroid;
 	}
 	
 	// 데이터 전송
@@ -126,9 +129,25 @@ public class ApiController {
 	@ResponseBody
 	public Object timer() {
 		ResponseEntity<String> result = null;
-	
+		ResponseEntity<String> responseAndroid = null;
+		
 		try {
-		result = apiService.timer("regid", null);
+			result = apiService.timer("regid", null);
+			String data = result.getBody();
+			Gson gson = new GsonBuilder().create();
+			ResponseDTO responseDTO = gson.fromJson(data, ResponseDTO.class);
+			responseDTO.setCurTime(new Date());
+			String jsonDataWithTime = gson.toJson(responseDTO);
+			
+			int currentStatus = responseDTO.getStatus_code();
+			LogVO logVO = new LogVO(responseDTO, "admin");
+			responseAndroid = new ResponseEntity<String>(jsonDataWithTime ,result.getHeaders(),result.getStatusCode());
+			
+			if(currentStatus != INT_NORMAL ) {
+				// 데이터베이스 기록
+				minuteLogService.create(logVO);
+			}
+			
 		}catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import com.exbyte.insurance.api.domain.LogVO;
 import com.exbyte.insurance.api.domain.ResponseDTO;
 import com.exbyte.insurance.api.persistence.LogDAO;
+import com.exbyte.insurance.api.persistence.MinuteLogDAO;
 import com.exbyte.insurance.api.service.ApiService;
 
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
@@ -25,6 +26,9 @@ public class apiTest {
 	
 	@Inject
 	LogDAO logDAO;
+	
+	@Inject
+	MinuteLogDAO minuteLogDAO;
 	
 	@Test
 	public void testApiTemplate() throws Exception {
@@ -46,5 +50,20 @@ public class apiTest {
 		dto.setYawn(1);
 		LogVO logVO = new LogVO(dto, "admin");
 		logDAO.create(logVO);
+	}
+	
+	@Test
+	public void createMinuteLog() throws Exception {
+		ResponseDTO dto = new ResponseDTO();
+		dto.setBlink(1);
+		dto.setPitch(1);
+		dto.setRoll(1);
+		dto.setSleep_step(1);
+		dto.setStatus_code(200);
+		dto.setYaw(1);
+		dto.setYawn(1);
+		LogVO logVO = new LogVO(dto, "admin");
+		System.out.println(logVO.getCurTime());
+		minuteLogDAO.create(logVO);
 	}
 }

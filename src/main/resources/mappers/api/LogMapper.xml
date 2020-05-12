@@ -10,25 +10,27 @@
 			blink,
 		    user_id,
 		    stage,
+		    cur_time,
 		    driving_time,
-		    is_correct,
 		    pitch,
 		    roll,
 		    yaw,
             mar,
-            ear,
+            right_ear,
+            left_ear,
             reason
 		) VALUES (
 			#{blink},
 		    #{userId},
 		    #{stage},
+		    #{curTime},
 		    #{drivingTime},
-		    #{isCorrect},
 		    #{pitch},
 		    #{roll},
 		    #{yaw},
             #{mar},
-            #{ear},
+            #{rightEar},
+            #{leftEar},
             #{reason}
 		);
 	</insert>
@@ -70,7 +72,8 @@
 		<result property="roll" column="roll" />
 		<result property="yaw" column="yaw" />
 		<result property="mar" column="mar" />
-		<result property="ear" column="ear" />
+		<result property="leftEar" column="left_ear" />
+		<result property="rightEar" column="right_ear" />
 		<result property="reason" column="reason" />
 	</resultMap>
 	
