@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.exbyte.insurance.api.domain.LogVO;
+import com.exbyte.insurance.api.domain.RequestFeedback;
 import com.exbyte.insurance.api.persistence.LogDAO;
 
 import lombok.extern.slf4j.Slf4j;
@@ -38,4 +39,10 @@ public class LogService {
 		logDAO.delete(logNo);
 	}
 	
+	public void updateFeedabck(RequestFeedback requestFeedback) throws Exception{
+		if(requestFeedback.getIsCorrect()) {
+			System.out.println("Working : " + requestFeedback.getCurTime());
+			logDAO.updateFeedback(requestFeedback);
+		}
+	}
 }

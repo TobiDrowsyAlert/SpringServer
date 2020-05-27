@@ -1,89 +1,72 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
-<html lang="ko">
-
-<%@ include file="../include/head2.jsp" %>
-
+<html>
+	<%@ include file="../include/head2.jsp" %>
 <head>
-  <!-- login css -->
-  <link href="${path }/dist/css/log_in.css" rel="stylesheet">
-</head>
-  
-<body id="page-top">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>AdminLTE 3 | Log in</title>
+  <!-- Tell the browser to be responsive to screen width -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- nav-->
-  <nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-    <div class="container">
-      <a class="navbar-brand js-scroll-trigger" href="${path }/"><img src='${imgPath }/img/logos/main_logo.png' width="200px" height="50px"></a>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>Tobi</b>Drowsy</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Sign in to start your session</p>
+
+      <form action="../../index3.html" method="post">
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="id">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" placeholder="Password">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="icheck-primary">
+              <input type="checkbox" id="remember">
+              <label for="remember">
+                Remember Me
+              </label>
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+          </div>
+          <!-- /.col -->
+        </div>
+      </form>
+
+      <!-- /.social-auth-links -->
+
     </div>
-  </nav>
-
-  <!-- header -->
-  <div class="page-section">
+    <!-- /.login-card-body -->
   </div>
+</div>
+<!-- /.login-box -->
 
-  <!-- section -->
-  <div class="page-section" id="about" style="display:block">
-    <div class="container">
-          <h2 class="section-heading text-uppercase">로그인</h2>
-      <form id="infoForm" name="sentinfo" action="${path }/admin/loginPOST" method="post">
-            <div class="info-form" id="infoid">
-              <input type="text" id="info_id" name="adminId" class="form-box" required="required" placeholder="아이디">
-            </div>
-            <div class="info-form" id="infopw">
-              <input type="password" id="info_pw" name="adminPw" class="form-box" maxlength="12" placeholder="비밀번호" required="required">
-            </div>
-            <div class="info-form" id="infolocate">
-              <select class="form-box" id="pointList" name="adminPoint" required="required">
-              </select>
-            </div>
-            <div class="finds">
-                <a class="find" href="${path }/admin/find" style="color:#000000;"> 아이디/비밀번호 찾기 <b>〉</b></a>
-            </div>
-            <button id="login" class="btns " name="button" type="submit" onclick="#">로그인</button>
-        </form>
-            <button id="join" class="btnRegister" onclick="#">회원가입</button>
-      </div>
-  </div>
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
 
-  <!-- Footer -->
-	<%@ include file="../include/main_footer2.jsp"%>
-  <!-- Scripts -->
-  <%@ include file="../include/plugin_js2.jsp" %>
 </body>
-
-<script type="text/javascript">
-	var msg = '${msg}';
-	console.log("result : " + msg);
-
-	if(msg != ""){
-		alert(msg);
-	}
-
-	$('.btnRegister').click(function(){
-		self.location = "${path }/admin/register";
-	});
-
-	var loadPoint =  function(){
-	     $.ajax({
-	       url : "${path }/admin/listPoint", // HTTP요청을 보낼 URL 주소
-	       method : "GET", // 요청 메소드
-	       dataType : "json", // 서버에서 보내줄 데이터 타입
-	       success : function(data){ // 성공 시 처리
-	         var data_key = Object.keys(data);
-	           for(var i = 0; i < data_key.length; i++){
-		         var op = new Option();
-		         op.value = data[data_key[i]].pointNo;
-		         op.text = data[data_key[i]].pointName;
-		         document.getElementById("pointList").add(op);
-	         }
-	       },
-	       error : function(){
-	         alert('point 불러오기 실패');
-	       }
-	     });
-	}
-  loadPoint();
-</script>
-
 </html>

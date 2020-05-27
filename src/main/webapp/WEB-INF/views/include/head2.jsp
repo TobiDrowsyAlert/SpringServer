@@ -31,19 +31,24 @@
   <!-- Custom styles for this template -->
   <link href="${path }/dist/css/agency.min.css" rel="stylesheet">
 
-   <link rel="stylesheet" href="${path }/dist/css/test_intro.css"/>
-  	  
+  <!-- Theme style -->
+  <link rel="stylesheet" href="${path }/dist/css/adminlte.min.css">
+    <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="${path }/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+
+  </head>
+  
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
   <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+	
+  <!-- Google Font: Source Sans Pro -->
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
 
   
-
-  <link rel="stylesheet" href="${path }/dist/css/common.css"/>
-  
-  <!-- login phone -->
-  <link rel="stylesheet" media="(min-width:0px) and (max-width:700px)" href="${path }/dist/css/login_phone.css">
   
   
 </head>

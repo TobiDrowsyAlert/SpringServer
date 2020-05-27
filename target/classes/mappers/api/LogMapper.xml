@@ -59,6 +59,13 @@
 			log_no = #{logNo} 
 	</select>
 		
+	<update id="updateFeedback">
+		UPDATE 
+			tbl_log 
+		SET 
+			is_correct = TRUE WHERE cur_time = #{curTime}
+	</update>
+	
 		
 	<resultMap type="LogVO" id="LogResultMap">
 		<id property="logNo" column="log_no"/>

@@ -1,8 +1,6 @@
 package com.exbyte.insurance.api.service;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.HashMap;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,8 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import com.exbyte.insurance.api.domain.Landmark;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,9 +30,6 @@ public class ApiService {
 	
 	public ResponseEntity<String> getItemsForOpenApi(String regid, String jsonData) throws UnsupportedEncodingException{
 		String url = "http://15.165.116.82:1234/set_face";
-		String serviceKey = "서비스키";
-		String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");
-		HashMap<String,Landmark> param = new HashMap<String, Landmark>();
 		
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
@@ -64,9 +57,6 @@ public class ApiService {
 
 	public ResponseEntity<String> dropSleepStep(String regid, String jsonData) throws UnsupportedEncodingException{
 		String url = "http://15.165.116.82:1234/drop";
-		String serviceKey = "서비스키";
-		String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");
-		HashMap<String,Landmark> param = new HashMap<String, Landmark>();
 		
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
@@ -86,9 +76,6 @@ public class ApiService {
 	
 	public ResponseEntity<String> resetSleepStep(String regid, String jsonData) throws UnsupportedEncodingException{
 		String url = "http://15.165.116.82:1234/reset";
-		String serviceKey = "서비스키";
-		String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");
-		HashMap<String,Landmark> param = new HashMap<String, Landmark>();
 		
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
@@ -108,18 +95,13 @@ public class ApiService {
 		return response;
 	}
 	
-	public ResponseEntity<String> feedbackSleepStep(String regid, String jsonData) throws UnsupportedEncodingException{
+	public ResponseEntity<String> feedbackSleepStep() throws UnsupportedEncodingException{
 		String url = "http://15.165.116.82:1234/feedback";
-		String serviceKey = "서비스키";
-		String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");
-		HashMap<String,Landmark> param = new HashMap<String, Landmark>();
-		
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();
-
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		
-		HttpEntity<String> entity = new HttpEntity<String>(jsonData,headers);
+		HttpEntity<String> entity = new HttpEntity<String>(null,headers);
 
 		UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
 				.build(false);
@@ -132,9 +114,6 @@ public class ApiService {
 	
 	public ResponseEntity<String> timer(String regid, String jsonData) throws UnsupportedEncodingException{
 		String url = "http://15.165.116.82:1234/timer";
-		String serviceKey = "서비스키";
-		String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");
-		HashMap<String,Landmark> param = new HashMap<String, Landmark>();
 		
 		RestTemplate restTemplate = new RestTemplate();
 		HttpHeaders headers = new HttpHeaders();

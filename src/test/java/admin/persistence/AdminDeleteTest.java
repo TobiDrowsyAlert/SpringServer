@@ -17,7 +17,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.PointDTO;
 import com.exbyte.insurance.admin.persistence.AdminDAO;
-import com.exbyte.insurance.point.domain.PointVO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
@@ -70,23 +69,7 @@ public class AdminDeleteTest {
 	
 	@Test
 	public void selectPointAdminTest() throws Exception{
-		List<PointVO> list = adminDAO.selectAllPoint();
-		PointDTO pointDTO = null;
 		
-		logger.info(list.toString());
-		for(PointVO pointVO : list) {
-			try {
-			AdminVO adminVO = adminDAO.selectPointAdmin(pointVO);
-			pointDTO = new PointDTO();
-			pointDTO.setPointNo(pointVO.getPointNo());
-			pointDTO.setPointName(pointVO.getPointName());
-			pointDTO.setPointAdmin(adminVO.getAdminId());
-			}catch (NullPointerException e) {
-				e.printStackTrace();
-				pointDTO.setPointAdmin("NULL");
-			}
-			logger.info(pointDTO.toString());
-		}
 		
 	}
 	

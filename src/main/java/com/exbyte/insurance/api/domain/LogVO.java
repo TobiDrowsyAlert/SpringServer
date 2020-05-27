@@ -14,7 +14,7 @@ public class LogVO {
 	private int blink;
 	private String userId; // not null
 	private int stage;
-	private Date curTime;
+	private String curTime;
 	private Date drivingTime;
 	private Boolean isCorrect;
 	private double pitch; 

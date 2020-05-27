@@ -1,5 +1,8 @@
 package api;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.inject.Inject;
 
 import org.junit.Test;
@@ -40,16 +43,11 @@ public class apiTest {
 	
 	@Test
 	public void createLog() throws Exception {
-		ResponseDTO dto = new ResponseDTO();
-		dto.setBlink(1);
-		dto.setPitch(1);
-		dto.setRoll(1);
-		dto.setSleep_step(1);
-		dto.setStatus_code(200);
-		dto.setYaw(1);
-		dto.setYawn(1);
-		LogVO logVO = new LogVO(dto, "admin");
-		logDAO.create(logVO);
+		/*
+		 * ResponseDTO dto = new ResponseDTO(); dto.setBlink(1); dto.setPitch(1);
+		 * dto.setRoll(1); dto.setSleep_step(1); dto.setStatus_code(200); dto.setYaw(1);
+		 * dto.setYawn(1); LogVO logVO = new LogVO(dto, "admin"); logDAO.create(logVO);
+		 */
 	}
 	
 	@Test
@@ -63,7 +61,10 @@ public class apiTest {
 		dto.setYaw(1);
 		dto.setYawn(1);
 		LogVO logVO = new LogVO(dto, "admin");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		logVO.setCurTime(format.format(new Date()));
 		System.out.println(logVO.getCurTime());
 		minuteLogDAO.create(logVO);
+		logDAO.create(logVO);
 	}
 }

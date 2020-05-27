@@ -39,8 +39,6 @@ import com.exbyte.insurance.admin.domain.LoginDTO;
 import com.exbyte.insurance.admin.persistence.AdminDAO;
 import com.exbyte.insurance.admin.service.AdminService;
 import com.exbyte.insurance.admin.service.AdminServiceImpl;
-import com.exbyte.insurance.consulting.service.ConsultingServiceOutside;
-
 
 @RunWith(MockitoJUnitRunner.class)
 @ContextConfiguration(locations = {
@@ -60,8 +58,6 @@ public class AdminServiceTest {
 	@Mock
 	AdminDAO adminDAO;
 	
-	@Mock
-	ConsultingServiceOutside consultingServiceOutside;
 	
 	AdminService adminService;
 	
@@ -75,7 +71,7 @@ public class AdminServiceTest {
 	@Before
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
-		adminService = new AdminServiceImpl(adminDAO, consultingServiceOutside);
+		adminService = new AdminServiceImpl(adminDAO);
 	}
 	
 	public AdminVO setAdminVO(String TEST_STRING, int TEST_POINT) {

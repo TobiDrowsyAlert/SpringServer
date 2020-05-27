@@ -41,9 +41,7 @@ import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
 import com.exbyte.insurance.admin.service.AdminMailService;
 import com.exbyte.insurance.admin.service.AdminService;
-import com.exbyte.insurance.point.domain.PointVO;
 
-import admin.domain.TestPointVO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"
@@ -87,7 +85,6 @@ public class AdminListValueTest {
 	private LoginDTO loginDTO;
 	private AdminVO admin;
 	private Map<String,Object> params;
-	List<PointVO> pointList;
 	
 	private ModelAndView mv;
 	
@@ -154,30 +151,13 @@ public class AdminListValueTest {
 	
 	@Test
 	public void listPointGetTest_HavePoint_ShouldPass() throws Exception {
-		//build
-		List<PointVO> pointListInDB = new ArrayList<PointVO>();
-		
-		pointListInDB.add(new TestPointVO(1, "서울"));
-		pointListInDB.add(new TestPointVO(2, "강남"));
-		pointListInDB.add(new TestPointVO(3, "용인"));
-		
-		//when
-		when(adminService.selectAllPoint()).thenReturn(pointListInDB);
-		
-		//check
-		ResponseEntity<List<PointVO>> json = adminController.listPoint();
-		verify(adminService, atLeast(1)).selectAllPoint();
-		assertEquals(pointListInDB, json.getBody());
+	
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test(expected = NullPointerException.class)
 	public void listPointGetTest_EmptyPointList_ThrowException() throws Exception {
-		//when
-		when(adminService.selectAllPoint()).thenThrow(NullPointerException.class);
-		
-		//check
-		ResponseEntity<List<PointVO>> result = adminController.listPoint();
+
 	}
 	
 	@Test

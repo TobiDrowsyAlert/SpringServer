@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.exbyte.insurance.api.domain.LogVO;
+import com.exbyte.insurance.api.domain.RequestFeedback;
 
 @Repository
 public class LogDAO {
@@ -35,5 +36,9 @@ public class LogDAO {
 	
 	public void delete(int logNo) throws Exception {
 		sqlSession.delete(NAMESPACE + ".delete", logNo);
+	}
+	
+	public void updateFeedback(RequestFeedback requestFeedback) throws Exception {
+		sqlSession.update(NAMESPACE + ".updateFeedback", requestFeedback );
 	}
 }

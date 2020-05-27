@@ -44,7 +44,6 @@ import com.exbyte.insurance.admin.domain.AdminVO;
 import com.exbyte.insurance.admin.domain.LoginDTO;
 import com.exbyte.insurance.admin.service.AdminMailService;
 import com.exbyte.insurance.admin.service.AdminService;
-import com.exbyte.insurance.point.domain.PointVO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"file:src/main/webapp/WEB-INF/spring/root-context.xml"
@@ -87,7 +86,6 @@ public class AdminIntegrationTest {
 	private LoginDTO loginDTO;
 	private AdminVO admin;
 	private Map<String,Object> params;
-	List<PointVO> pointList;
 	
 	private ModelAndView mv;
 	
@@ -126,14 +124,6 @@ public class AdminIntegrationTest {
 
 	@Test
 	public void registerGetTest_CheckForward() throws Exception {
-		pointList = new ArrayList<>();
-		
-		when(adminService.selectAllPoint()).thenReturn(pointList);
-		
-		mockMvc.perform(get("/admin/register"))
-		.andExpect(status().isOk())
-		.andExpect(view().name("admin/register"))
-		.andExpect(model().attribute("points", pointList));
 		
 	}
 	
