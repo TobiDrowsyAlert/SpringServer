@@ -18,8 +18,8 @@ public class LogAdvice {
 	
 	
 	@Around("execution(* com.exbyte.insurance..*Controller.*(..))"
-			+ " or execution(* com.exbyte.insurance..service..*Impl.*(..))"
-			+ " or execution(* com.exbyte.insurance..persistence..*Impl.*(..))"
+			+ " || execution(* com.exbyte.insurance..service..*Impl.*(..))"
+			+ " || execution(* com.exbyte.insurance..persistence..*Impl.*(..))"
 			)
 	public Object logPrint(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 		

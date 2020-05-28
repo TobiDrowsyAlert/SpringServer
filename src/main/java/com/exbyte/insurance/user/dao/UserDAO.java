@@ -25,4 +25,8 @@ public class UserDAO {
 	public UserVO select(UserVO userVO) throws Exception {
 		return sqlSession.selectOne(NAMESPACE + ".select", userVO);
 	}
+
+	public void delete(UserVO userVO) throws Exception {
+		sqlSession.delete(NAMESPACE + ".delete", userVO);
+	}
 }

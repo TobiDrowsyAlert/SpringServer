@@ -7,17 +7,19 @@
 <mapper namespace="com.exbyte.insurance.user.UserMapper">
 
 	<insert id ="create">
-			INSERT INTO tbl_member(
-				user_id,
-				user_pw,
-				name,
-				email
-			) VALUES (
-				#{userId},
-				#{userPassword},
-				#{userName},
-				#{userEmail}
+		INSERT INTO
+			USERS(
+			id,
+			password,
+			name,
+			email
 			)
+		VALUES(
+			#{userId},
+			#{userPassword},
+			#{userName},
+			#{userEmail}
+		);
 	</insert>
 	
 	<select id="select" resultMap="UserResultMap">
@@ -26,13 +28,28 @@
 		FROM
 			tbl_member
 		WHERE
-			user_id = #{userId}
+			id = #{userId}
 	</select>
-	
-	
+
+	<delete id="delete">
+		DELETE FROM
+			USERS
+		WHERE
+			id = #{userId}
+	</delete>
+	<update id="update">
+		UPDATE
+			USERS
+		SET
+			password = #{userPassword}
+		WHERE
+			id = #{userId}
+	</update>
+
+
 	<resultMap type="UserVO" id="UserResultMap">
-		<id property="userId" column="user_id"/>
-		<result property="userPassword" column="user_pw"/>
+		<id property="userId" column="id"/>
+		<result property="userPassword" column="password"/>
 		<result property="userName" column="name"/>
 		<result property="userEmail" column="email"/>
 	</resultMap>

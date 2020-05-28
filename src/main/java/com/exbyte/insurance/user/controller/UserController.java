@@ -31,7 +31,6 @@ public class UserController {
 	public ResponseEntity<String> login(@RequestBody String requestLoginDTO) {
 		
 		ResponseEntity<String> response = null;
-		
 		try {
 			response = userService.login(requestLoginDTO);
 		} catch (UnsupportedEncodingException e) {
@@ -44,10 +43,14 @@ public class UserController {
 	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> register(@RequestBody UserVO userVO){
+	public ResponseEntity<String> register(@RequestBody UserVO userVO) {
 		
 		ResponseEntity<String> response = null;
-		
+		UserVO hashUser = null;
+
+
+		System.out.println("userId" + userVO.getUserId());
+
 		
 		return response;
 		

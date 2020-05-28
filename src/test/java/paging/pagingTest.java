@@ -10,14 +10,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.exbyte.insurance.commons.paging.Criteria;
 import com.exbyte.insurance.commons.paging.PageMaker;
 
-import persisenceTest.ConsultingDAOTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/main/webapp/WEB-INF/spring/root-context.xml")
 public class pagingTest {
 
-	private final static Logger logger = LoggerFactory.getLogger(ConsultingDAOTest.class);
-	
 	PageMaker pageMaker;
 	Criteria criteria;
 	
@@ -46,22 +43,5 @@ public class pagingTest {
 		pageMaker.setCriteria(criteria);
 		pageMaker.setTotalPageNum(150);
 	}
-	
-	@Test
-	public void pageMakerTest() {
-		logger.info(pageMaker.makeSearch(3));
-	}
-	
-	@Test
-	public void makeQueryTest() {
-		logger.info(pageMaker.makeQuery());
-		logger.info(pageMaker.makeQuery(3));
-	}
-	
-	@Test
-	public void encodingTest() {
-		logger.info(pageMaker.encoding(null));
-		logger.info(pageMaker.encoding("한글English Encoding"));
-	}
-	
+
 }

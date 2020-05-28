@@ -59,8 +59,6 @@ public class AdminController {
 	
 	@RequestMapping(value = "/register", method = RequestMethod.GET)
 	public void registerGET(Model model) throws Exception {
-		
-		
 		return;
 	}
 	
