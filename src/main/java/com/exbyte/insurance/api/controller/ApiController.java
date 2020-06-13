@@ -7,7 +7,9 @@ import java.util.TimeZone;
 
 import javax.inject.Inject;
 
+import com.exbyte.insurance.user.domain.UserVO;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -61,133 +63,102 @@ public class ApiController {
 	@ResponseBody
 	public Object ResponseAPIPost(@RequestBody String landmarks) {
 		ResponseEntity<String> result = null;
-		ResponseEntity<String> responseAndroid = null;
+		ResponseEntity<String> response = null;
 		Gson gson = new GsonBuilder().create();
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
+		UserVO userVO = gson.fromJson(landmarks, UserVO.class);
 		
 		try {
-			result = apiService.getItemsForOpenApi("regid", landmarks);
-			String data = result.getBody();
-			System.out.println("result.getBody() : " + data.toString());
+			result = apiService.transferLandmark(landmarks);
 			
-			/*
-			 * JsonReader reader = new JsonReader(new StringReader(result.getBody()));
-			 * reader.setLenient(true);
-			 */
+			//json >> object
+			String data = result.getBody();
+
 			ResponseDTO responseDTO = gson.fromJson(data, ResponseDTO.class);
-			System.out.println("responseDTO : " + responseDTO.toString());
 			responseDTO.setCurTime(format.format(new Date()));
+			int currentStatus = responseDTO.getStatus_code();
+			LogVO logVO = new LogVO(responseDTO, userVO.getUserId());
+			
+		if(currentStatus != INT_NORMAL ) {
+			// 데이터베이스 기록
+			responseDTO.setLogNo(logService.create(logVO).getLogNo());
 			String jsonDataWithTime = gson.toJson(responseDTO);
-			System.out.println("time" + responseDTO.getCurTime());
-			System.out.println("jsonDateWithTime : " + jsonDataWithTime);
 
-			
-			int currentStatus = responseDTO.getStatus_code();
-			LogVO logVO = new LogVO(responseDTO, "admin");
-			responseAndroid = new ResponseEntity<String>(jsonDataWithTime ,headers,result.getStatusCode());
-			System.out.println("responseAndroid : " + responseAndroid.toString());
-			
-		if(currentStatus != INT_NORMAL ) {
-			// 데이터베이스 기록
-			logService.create(logVO);
+			response = new ResponseEntity<String>(jsonDataWithTime ,headers, result.getStatusCode());
 		}
 		
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
-		
-		return responseAndroid;
-	}
-	// 데이터 전송
-	@RequestMapping(value = "/valueResult", method = RequestMethod.POST)
-	@ResponseBody
-	public Object ResponseAPIPostResult(@RequestBody String landmarks) {
-		ResponseEntity<String> result = null;
-		ResponseEntity<String> responseAndroid = null;
-		
-		try {
-			result = apiService.getItemsForOpenApi("regid", landmarks);
-			String data = result.getBody();
-			System.out.println("result.getBody() : " + data.toString());
-			/*
-			 * JsonReader reader = new JsonReader(new StringReader(result.getBody()));
-			 * reader.setLenient(true);
-			 */
-			ResponseDTO responseDTO = gson.fromJson(data, ResponseDTO.class);
-			System.out.println("responseDTO : " + responseDTO.toString());
-			responseDTO.setCurTime(format.format(new Date()));
-			int currentStatus = responseDTO.getStatus_code();
-			LogVO logVO = new LogVO(responseDTO, "admin");
 
-		if(currentStatus != INT_NORMAL ) {
-			// 데이터베이스 기록
-			logService.create(logVO);
-		}
+		System.out.println("responseAndroid : " + response.toString());
 		
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		
-		return result;
+		return response;
 	}
-	
-	// 데이터 전송
+
 	@RequestMapping(value = "/drop", method = RequestMethod.POST)
 	@ResponseBody
 	public Object dropSleepStep(@RequestBody String jsonData) {
 		ResponseEntity<String> result = null;
 		try {
-			result = apiService.dropSleepStep("regid", jsonData);
+			result = apiService.dropSleepStep(jsonData);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 		
 		return result;
 	}
-	
-	// 데이터 전송
+
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
 	@ResponseBody
-	public Object resetSleepStep() {
+	public Object resetSleepStep(@RequestBody String json) {
 		ResponseEntity<String> result = null;
 		try {
-		result = apiService.resetSleepStep("regid", null);
+		result = apiService.resetSleepStep(json);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		return result;
 	}
-	
-	// 데이터 전송
+
 	@RequestMapping(value = "/feedback", method = RequestMethod.POST)
 	@ResponseBody
 	public Object feedbackSleepStep(@RequestBody String json) {
 		ResponseEntity<String> result = null;
 		RequestFeedback requestFeedback = gson.fromJson(json, RequestFeedback.class);
-		
+
 		try {
-		result = apiService.feedbackSleepStep();
-		logService.updateFeedabck(requestFeedback);
-		
+			logService.updateFeedabck(requestFeedback);
+
+			if(!requestFeedback.getIsCorrect()){
+				result = apiService.feedbackSleepStep(json);
+			}
+			else{
+				result = new ResponseEntity<>(HttpStatus.OK);
+			}
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+
+
 		
 		return result;
 	}
-	
 
-	// 데이터 전송
 	@RequestMapping(value = "/timer", method = RequestMethod.POST)
 	@ResponseBody
 	public Object timer(@RequestBody String json) {
 		ResponseEntity<String> result = null;
 		ResponseEntity<String> responseAndroid = null;
+		Gson gson = new GsonBuilder().create();
+		UserVO userVO = gson.fromJson(json, UserVO.class);
 		
 		try {
-			result = apiService.timer("regid", json);
+			result = apiService.timer(json);
 			String data = result.getBody();
 			ResponseDTO responseDTO = gson.fromJson(data, ResponseDTO.class);
 		
@@ -196,11 +167,8 @@ public class ApiController {
 			String jsonDataWithTime = gson.toJson(responseDTO);
 			
 			System.out.println("Timer : " + responseDTO.getCurTime());
-			
-			int currentStatus = responseDTO.getStatus_code();
-			LogVO logVO = new LogVO(responseDTO, "admin");
-			responseAndroid = new ResponseEntity<String>(jsonDataWithTime ,result.getHeaders(),result.getStatusCode());
-			
+
+			LogVO logVO = new LogVO(responseDTO, userVO.getUserId());
 
 			// 데이터베이스 기록
 			minuteLogService.create(logVO);

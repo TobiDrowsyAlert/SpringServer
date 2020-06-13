@@ -5,7 +5,7 @@
         
 <mapper namespace="com.exbyte.insurance.api.LogMapper">
 	
-	<insert id="create">
+	<insert id="create" useGeneratedKeys="true" keyProperty="logNo" parameterType="LogVO">
 		INSERT INTO tbl_log(
 			blink,
 		    user_id,
@@ -60,10 +60,11 @@
 	</select>
 		
 	<update id="updateFeedback">
-		UPDATE 
-			tbl_log 
-		SET 
-			is_correct = TRUE WHERE cur_time = #{curTime}
+	UPDATE tbl_log
+	SET
+		is_correct = #{isCorrect}, is_feedback = #{isFeedback}
+	WHERE
+		log_no = #{logNo};
 	</update>
 	
 		

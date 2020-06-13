@@ -22,8 +22,9 @@ public class LogDAO {
 		this.sqlSession = sqlSession;
 	}
 	
-	public void create(LogVO logVO) throws Exception {
+	public LogVO create(LogVO logVO) throws Exception {
 		sqlSession.insert(NAMESPACE + ".create", logVO);
+		return logVO;
 	}
 	
 	public LogVO read(int logNo) throws Exception {

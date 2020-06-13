@@ -32,22 +32,16 @@ public class apiTest {
 	
 	@Inject
 	MinuteLogDAO minuteLogDAO;
-	
-	@Test
-	public void testApiTemplate() throws Exception {
-		ApiService apiService = new ApiService();
-		
-		Object result = apiService.getItemsForOpenApi("50","check");
-		logger.info("data Test " + result.toString());
-	}
-	
+
 	@Test
 	public void createLog() throws Exception {
-		/*
-		 * ResponseDTO dto = new ResponseDTO(); dto.setBlink(1); dto.setPitch(1);
-		 * dto.setRoll(1); dto.setSleep_step(1); dto.setStatus_code(200); dto.setYaw(1);
-		 * dto.setYawn(1); LogVO logVO = new LogVO(dto, "admin"); logDAO.create(logVO);
-		 */
+
+		 ResponseDTO dto = new ResponseDTO(); dto.setBlink(1); dto.setPitch(1);
+		 dto.setRoll(1); dto.setSleep_step(1); dto.setStatus_code(200); dto.setYaw(1);
+		 dto.setYawn(1); LogVO logVO = new LogVO(dto, "admin");
+		 LogVO returnLogVO = logDAO.create(logVO);
+		 System.out.println(returnLogVO.toString());
+
 	}
 	
 	@Test
@@ -67,4 +61,5 @@ public class apiTest {
 		minuteLogDAO.create(logVO);
 		logDAO.create(logVO);
 	}
+
 }
