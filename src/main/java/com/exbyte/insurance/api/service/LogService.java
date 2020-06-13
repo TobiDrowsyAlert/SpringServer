@@ -23,8 +23,8 @@ public class LogService {
 		this.logDAO = logDAO;
 	}
 	
-	public void create(LogVO logVO) throws Exception {
-		logDAO.create(logVO);
+	public LogVO create(LogVO logVO) throws Exception {
+		return logDAO.create(logVO);
 	}
 	
 	public LogVO read(int logNo) throws Exception {
@@ -40,9 +40,6 @@ public class LogService {
 	}
 	
 	public void updateFeedabck(RequestFeedback requestFeedback) throws Exception{
-		if(requestFeedback.getIsCorrect()) {
-			System.out.println("Working : " + requestFeedback.getCurTime());
-			logDAO.updateFeedback(requestFeedback);
-		}
+		logDAO.updateFeedback(requestFeedback);
 	}
 }

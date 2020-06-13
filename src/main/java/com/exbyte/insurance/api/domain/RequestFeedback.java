@@ -8,8 +8,10 @@ import lombok.ToString;
 @Getter
 @Setter
 public class RequestFeedback {
-	
+
+	private int logNo;
 	private Boolean isCorrect;
+	private Boolean isFeedback;
 	private String curTime;
 	
 	public Boolean getIsCorrect() {

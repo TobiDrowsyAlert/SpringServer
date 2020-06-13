@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ResponseDTO {
+	private int logNo;
 	private int sleep_step;
 	private int status_code;
 	private int blink;
