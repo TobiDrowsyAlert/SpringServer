@@ -13,10 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import com.exbyte.insurance.api.domain.LogVO;
 import com.exbyte.insurance.api.domain.RequestFeedback;
@@ -56,7 +54,7 @@ public class ApiController {
 		gson = new GsonBuilder().setDateFormat("dd-MM-yyyy HH:mm:ss").create();
 		format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
-	}
+	} 
 	
 	// 데이터 전송
 	@RequestMapping(value = "/value", method = RequestMethod.POST)
@@ -179,6 +177,26 @@ public class ApiController {
 		}
 		
 		return result;
+	}
+
+
+	@RequestMapping(value = "/chart", method = RequestMethod.GET)
+	public String chart(@RequestParam String userId, Model model){
+
+		//UserVO userVO = gson.fromJson(json, UserVO.class);
+		UserVO userVO = new UserVO();
+		userVO.setUserId(userId);
+
+		if(userVO != null)
+			System.out.println(userVO.getUserId());
+		try{
+			model.addAttribute("logArray",logService.countDrowsy(userVO));
+			model.addAttribute("successRate", logService.calculateSuccessRate(userVO));
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return "/user/chartjs";
 	}
 	
 }

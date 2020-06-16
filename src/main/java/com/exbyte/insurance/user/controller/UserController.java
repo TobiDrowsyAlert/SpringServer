@@ -51,10 +51,8 @@ public class UserController {
 
 		System.out.println("userId" + userVO.getUserId());
 
-		
 		return response;
-		
 	}
-	
+
 	
 }

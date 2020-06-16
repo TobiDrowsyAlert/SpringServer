@@ -42,4 +42,24 @@ public class LogDAO {
 	public void updateFeedback(RequestFeedback requestFeedback) throws Exception {
 		sqlSession.update(NAMESPACE + ".updateFeedback", requestFeedback );
 	}
+
+	public int countDrowsy(LogVO logVO) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".countDrowsy", logVO);
+	}
+
+	public int countCorrectLogWithReason(LogVO logVO) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".countCorrectLogWithReason", logVO);
+	}
+
+	public int countTotalLogWithReason(LogVO logVO) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".countTotalLogWithReason", logVO);
+	}
+
+	public int countCorrectLog(LogVO logVO) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".countCorrectLog", logVO);
+	}
+
+	public int countTotalLog(LogVO logVO) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".countTotalLog", logVO);
+	}
 }

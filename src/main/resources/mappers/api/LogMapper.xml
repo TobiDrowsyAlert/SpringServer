@@ -66,8 +66,57 @@
 	WHERE
 		log_no = #{logNo};
 	</update>
-	
-		
+
+	<select id="countDrowsy" resultType="int">
+		SELECT COUNT(*) FROM tbl_log
+		WHERE user_id = #{userId} AND reason = #{reason}
+	</select>
+
+	<select id="countCorrectLogWithReason" resultType="int">
+		SELECT
+			count(*)
+		FROM
+			tbl_log
+		WHERE
+			user_id = #{userId}
+			AND reason = #{reason}
+			AND is_correct = 1
+			AND is_feedback = 1
+	</select>
+
+	<select id="countTotalLogWithReason" resultType="int">
+		SELECT
+			count(*)
+		FROM
+			tbl_log
+		WHERE
+			user_id = #{userId}
+			AND reason = #{reason}
+			AND is_feedback = 1
+	</select>
+
+
+	<select id="countCorrectLog" resultType="int">
+		SELECT
+			count(*)
+		FROM
+			tbl_log
+		WHERE
+			user_id = #{userId}
+			AND is_correct = 1
+			AND is_feedback = 1
+	</select>
+
+	<select id="countTotalLog" resultType="int">
+		SELECT
+			count(*)
+		FROM
+			tbl_log
+		WHERE
+			user_id = #{userId}
+			AND is_feedback = 1
+	</select>
+
 	<resultMap type="LogVO" id="LogResultMap">
 		<id property="logNo" column="log_no"/>
 		<result property="blink" column="blink" />
