@@ -4,7 +4,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
         
 <mapper namespace="com.exbyte.insurance.api.LogMapper">
-	
+
 	<insert id="create" useGeneratedKeys="true" keyProperty="logNo" parameterType="LogVO">
 		INSERT INTO tbl_log(
 			blink,
@@ -58,7 +58,7 @@
 		WHERE
 			log_no = #{logNo} 
 	</select>
-		
+
 	<update id="updateFeedback">
 	UPDATE tbl_log
 	SET
