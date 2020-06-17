@@ -16,6 +16,11 @@ public class RequestFeedback {
 	
 	public Boolean getIsCorrect() {
 		return isCorrect;
-		
+	}
+	public int getLogNo(){
+		return logNo;
+	}
+	public Boolean getIsFeedback(){
+		return isFeedback;
 	}
 }
