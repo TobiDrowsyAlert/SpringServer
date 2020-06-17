@@ -54,8 +54,8 @@ public class ApiController {
 		gson = new GsonBuilder().setDateFormat("dd-MM-yyyy HH:mm:ss").create();
 		format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
-	} 
-	
+	}
+
 	// 데이터 전송
 	@RequestMapping(value = "/value", method = RequestMethod.POST)
 	@ResponseBody
@@ -84,9 +84,9 @@ public class ApiController {
 			responseDTO.setLogNo(logService.create(logVO).getLogNo());
 			String jsonDataWithTime = gson.toJson(responseDTO);
 
-			response = new ResponseEntity<String>(jsonDataWithTime ,headers, result.getStatusCode());
-		}
-		
+				response = new ResponseEntity<String>(jsonDataWithTime ,headers, result.getStatusCode());
+			}
+
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -114,7 +114,7 @@ public class ApiController {
 	public Object resetSleepStep(@RequestBody String json) {
 		ResponseEntity<String> result = null;
 		try {
-		result = apiService.resetSleepStep(json);
+			result = apiService.resetSleepStep(json);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

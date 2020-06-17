@@ -28,8 +28,8 @@ public class ApiService {
 	private final int INT_DRIVER_AWAY = 300;
 	private final int INT_DRIVER_AWARE_FAIL = 301;
 	private final int C_NORMAL = 400;
-	
-	
+
+
 	public ResponseEntity<String> transferLandmark(String jsonData) throws UnsupportedEncodingException{
 		String url = "/set_face";
 		return ConnectionRestTemplate.connect(jsonData,url);
