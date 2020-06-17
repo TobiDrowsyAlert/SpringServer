@@ -133,6 +133,7 @@
 		<result property="leftEar" column="left_ear" />
 		<result property="rightEar" column="right_ear" />
 		<result property="reason" column="reason" />
+		<result property="isFeedback" column="is_feedback"/>
 	</resultMap>
 	
 </mapper>

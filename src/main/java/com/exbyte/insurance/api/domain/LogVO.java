@@ -24,6 +24,7 @@ public class LogVO {
 	private double leftEar;
 	private double rightEar;
 	private String reason; // 졸음 이유
+	private Boolean isFeedback;
 	
 	public LogVO() {
 		
