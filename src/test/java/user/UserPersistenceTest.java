@@ -1,7 +1,8 @@
 package user;
 
-import com.exbyte.insurance.api.persistence.LogDAO;
+import com.exbyte.insurance.user.dao.PersonalDAO;
 import com.exbyte.insurance.user.dao.UserDAO;
+import com.exbyte.insurance.user.domain.PersonalVO;
 import com.exbyte.insurance.user.domain.UserVO;
 import com.exbyte.insurance.user.service.UserService;
 import org.junit.Test;
@@ -18,6 +19,9 @@ public class UserPersistenceTest {
 
     @Inject
     UserDAO userDAO;
+
+    @Inject
+    PersonalDAO personalDAO;
 
     @Inject
     UserService userService;
@@ -50,4 +54,10 @@ public class UserPersistenceTest {
         userService.isCorrectNamingRule(userVO);
     }
 
+    @Test
+    public void personalTest(){
+        PersonalVO personalizeVO = new PersonalVO();
+        personalizeVO.setUserId("admin");
+
+    }
 }

@@ -36,7 +36,7 @@ public class LogDAO {
 	}
 	
 	public void delete(int logNo) throws Exception {
-		sqlSession.delete(NAMESPACE + ".delete", logNo);
+		sqlSession.delete(NAMESPACE + ".delete", logNo); 
 	}
 	
 	public void updateFeedback(RequestFeedback requestFeedback) throws Exception {

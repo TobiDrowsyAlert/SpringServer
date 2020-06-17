@@ -4,33 +4,27 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper
-	namespace="com.exbyte.insurance.personal.PersonalMapper">
+	namespace="com.exbyte.insurance.user.PersonalMapper">
 
 	<insert id="create">
 		INSERT INTO tbl_personal(
-		user_id
-		blink_avg,
-		eye_ear,
-		mouth_ear
+		user_id,
+		ear,
+		mar,
+		avg_stage,
+        is_weak_time,
+        frequency_reason
 		) VALUES (
-		#{userId},
-		#{blinkAvg},
-		#{eyeEar},
-		#{mouthEar}
+        #{userId},
+        0.2,
+        0.4,
+        0,
+        false,
+        NULL
 		);
 	</insert>
 
-	<select id="selectByAdmin" resultMap="PersonalResultMap">
-		SELECT
-		*
-		FROM
-		tbl_personal
-		WHERE
-		user_id NOT NULL
-		AND user_id = #{userId}
-	</select>
-
-	<select id="read" resultMap="PersonalResultMap">
+	<select id="select" resultMap="PersonalResultMap">
 		SELECT
 		*
 		FROM
@@ -40,21 +34,50 @@
 	</select>
 
 	<update id="update">
-		UPDATE
-		tbl_personal
+		UPDATE tbl_personal
 		SET
-		user_Id = #{uesrId}
-		, blink_avg = #{blinkAvg}
-		, eye_ear = #{eyeEar}
-		, mouth_ear = #{mouthEar}
-		WHERE user_id = #{userId}
+			ear = #{ear},
+			mar = #{mar},
+			avg_stage = #{avgStage},
+			is_weak_time = #{isWeakTime},
+			frequency_reason = #{frequencyReason}
+		WHERE
+			user_id = #{userId};
 	</update>
+
+	<select id="calculateEar" resultType="double">
+		SELECT ((SELECT AVG(left_ear) FROM tbl_log WHERE user_id = #{userId} AND is_correct = 1)
+		+ (SELECT AVG(left_ear) FROM tbl_minute_log WHERE user_id = #{userId} AND left_ear != 0)) / 2;
+	</select>
+
+	<select id="calculateMar" resultType="double">
+		SELECT ((SELECT AVG(mar) FROM tbl_log WHERE user_id = #{userId} AND is_correct = 1)
+		+ (SELECT AVG(mar) FROM tbl_minute_log WHERE user_id = #{userId} AND mar != 0)) / 2;
+	</select>
+
+	<select id="calculateAvgStage" resultType="double">
+		SELECT AVG(stage) FROM tbl_minute_log WHERE user_id = #{userId}
+	</select>
+
+	<select id="calculateFrequencyReason" resultType="String">
+		SELECT MAX(reason) FROM tbl_log WHERE user_id =#{userId} AND is_correct = 1;
+	</select>
+
+	<select id="countLog" resultType="int">
+		SELECT COUNT(*) FROM tbl_log WHERE user_id = #{userId} AND is_correct = 1;
+	</select>
+
+	<select id="countMinuteLog" resultType="int">
+		SELECT COUNT(*) FROM tbl_minute_log WHERE user_id = #{userId} AND left_ear != 0;
+	</select>
 
 	<resultMap type="PersonalVO" id="PersonalResultMap">
 		<id property="userId" column="user_id" />
-		<result property="blinkAvg" column="blinkAvg" />
-		<result property="eyeEar" column="eye_ear" />
-		<result property="mouthEar" column="mouth_ear" />
+		<result property="ear" column="ear" />
+		<result property="mar" column="mar" />
+		<result property="avgStage" column="avg_stage" />
+		<result property="isWeakTime" column="is_weak_time" />
+		<result property="frequencyReason" column="frequency_reason" />
 	</resultMap>
 
 </mapper>

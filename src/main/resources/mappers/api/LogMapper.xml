@@ -117,6 +117,7 @@
 			AND is_feedback = 1
 	</select>
 
+
 	<resultMap type="LogVO" id="LogResultMap">
 		<id property="logNo" column="log_no"/>
 		<result property="blink" column="blink" />

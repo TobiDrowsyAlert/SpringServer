@@ -50,6 +50,28 @@
 			log_no > 0
 	</select>
 
+	<select id="calculateEar" resultType="double">
+		SELECT
+			AVG(left_ear)
+		FROM
+			tbl_minute_log
+		WHERE
+			user_id=#{userId}
+		AND
+			left_ear != 0
+	</select>
+
+	<select id="calculateMar" resultType="double">
+		SELECT
+			AVG(mar)
+		FROM
+			tbl_minute_log
+		WHERE
+			user_id=#{userId}
+		AND
+			mar != 0
+	</select>
+
 	<select id="read" resultMap="LogResultMap">
 		SELECT
 			*

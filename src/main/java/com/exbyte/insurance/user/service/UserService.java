@@ -5,7 +5,11 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import com.exbyte.insurance.commons.utils.ConnectionRestTemplate;
+import com.exbyte.insurance.user.dao.PersonalDAO;
 import com.exbyte.insurance.user.domain.UserVO;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.http.*;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
@@ -26,22 +30,8 @@ public class UserService {
 	}
 	
 	public ResponseEntity<String> login(String requestLoginDTO) throws UnsupportedEncodingException{
-		String url = "http://15.165.116.82:1234/login";
-		RestTemplate restTemplate = new RestTemplate();
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		
-		HttpEntity<String> entity = new HttpEntity<String>(requestLoginDTO,headers);
-
-		UriComponents builder = UriComponentsBuilder.fromHttpUrl(url)
-				.build(false);
-		
-		ResponseEntity<String> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, entity ,String.class);
-		System.out.print("result " + response.toString());
-	
-		
-		
-		return response;
+		String url = "/login";
+		return ConnectionRestTemplate.connect(requestLoginDTO, url);
 	}
 
 	public ResponseEntity<String> create(UserVO userVO) throws Exception {
@@ -54,7 +44,7 @@ public class UserService {
 		userVO.setUserPassword(hashedPassword);
 		userDAO.create(userVO);
 
-		return null;
+		return new ResponseEntity<String>("{ \"msg\": \"success\"",HttpStatus.OK);
 	}
 
 	public Boolean isCorrectNamingRule(UserVO userVO){
