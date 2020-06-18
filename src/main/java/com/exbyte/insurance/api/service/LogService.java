@@ -1,9 +1,14 @@
 package com.exbyte.insurance.api.service;
 
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 import javax.inject.Inject;
 
+import com.exbyte.insurance.api.domain.TimeCheck;
 import com.exbyte.insurance.user.domain.UserVO;
 import org.springframework.stereotype.Service;
 
@@ -98,5 +103,62 @@ public class LogService {
 		successRate[4] = (int)Math.round(value*100);
 
 		return successRate;
+	}
+
+
+	public Map<Integer,Double> getAvgTime(UserVO userVO) throws Exception{
+		Map<Integer,Double> avgTimeMap = new HashMap<>();
+		TimeCheck timeCheck = new TimeCheck();
+		timeCheck.setUserId(userVO.getUserId());
+		for(int i = 0; i < 24; i++){
+			String time;
+			if(i < 10){
+				time = "0"+i;
+			}
+			else{
+				time = ""+i;
+			}
+			timeCheck.setTime( "%"+time+":%:%");
+			System.out.println(timeCheck.toString());
+			String avg = logDAO.countLogTime(timeCheck);
+			double stageAvg;
+			System.out.println(avg);
+
+			if(avg == null){
+				stageAvg = 0;
+			}
+			else{
+				stageAvg = Math.round((Double.parseDouble(avg)*100)/100.0);
+			}
+			avgTimeMap.put(i, stageAvg);
+		}
+		return avgTimeMap;
+	}
+
+	public double getCurrentStageAvg(UserVO userVO){
+		double currentTimeAvgStage = 0;
+		try {
+			//취약 시간 체크
+			SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
+			String currentTime = hourFormat.format(System.currentTimeMillis());
+			System.out.println("현재 시간 : " + currentTime);
+
+			Map<Integer, Double> times = getAvgTime(userVO);
+
+			for (Integer hour : times.keySet()) {
+
+				if(Integer.parseInt(currentTime) != hour){
+					continue;
+				}
+
+				currentTimeAvgStage = times.get(hour);
+			}
+
+			return currentTimeAvgStage;
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		return 0;
 	}
 }

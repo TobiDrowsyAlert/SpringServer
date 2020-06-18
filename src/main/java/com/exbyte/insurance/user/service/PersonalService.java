@@ -32,6 +32,7 @@ public class PersonalService {
 
     public ResponseEntity<String> update(UserVO userVO) throws Exception {
         String url = "/personal";
+        String statusCode = null;
         PersonalVO currenctPersonal = personalDAO.select(userVO);
 
         PersonalVO personalVO = new PersonalVO();
@@ -42,9 +43,20 @@ public class PersonalService {
             personalVO.setAvgStage((currenctPersonal.getAvgStage() * 29 + personalDAO.calculateAvgStage(userVO)) / 30);
             personalVO.setFrequencyReason(personalDAO.calculateFrequencyReason(userVO));
             personalVO.setIsWeakTime(false);
-
             currenctPersonal = personalVO;
         }
+
+        if(personalVO.getFrequencyReason().equals("눈 깜빡임")){
+            statusCode = "100";
+        }else if(personalVO.getFrequencyReason().equals("눈 감음")){
+            statusCode = "101";
+        }else if(personalVO.getFrequencyReason().equals("하품")){
+            statusCode = "200";
+        }else{
+            statusCode = "300";
+        }
+
+        currenctPersonal.setUserId(userVO.getUserId());
         personalDAO.update(currenctPersonal);
         Gson gson = new GsonBuilder().create();
         String json = gson.toJson(currenctPersonal);

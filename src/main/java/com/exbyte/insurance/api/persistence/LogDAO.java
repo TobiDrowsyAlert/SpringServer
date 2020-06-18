@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import com.exbyte.insurance.api.domain.TimeCheck;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -61,5 +62,9 @@ public class LogDAO {
 
 	public int countTotalLog(LogVO logVO) throws Exception {
 		return sqlSession.selectOne(NAMESPACE + ".countTotalLog", logVO);
+	}
+
+	public String countLogTime(TimeCheck timeCheck) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".countLogTime", timeCheck);
 	}
 }

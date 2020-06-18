@@ -18,4 +18,5 @@ public class ResponseDTO {
 	private double right_ear;
 	private double m_ear;
 	private String curTime;
+	private double avgStage;
 }

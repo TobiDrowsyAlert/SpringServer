@@ -26,12 +26,11 @@ public class UserController {
 	private Gson gson;
 	
 	@Inject
-	public UserController(UserService userService, PersonalService personalService){
+	public UserController(UserService userService, PersonalService personalService) {
 		this.userService = userService;
 		this.personalService = personalService;
 		gson = new GsonBuilder().create();
 	}
-	
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
