@@ -15,4 +15,6 @@ public class RequestSleepAnalyze {
     private Boolean isCorrect;
     private String userId;
     private Boolean isWeakTime;
+    private double avgStage;
+    private int sleep_step;
 }

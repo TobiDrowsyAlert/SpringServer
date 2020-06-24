@@ -5,6 +5,7 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
+import com.exbyte.insurance.admin.exception.InvalidAuthKeyAccessException;
 import com.exbyte.insurance.commons.utils.ConnectionRestTemplate;
 import com.exbyte.insurance.user.dao.PersonalDAO;
 import com.exbyte.insurance.user.domain.UserVO;
@@ -29,9 +30,31 @@ public class UserService {
 		this.userDAO = userDAO;
 	}
 	
-	public ResponseEntity<String> login(String requestLoginDTO) throws UnsupportedEncodingException{
+	public ResponseEntity<String> login(String requestLoginDTO) throws Exception{
 		String url = "/login";
+		Gson gson = new GsonBuilder().create();
+		UserVO userVO = gson.fromJson(requestLoginDTO, UserVO.class);
+
+		UserVO savedUser = userDAO.select(userVO);
+
+		if(savedUser == null)
+			throw new Exception();
+
+
+		String loginPw = userVO.getUserPassword();
+		String databasePw = savedUser.getUserPassword();
+
+
+		if(!BCrypt.checkpw(loginPw, databasePw)) {
+			throw new Exception();
+		}
+
+
 		return ConnectionRestTemplate.connect(requestLoginDTO, url);
+	}
+	public ResponseEntity<String> logout(String requestLogoutDTO) throws Exception{
+		String url = "/logout";
+		return ConnectionRestTemplate.connect(requestLogoutDTO, url);
 	}
 
 	public ResponseEntity<String> create(UserVO userVO) throws Exception {

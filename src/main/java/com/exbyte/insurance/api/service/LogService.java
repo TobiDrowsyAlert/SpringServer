@@ -128,7 +128,8 @@ public class LogService {
 				stageAvg = 0;
 			}
 			else{
-				stageAvg = Math.round((Double.parseDouble(avg)*100)/100.0);
+				stageAvg = Double.parseDouble(avg);
+				stageAvg = Math.round(stageAvg*100)/100.0;
 			}
 			avgTimeMap.put(i, stageAvg);
 		}

@@ -4,9 +4,12 @@ import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.Vector;
 
 import javax.inject.Inject;
+import javax.mail.Session;
 
+import com.exbyte.insurance.api.domain.RequestSleepAnalyze;
 import com.exbyte.insurance.user.domain.UserVO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -63,14 +66,14 @@ public class ApiController {
 		ResponseEntity<String> result = null;
 		ResponseEntity<String> response = null;
 		Gson gson = new GsonBuilder().create();
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		UserVO userVO = gson.fromJson(landmarks, UserVO.class);
 		
 		try {
-			result = apiService.transferLandmark(landmarks);
-			
+			String requestSleepJson = gson.toJson(sleepAnalyze);
+			result = apiService.transferLandmark(requestSleepJson);
+
 			//json >> object
 			String data = result.getBody();
 
@@ -150,14 +153,31 @@ public class ApiController {
 	@RequestMapping(value = "/timer", method = RequestMethod.POST)
 	@ResponseBody
 	public Object timer(@RequestBody String json) {
-		ResponseEntity<String> result = null;
-		ResponseEntity<String> responseAndroid = null;
+		ResponseEntity<String> response = null;
+		double avgStage;
 		Gson gson = new GsonBuilder().create();
 		UserVO userVO = gson.fromJson(json, UserVO.class);
 		
 		try {
-			result = apiService.timer(json);
-			String data = result.getBody();
+			//취약 시간 체크
+			SimpleDateFormat hourFormat = new SimpleDateFormat ( "HH");
+			String currentTime = hourFormat.format (System.currentTimeMillis());
+			avgStage = logService.getCurrentStageAvg(userVO);
+			System.out.println("현재 시간 평균 단계 : " + avgStage);
+
+			if(sleepAnalyze.getIsWeakTime() == null){
+				Boolean isWeakTime = false;
+
+				if(avgStage > 2)
+					isWeakTime = true;
+
+				System.out.println("취약 시간 체크 : " + isWeakTime);
+				sleepAnalyze.setIsWeakTime(isWeakTime);
+			}
+
+			json = gson.toJson(sleepAnalyze);
+			response = apiService.timer(json);
+			String data = response.getBody();
 			ResponseDTO responseDTO = gson.fromJson(data, ResponseDTO.class);
 		
 			
@@ -165,8 +185,15 @@ public class ApiController {
 			String jsonDataWithTime = gson.toJson(responseDTO);
 			
 			System.out.println("Timer : " + responseDTO.getCurTime());
-
 			LogVO logVO = new LogVO(responseDTO, userVO.getUserId());
+
+			sleepAnalyze.setSleep_step(logVO.getStage());
+			json = gson.toJson(sleepAnalyze);
+			System.out.println(json);
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			response = new ResponseEntity<String>(json ,headers, response.getStatusCode());
 
 			// 데이터베이스 기록
 			minuteLogService.create(logVO);
