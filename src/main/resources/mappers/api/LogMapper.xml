@@ -70,6 +70,14 @@
 	<select id="countDrowsy" resultType="int">
 		SELECT COUNT(*) FROM tbl_log
 		WHERE user_id = #{userId} AND reason = #{reason}
+        AND date_sub(NOW(), interval 7 day)
+	</select>
+
+	<select id="countPastDrowsy" resultType="int">
+		SELECT COUNT(*) FROM tbl_log
+		WHERE user_id = #{userId} AND reason = #{reason}
+        AND cur_time BETWEEN date_sub(NOW(), interval 14 day)
+        AND date_sub(NOW(), interval 7 day)
 	</select>
 
 	<select id="countCorrectLogWithReason" resultType="int">
@@ -82,6 +90,21 @@
 			AND reason = #{reason}
 			AND is_correct = 1
 			AND is_feedback = 1
+			AND cur_time >= date_sub(NOW(), interval 14 day)
+	</select>
+
+	<select id="countPastCorrectLogWithReason" resultType="int">
+		SELECT
+			count(*)
+		FROM
+			tbl_log
+		WHERE
+			user_id = #{userId}
+			AND reason = #{reason}
+			AND is_correct = 1
+			AND is_feedback = 1
+			AND cur_time BETWEEN date_sub(NOW(), interval 14 day)
+			AND date_sub(NOW(), interval 7 day)
 	</select>
 
 	<select id="countTotalLogWithReason" resultType="int">
@@ -93,8 +116,21 @@
 			user_id = #{userId}
 			AND reason = #{reason}
 			AND is_feedback = 1
+			AND cur_time >= date_sub(NOW(), interval 7 day)
 	</select>
 
+	<select id="countPastTotalLogWithReason" resultType="int">
+		SELECT
+			count(*)
+		FROM
+			tbl_log
+		WHERE
+			user_id = #{userId}
+			AND reason = #{reason}
+			AND is_feedback = 1
+			AND cur_time BETWEEN date_sub(NOW(), interval 14 day)
+			AND date_sub(NOW(), interval 7 day)
+	</select>
 
 	<select id="countCorrectLog" resultType="int">
 		SELECT

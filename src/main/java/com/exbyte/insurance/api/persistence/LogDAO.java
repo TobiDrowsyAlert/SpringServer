@@ -52,8 +52,16 @@ public class LogDAO {
 		return sqlSession.selectOne(NAMESPACE + ".countCorrectLogWithReason", logVO);
 	}
 
+	public int countPastCorrectLogWithReason(LogVO logVO) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".countPastCorrectLogWithReason", logVO);
+	}
+
 	public int countTotalLogWithReason(LogVO logVO) throws Exception {
 		return sqlSession.selectOne(NAMESPACE + ".countTotalLogWithReason", logVO);
+	}
+
+	public int countPastTotalLogWithReason(LogVO logVO) throws Exception {
+		return sqlSession.selectOne(NAMESPACE + ".countPastTotalLogWithReason", logVO);
 	}
 
 	public int countCorrectLog(LogVO logVO) throws Exception {

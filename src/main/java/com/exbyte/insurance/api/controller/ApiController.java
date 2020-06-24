@@ -218,7 +218,8 @@ public class ApiController {
 			System.out.println(userVO.getUserId());
 		try{
 			model.addAttribute("logArray",logService.countDrowsy(userVO));
-			model.addAttribute("successRate", logService.calculateSuccessRate(userVO));
+			model.addAttribute("successRate", logService.calculateSuccessRate(userVO,false));
+			model.addAttribute("pastSuccessRate", logService.calculateSuccessRate(userVO,true));
 		}catch (Exception e){
 			e.printStackTrace();
 		}

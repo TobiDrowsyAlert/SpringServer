@@ -54,41 +54,61 @@ public class LogService {
 		LogVO logVO =new LogVO();
 		logVO.setUserId(userVO.getUserId());
 		logVO.setReason("눈 감김");
-		drowsyCount[0] = logDAO.countDrowsy(logVO);
+		drowsyCount[0] = logDAO.countCorrectLogWithReason(logVO);
 
 		logVO.setReason("눈 깜빡임");
-		drowsyCount[1] = logDAO.countDrowsy(logVO);
+		drowsyCount[1] = logDAO.countCorrectLogWithReason(logVO);
 
 		logVO.setReason("하품");
-		drowsyCount[2] = logDAO.countDrowsy(logVO);
+		drowsyCount[2] = logDAO.countCorrectLogWithReason(logVO);
 
 		logVO.setReason("운전자 이탈");
-		drowsyCount[3] = logDAO.countDrowsy(logVO);
+		drowsyCount[3] = logDAO.countCorrectLogWithReason(logVO);
 
 		return drowsyCount;
 	}
 
-	public int[] calculateSuccessRate(UserVO userVO) throws Exception{
+	public int[] calculateSuccessRate(UserVO userVO, Boolean isPast) throws Exception{
 		int[] successLog = new int[4];
 		int[] totalLog = new int[4];
 		int[] successRate = new int[5];
 		LogVO logVO = new LogVO();
 		logVO.setUserId(userVO.getUserId());
-		logVO.setReason("눈 감김");
-		successLog[0] = logDAO.countCorrectLogWithReason(logVO);
-		totalLog[0] = logDAO.countTotalLogWithReason(logVO);
 
-		logVO.setReason("눈 깜빡임");
-		successLog[1] = logDAO.countCorrectLogWithReason(logVO);
-		totalLog[1] = logDAO.countTotalLogWithReason(logVO);
+		if(!isPast) {
+			logVO.setReason("눈 감김");
+			successLog[0] = logDAO.countCorrectLogWithReason(logVO);
+			totalLog[0] = logDAO.countTotalLogWithReason(logVO);
 
-		logVO.setReason("하품");
-		successLog[2] = logDAO.countCorrectLogWithReason(logVO);
-		totalLog[2] = logDAO.countTotalLogWithReason(logVO);
+			logVO.setReason("눈 깜빡임");
+			successLog[1] = logDAO.countCorrectLogWithReason(logVO);
+			totalLog[1] = logDAO.countTotalLogWithReason(logVO);
 
-		logVO.setReason("운전자 이탈");
-		successLog[3] = logDAO.countCorrectLogWithReason(logVO);
-		totalLog[3] = logDAO.countTotalLogWithReason(logVO);
+			logVO.setReason("하품");
+			successLog[2] = logDAO.countCorrectLogWithReason(logVO);
+			totalLog[2] = logDAO.countTotalLogWithReason(logVO);
+
+			logVO.setReason("운전자 이탈");
+			successLog[3] = logDAO.countCorrectLogWithReason(logVO);
+			totalLog[3] = logDAO.countTotalLogWithReason(logVO);
+		}
+		else{
+			logVO.setReason("눈 감김");
+			successLog[0] = logDAO.countPastCorrectLogWithReason(logVO);
+			totalLog[0] = logDAO.countPastTotalLogWithReason(logVO);
+
+			logVO.setReason("눈 깜빡임");
+			successLog[1] = logDAO.countPastCorrectLogWithReason(logVO);
+			totalLog[1] = logDAO.countPastTotalLogWithReason(logVO);
+
+			logVO.setReason("하품");
+			successLog[2] = logDAO.countPastCorrectLogWithReason(logVO);
+			totalLog[2] = logDAO.countPastTotalLogWithReason(logVO);
+
+			logVO.setReason("운전자 이탈");
+			successLog[3] = logDAO.countPastCorrectLogWithReason(logVO);
+			totalLog[3] = logDAO.countPastTotalLogWithReason(logVO);
+		}
 
 		for (int i = 0; i < successRate.length - 1; i++) {
 			double value = (totalLog[i] != 0 ? successLog[i] / (double)totalLog[i] : 0 );

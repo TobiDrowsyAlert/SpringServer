@@ -20,7 +20,7 @@
 			<div class="container-fluid">
 				<div class="row mb-2">
 					<div class="col-sm-6">
-						<h1>ChartJS</h1>
+						<h1>통계</h1>
 					</div>
 				</div>
 			</div><!-- /.container-fluid -->
@@ -34,7 +34,7 @@
 						<!-- DONUT CHART -->
 						<div class="card card-danger">
 							<div class="card-header">
-								<h3 class="card-title">Donut Chart</h3>
+								<h3 class="card-title">졸음 발생 원인</h3>
 
 								<div class="card-tools">
 									<button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
@@ -54,7 +54,7 @@
 						<!-- BAR CHART -->
 						<div class="card card-success">
 							<div class="card-header">
-								<h3 class="card-title">Bar Chart</h3>
+								<h3 class="card-title">인식률 현황</h3>
 
 								<div class="card-tools">
 									<button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
@@ -145,7 +145,7 @@
 			labels  : ['눈 감김', '눈 깜빡임', '하품', '운전자 이탈', '전체 평균'],
 			datasets: [
 				{
-					label               : 'Digital Goods',
+					label               : '과거 졸음 인식률',
 					backgroundColor     : 'rgba(60,141,188,0.9)',
 					borderColor         : 'rgba(60,141,188,0.8)',
 					pointRadius          : false,
@@ -153,8 +153,9 @@
 					pointStrokeColor    : 'rgba(60,141,188,1)',
 					pointHighlightFill  : '#fff',
 					pointHighlightStroke: 'rgba(60,141,188,1)',
-					data                : ["${logArray[0]}", "${logArray[1]}", "${logArray[2]}",
-						"${logArray[3]}", "${logArray[4]}"]
+					data                : [${pastSuccessRate[0]}, ${pastSuccessRate[1]}, ${pastSuccessRate[2]},
+						${pastSuccessRate[3]}, ${pastSuccessRate[4]}]
+
 				},
 				{
 					label               : '현재 졸음 인식률',
@@ -165,7 +166,8 @@
 					pointStrokeColor    : '#c1c7d1',
 					pointHighlightFill  : '#fff',
 					pointHighlightStroke: 'rgba(220,220,220,1)',
-					data                : [65, 59, 80, 81, 56, 55, 40]
+					data                : ["${logArray[0]}", "${logArray[1]}", "${logArray[2]}",
+						"${logArray[3]}", "${logArray[4]}"]
 				},
 			]
 		}
