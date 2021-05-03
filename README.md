@@ -13,10 +13,12 @@
 ![Dlib를 활용한 졸음방지 애플리케이션 (java 72da5a0ceff94c9db875f283879c29ef](https://user-images.githubusercontent.com/44090332/116850145-0d33c580-ac2b-11eb-868b-6cfab6576af3.png)
 ![image12303](https://user-images.githubusercontent.com/44090332/116850119-fee5a980-ac2a-11eb-9fdb-0dee3d1c7fb0.png)
 
-![Dlib를 활용한 졸음방지 애플리케이션 (java 72da5a0ceff94c9db875f283879c29ef 2](https://user-images.githubusercontent.com/44090332/116850148-0dcc5c00-ac2b-11eb-8ab7-12808d193410.png)
-![Dlib를 활용한 졸음방지 애플리케이션 (java 72da5a0ceff94c9db875f283879c29ef 3](https://user-images.githubusercontent.com/44090332/116850142-0c029880-ac2b-11eb-9beb-23de545d259b.png)
-![_ 1](https://user-images.githubusercontent.com/44090332/116850121-ff7e4000-ac2a-11eb-95ce-506f98eb92da.png)
-![_ 2](https://user-images.githubusercontent.com/44090332/116850122-ff7e4000-ac2a-11eb-9332-305f656ad5b5.png)
+![깜빡임resize](https://user-images.githubusercontent.com/44090332/116853839-a9f96180-ac31-11eb-9714-4711ccb2fea1.gif)
+![눈감김resize](https://user-images.githubusercontent.com/44090332/116853846-abc32500-ac31-11eb-8681-4c326b1f9413.gif)
+![하품resize](https://user-images.githubusercontent.com/44090332/116853852-ae257f00-ac31-11eb-82f6-95ed43bf32b8.gif)
+![운전자이탈resize](https://user-images.githubusercontent.com/44090332/116853857-b087d900-ac31-11eb-9d17-1e8d82c477fb.gif)
+![따라말하기resize](https://user-images.githubusercontent.com/44090332/116853863-b1b90600-ac31-11eb-8dd6-8efc0ca47670.gif)
+![체조resize](https://user-images.githubusercontent.com/44090332/116853869-b382c980-ac31-11eb-8642-22450f6e7c3c.gif)
 
 졸업 작품으로 진행한 프로젝트입니다.  졸음과 관련된 논문들을 참조하여, 눈 깜빡임 빈도, 하품 빈도, 눈 감김, 고개의 각도 등 졸음 징후를 확인하여, 졸음 운전 사고를 방지하는 것을 목적으로 동작하는 애플리케이션입니다. 인종과 성별 등을 개인마다 인식률에 차이가 있으므로 이를 완화하고자 졸음 발생 피드백을 통해 졸음 기준 값을 변경하는 작업을 기능을 갖고 있습니다. 
 
